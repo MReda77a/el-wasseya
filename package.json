@@ -1,0 +1,22 @@
+{
+  "name": "el-wasseya",
+  "version": "1.0.0",
+  "description": "El Wasseya — party game: write your will, crack the vault.",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "WSY_FAST=1 node server/index.js",
+    "cf:dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.40.0"
+  }
+}
