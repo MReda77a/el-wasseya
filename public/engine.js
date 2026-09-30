@@ -151,6 +151,7 @@ class Host {
         else if(!T || !this.conn(T) || now > this.dl) this.finishAns(pd.truth);
         break; }
       case 'reveal':
+        this.processChallenge(I);
         this.processGhosts(I);
         this.processAbilities(I);
         this.processOpens(I);
@@ -205,7 +206,7 @@ class Host {
     this.fakeAt = this.evk==='fakehint' ? pick([1,2,4,5]) : -1; this.fk = null;
     if(this.evk!=='dark'){ for(let q=0; q<LV.init; q++) this.addHint(0); }
     for(const p of this.P){ p.rp=0; p.open=null; p.lieUsed=false; p.lies=0; p.liedTo=[]; p.caught=false; p.acted=false; p.skip = p.alive && p.skipNext; p.skipNext=false;
-      p.pkR=0; p.ab=[]; p.abUsed=[]; p.ar=[]; p.shield=0; p.trap=0; p.whisper=0; p.muted=0; p.privHints=[]; p.ghH=[]; p.whS=null; }
+      p.pkR=0; p.chd=0; p.ab=[]; p.abUsed=[]; p.ar=[]; p.shield=0; p.trap=0; p.whisper=0; p.muted=0; p.privHints=[]; p.ghH=[]; p.whS=null; }
     const pool = ABIL.filter(k=>!(this.evk==='silence' && k==='so2al') && !(this.evk==='truth' && ['fakh','dar3','kashf'].includes(k)) && !(k==='tabdeel' && !this.table.length) && !(k==='sa2r' && !this.table.length));
     for(const p of al) p.ab = this.simple ? [] : shuffle([...pool]).slice(0, this.evk==='kareem' ? 2 : 1);
     const ghosts = this.P.filter(x=>!x.alive && !x.revived);
@@ -231,6 +232,7 @@ class Host {
     if(this.tn>0 && this.evk!=='dark' && this.tn % Math.max(2, Math.ceil(this.order.length/2)) === 0) this.addHint(this.tn);
     this.cur = this.order[this.ti]; this.tn++; this.la = null; this.rollQ();
     for(const p of this.P) p.acted = p.id===this.cur ? false : p.acted;
+    this.chal = null;
     this.set('turn','TURN'); if(this.evk==='fast') this.dl = Date.now() + 20000*SPEED;
   }
   endTurns(){
@@ -297,6 +299,23 @@ class Host {
       this.whs.push([this.tn, g.id, T.id]); this.stat(g.id,'wh');
     }
   }
+  /** "Liar!" — right after an answer anyone can call it. Lie: liar −3, caller +2, truth shown. Truth: caller −2, answerer +1. */
+  processChallenge(I){
+    if(!this.la || this.la[1]!=='q' || this.chal || Date.now() > this.chW) return;
+    const ix = this.lastQ, l = this.lg[ix]; if(!l || l[6] || l[0]!==this.tn) return;
+    for(const p of this.alive()){
+      if(p.id===l[2]) continue; const c = I[p.id]?.ch; if(!c || c.k!==this.key()) continue;
+      if(l[5] && p.id!==l[1]) continue;   // whispered answers: only the asker saw it
+      const T = this.p(l[2]); if(!T) return;
+      const lie = this.lies.find(x=>x[0]===l[0] && x[1]===l[2] && x[2]===l[1] && !x[6]);
+      if(lie){ lie[6] = 1; p.chd = (p.chd||0) + 2; T.chd = (T.chd||0) - 3; this.stat(p.id,'catch'); }
+      else { p.chd = (p.chd||0) - 2; T.chd = (T.chd||0) + 1; }
+      this.chal = [p.id, l[2], lie?1:0, lie?lie[5]:null, l[3]];
+      l[7] = [p.id, lie?1:0, lie?lie[5]:null];
+      this.dl = Math.max(this.dl, Date.now() + 6000*SPEED);
+      return;
+    }
+  }
   processOpens(I){
     for(const p of this.P){
       if(!p.alive || p.skip || p.open) continue;
@@ -333,9 +352,10 @@ class Host {
     if(T && v!==pd.truth && ansOptions(pd.q, this.nmax, this.hs).includes(v) && this.canLie(T, A)){ ans = v; this.lies.push([this.tn, T.id, pd.a, pd.q, v, pd.truth]); T.lies = (T.lies||0)+1; T.lieUsed = T.lies >= this.lieMax() + (T.trap===this.r?1:0); T.liedTo.push(pd.a); }
     if(T){ T.askedBy[pd.a] = (T.askedBy[pd.a]||0)+1; }
     this.stat(pd.a,'q'); this.stat(pd.t,'a'); if(ans!==pd.truth) this.stat(pd.t,'l');
+    this.lastQ = this.lg.length; this.chal = null;
     this.lg.push([this.tn, pd.a, pd.t, pd.q, ans, T && T.whisper===this.r ? 1 : 0, 0]);
     this.la = [pd.a, 'q', pd.t, pd.q]; this.pend = null;
-    this.set('reveal','REVEAL');
+    this.set('reveal','REVEAL'); this.chW = Date.now() + 8000*SPEED;
   }
   afterReveal(){
     const cp = this.p(this.cur);
@@ -361,14 +381,16 @@ class Host {
     // accusations: "you lied to me!" Right: accuser +2, liar -2. Wrong: accuser -1. A liar nobody caught gets +2.
     const caught = new Set();
     for(const A of al){ const ac = I[A.id]?.ac; if(!ac || ac.r!==this.r || !D[A.id]) continue; const T = this.p(ac.t); if(!T || T.id===A.id) continue;
-      const hit = this.lies.some(l=>l[1]===T.id && l[2]===A.id), d = hit ? 2 : -1;
+      const hit = this.lies.some(l=>l[1]===T.id && l[2]===A.id && !l[6]), d = hit ? 2 : -1;
       A.rp += d; D[A.id].acc = (D[A.id].acc||0) + d; this.accs.push([A.id, T.id, hit?1:0]);
       if(hit){ this.stat(A.id,'catch'); if(!caught.has(T.id) && D[T.id]){ caught.add(T.id); T.rp -= 2; D[T.id].liar = (D[T.id].liar||0) - 2; } } }
-    for(const id of new Set(this.lies.map(l=>l[1]))){ const L = this.p(id); if(!caught.has(id) && L && L.alive && D[id]){ L.rp += 1; D[id].liar = (D[id].liar||0) + 1; } }
+    for(const p of al){ if(p.chd && D[p.id]){ p.rp += p.chd; D[p.id].ch = p.chd; } }
+    const chCaught = new Set(this.lies.filter(l=>l[6]).map(l=>l[1]));
+    for(const id of new Set(this.lies.map(l=>l[1]))){ const L = this.p(id); if(!caught.has(id) && !chCaught.has(id) && L && L.alive && D[id]){ L.rp += 1; D[id].liar = (D[id].liar||0) + 1; } }
     if(this.pending.length){ const f = okO[0]; if(f){ const amt = this.pending.reduce((s,x)=>s+x,0); f.pts += amt; D[f.id].beq = amt; } this.pending = []; }
     for(const p of al) p.pts += p.rp;
     const order = [...okO, ...halfO, ...al.filter(p=>!p.open).sort((a,b)=>D[a.id].rank-D[b.id].rank), ...wrong];
-    this.res = order.map(p=>{ const d=D[p.id]; return [p.id, p.rp, d.rank, d.c, d.acc||0, d.liar||0, d.gh||0, d.beq||0]; });
+    this.res = order.map(p=>{ const d=D[p.id]; return [p.id, p.rp, d.rank, d.c, d.acc||0, d.liar||0, d.gh||0, d.beq||0, d.ch||0]; });
     this.lastVault = this.vault.slice();
     this.set('results','RESULTS');
   }
@@ -489,6 +511,7 @@ class Host {
         const lie = this.canLie(b, this.p(this.pend.a)) && Math.random()<.3 && opts.length;
         bi.ans = {k:this.pend.k, v: lie ? pick(opts) : this.pend.truth};
       }
+      if(this.ph==='reveal' && b.alive && this.la && this.la[1]==='q' && !this.chal && this.lg[this.lastQ] && this.lg[this.lastQ][2]!==b.id && Date.now() < this.chW && Math.random()<.08) bi.ch = {k:this.key()};
       if(this.ph==='vote' && this.court){ bi.vt = {k:this.courtKey(), t:pick(this.court.d)}; }
     }
   }
@@ -502,21 +525,22 @@ class Host {
         pv[p.id] = {h:this.hands[p.id], pk:this.peeks[p.id]||null, pu:(p.pkR===this.r && this.evk!=='silence')?1:0, lu:(p.lies||0)>=lmx?1:0, lc:p.lies||0, lm:lmx, tr:(this.pend && this.pend.t===p.id)?this.pend.truth:null, cl:(this.pend && this.pend.t===p.id)?(this.canLie(p, this.p(this.pend.a))?1:0):0, ab:p.ab||[], au:p.abUsed||[], ar:p.ar||[], ph:p.privHints||[], mu:p.muted?1:0, wa, gw:p.ghH||[]}; }
       else if(!p.alive) pv[p.id] = {ab:p.ab||[], au:p.abUsed||[], ar:p.ar||[], ws:(p.whS && p.whS[0]===this.r) ? p.whS.slice(1) : null};
     }
-    const lgPub = this.lg.map(l=> l[5] ? [l[0],l[1],l[2],l[3],null,1,l[6]] : l);
+    const lgPub = this.lg.map(l=> l[5] ? [l[0],l[1],l[2],l[3],null,1,l[6], l[7]?[l[7][0],l[7][1],null]:undefined] : l);
     const S = {
       c:this.code, h:this.me, ph:this.ph, r:this.r, R:this.R, tn:this.tn, TT:this.LAPS||2, lap:this.lap||1, cur:this.cur||null, pend:this.pend?{a:this.pend.a,t:this.pend.t,q:this.pend.q,k:this.pend.k}:null, la:this.la||null, ord:this.order||[], fin:this.fin?1:0, k:this.key(),
       P:this.P.map(p=>[p.id, p.name, p.alive?p.pts:(p.outPts||0), (p.alive?1:0)|(p.open?.ok?2:0)|(p.open&&!p.open.ok&&!p.open.half?4:0)|(p.open?.half?512:0)|(p.skip?8:0)|(p.bot?16:0)|(p.id===this.cur?32:0)|(this.conn(p)?64:0)|(p.wd?128:0)|(p.late?1024:0), p.rp]),
-      tc:this.table.length, qo:this.qo||null, pz:this.paused?1:0, lvl:this.lvl, pkl:this.pkl||[], nm:this.nmax||5, hs:this.hs||2, th:this.th||3, hi:this.hints, lg:lgPub, ev:this.ev, pv, evk:this.evk||null, pkp:this.pkp||[], revs:this.revs||[], mutes:this.mutes||[], fk:(this.ph==='results'&&this.fk!=null)?this.hints[this.fk]:null, fki:this.ph==='results'?this.fk:null,
+      tc:this.table.length, qo:this.qo||null, chal:this.ph==='reveal'?(this.chal||null):null, pz:this.paused?1:0, lvl:this.lvl, pkl:this.pkl||[], nm:this.nmax||5, hs:this.hs||2, th:this.th||3, hi:this.hints, lg:lgPub, ev:this.ev, pv, evk:this.evk||null, pkp:this.pkp||[], revs:this.revs||[], mutes:this.mutes||[], fk:(this.ph==='results'&&this.fk!=null)?this.hints[this.fk]:null, fki:this.ph==='results'?this.fk:null,
       res:this.ph==='results'?this.res:null, lv:this.ph==='results'||this.ph==='over'?(this.lastVault||this.vault):null,
       ct:this.court&&['talk','vote','over'].includes(this.ph)?{d:this.court.d, m:this.court.m, w:this.court.win?1:0, k:this.courtKey(), cnt:this.court.cnt||null}:null,
       el:this.ph==='wills'?this.el:null, win:this.win, sm:this.simple?1:0, whs:this.whs||[], bo:this.ph==='wills'?this.bo:null,
       st:this.ph==='over'?this.st:null, bw:this.ph==='over'?this.bestW:null,
-      lies:this.ph==='results'?this.lies.map(l=>[l[1],l[2],l[3],l[4],l[5],this.accs.some(a=>a[0]===l[2]&&a[1]===l[1]&&a[2])?1:0]):null,
+      lies:this.ph==='results'?this.lies.map(l=>[l[1],l[2],l[3],l[4],l[5],(l[6]||this.accs.some(a=>a[0]===l[2]&&a[1]===l[1]&&a[2]))?1:0, l[6]?1:0]):null,
       accs:this.ph==='results'?this.accs:null, nt:['lobby','over'].includes(this.ph)&&this.games?this.night:null
     };
     const body = JSON.stringify(S);
     if(body !== this._last){ this._last = body; this.v++; }
     S.v = this.v; S.rem = Math.max(0, this.dl - (this.paused ? this.pauseAt : now));
+    S.chw = (this.ph==='reveal' && this.la && this.la[1]==='q' && !this.chal) ? Math.max(0, this.chW - now) : 0;
     return S;
   }
 }

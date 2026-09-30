@@ -506,6 +506,28 @@ button.def{background:var(--panel2)}
 .newhint{opacity:.85}
 .qlist{display:flex;flex-direction:column;gap:8px}
 .qlist .chipb{width:100%;text-align:start;font-size:1.05rem;padding:12px 14px}
+.kaddab{background:var(--red);color:#fff;font-size:1.35rem;animation:hot 1s ease-in-out infinite;margin-top:10px}
+.kaddab[disabled]{animation:none;opacity:.7}
+.muted2{color:var(--on-bg);opacity:.8}
+.chwait{color:var(--on-bg);opacity:.85;margin-top:8px}
+.chres{display:flex;flex-direction:column;align-items:center;position:relative;margin-top:14px;text-align:center;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:22px;padding:22px 14px 14px;box-shadow:0 5px 0 var(--ink);animation:stamp .5s cubic-bezier(.3,1.6,.5,1)}
+.chres.lie{background:#ffe1e7} .chres.truth{background:#dcffe9}
+.chres .chstamp{position:absolute;top:-16px;left:50%;transform:translateX(-50%) rotate(-4deg);background:var(--red);color:#fff;border:3px solid var(--ink);border-radius:999px;padding:2px 16px;font-weight:800;font-size:1.1rem;white-space:nowrap}
+.chres h3{font-size:1.4rem;margin:.2em 0}
+.chres p{margin:.2em 0;font-weight:700}
+.tagx.chl{background:var(--pink);color:#fff}
+.pfile{display:flex;gap:10px;align-items:flex-start;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px;box-shadow:0 4px 0 var(--ink)}
+.pfile.hit{background:#fff6cf;outline:4px solid var(--yellow)}
+.pbody{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+.pname{font-size:1.05rem}
+.facts{display:flex;flex-wrap:wrap;gap:4px}
+.fact{border:2px solid var(--ink);border-radius:999px;padding:0 8px;font-weight:800;font-size:.85rem}
+.fact.y{background:#c9f5dc} .fact.n{background:#ffd9df} .fact.warn{border-style:dashed;opacity:.75}
+.poss{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cnt{font-weight:800;font-size:.85rem;opacity:.7}
+.warnline{font-size:.8rem;font-weight:700;color:#b3122a}
+.fbad{color:#b3122a;font-weight:800}
+.seg{flex-wrap:nowrap} .seg button{white-space:nowrap}
 .deckrows{display:flex;flex-direction:column;gap:6px;margin:4px 0}
 .deckrow{display:grid;gap:4px;justify-content:center}
 .deckrow .nc{font-size:.85rem;cursor:default}
@@ -534,6 +556,9 @@ const AVC = ['#ffd23f','#ff7eb3','#4fd1ff','#6ff0a6','#c3a2ff','#ff9a3c','#2ee6c
 const T = {
 ar:{
  title:'الوصية',
+ nF:'الملفات', fHelp:'كل إجابة بتتسجل في ملف صاحبها، واللعبة بتحسبلك كارته ممكن يكون إيه. لو حد كدب ومحدش قفشه، الملف ممكن يغلط!', fSum:'المجموع', fMax:'أعلى رقم', fBig:'أكبر من {n}', fSame:'نفس اللون', fEven:'زوجي', fNone:'لسه محدش سأله', fContra:'الإجابات مش راكبة على بعض، فيه كدبة!', fMaybe:'ممكن يكون:', fGot:'عرفت كارته!', fGotOne:'عرفت كارت من كروته!', fCross:'اشطبه', fLiar:'{p} اتقفش بيكدب قبل كده، إجاباته ممكن تكون كدب', fMem:'🧠 الراوند ده «ذاكرة»: الملفات مقفولة، افتكر بنفسك!', fToast:'🎯 عرفت كارت {p}! شوف «الملفات» في النوتة',
+ chQ:'فاكر {p} كدب؟ لو صح هو −٣ وانت +٢، لو غلط انت −٢.', kaddab:'كداب!', chSent:'اتبعت...', chHelp:'فاكره كدب؟ دوس بسرعة! لو صح: هو −٣ وانت +٢. لو غلط: انت −٢.', chWait:'حد ممكن يقول «كداب!» دلوقتي...', chCalled:'{p} قال لـ {t}: كداب!', chWasLie:'😱 {t} كان بيكدب!', chWasTrue:'😇 {t} كان صادق!', chTruth:'الحقيقة:', chPtsLie:'{t} −٣ · {p} +٢', chPtsTrue:'{p} −٢ · {t} +١', chLogLie:'اتقفش', chLogTrue:'كان صادق',
+ tip_ch:['🚨','كداب!','بعد أي إجابة، أي حد يقدر يدوس «كداب!» في ٨ ثواني. لو الإجابة طلعت كدب: الكداب −٣ واللي قفشه +٢ والحقيقة تبان للكل. لو كانت صح: اللي اتهم −٢.'],
  peekUsed:'بصيت', qoNote:'كل دور بيطلعلك ٣ أسئلة مختلفة.', tutAnsRed:'عمر معاه كارت أحمر، يعني واحد من الأحمر مش في الخزنة.', tutAnsNo:'كده عرفت حاجة عن كارت عمر، وكارته أكيد مش في الخزنة. كل إجابة بتقربك.',
  tutBtn:'🎓 اتعلم اللعبة في دقيقتين', tutExit:'اخرج', tutNext:'كمّل', omar:'عمر', mona:'منى', tutAskQ:'معاك كارت أحمر؟', tutMonaQ:'معاك كارت أزرق؟', tutAnsO:'آه ✅',
  tutWill1:'نقطي تروح لـ {p}', tutDare:'{p} يدفع المشاريب', tutPlay:'🤖 العب مع بوتات', tutHome:'🏠 الرئيسية', tutBad:'مش دول 😅 اختار الـ ٣ اللي مش مشطوبين.',
@@ -554,7 +579,7 @@ ar:{
  ],
  tutPeek2:['👀','شفته!','الكارت ده على الترابيزة، يعني مش في الخزنة. اشطبه كمان تحت.'],
  tutAsk2:['💡','الكل شاف الإجابة','كل واحد في القعدة شاف إجابة عمر. كل دور بيطلعلك ٣ أسئلة مختلفة تختار منهم.'],
- tutLie2:['😈','منى صدقتك!','الكدب مسموح مرة في الراوند. بس آخر الراوند كل كدبة بتتفضح قدام الكل، ولو منى اتهمتك هتخسر ٢.'],
+ tutLie2:['😈','منى صدقتك!','بس خلي بالك: بعد أي إجابة، أي حد يقدر يدوس «🚨 كداب!». لو قفشك تخسر ٣ والكل يعرف الحقيقة. وآخر الراوند كل كدبة بتتفضح.'],
  tutTruth2:['😇','صادق!','تمام. بس الكدب هو المتعة: مرة في الراوند تقدر تضلل حد، ولو محدش قفشك تاخد +١.'],
  nX:'✕ مش فيها', nS:'🤔 شاكك فيه', notesHelpS2:'علّم الكروت اللي شاكك إنها في الخزنة. هتفضل متعلمة قدامك، ولما تيجي تفتح تلاقيها جاهزة.', susT:'شاكك في:', susBtn:'شكوكي', useSus:'🤔 حط الـ ٣ اللي شاكك فيهم',
  fadT:'🤥 فضايح الراوند', fadLine:'{a} كدب على {b}', fadSaid:'قال', fadTruth:'والحقيقة', fadCaught:'اتقفش! −٢', fadFree:'عدّت عليه +١', fadNone:'محدش كدب الراوند ده. ناس محترمة 😇', fadWrong:'{a} اتهم {b} ظلم (−١)',
@@ -688,7 +713,7 @@ ar:{
  H0:'مجموع الخزنة بين {a} و {b}', H1:'مفيش كارت {c} في الخزنة', H2:'في الخزنة {n} كارت {c}', H3:'أعلى رقم في الخزنة {n}', H4:'في الخزنة {n} رقم زوجي', H5:'فيه كارت أكبر من {n}؟ {y}', H4z:'كل أرقام الخزنة فردية', H6:'أصغر رقم في الخزنة {n}', H7y:'كروت الخزنة ٣ ألوان مختلفة', H7n:'فيه لون متكرر في الخزنة', H8y:'فيه رقم {n} في الخزنة', H8n:'مفيش رقم {n} في الخزنة', H9:'تلميح دهبي: {c} {n} في الخزنة!',
  help:[
   ['🔐','الفكرة','فيه خزنة فيها ٣ كروت سرية. كل راوند الكل بيحاول يعرفهم، واللي يفتحها صح وأسرع ياخد نقط أكتر.'],
-  ['❓','إزاي تعرفهم؟','في دورك: تبص على كارت مقلوب (مرة واحدة في الراوند)، أو تسأل حد سؤال والكل يسمع الإجابة. بس ممكن يكدب عليك 🤥! اشطب اللي مش في الخزنة، ولما تعرف الـ ٣ افتح.'],
+  ['❓','إزاي تعرفهم؟','في دورك: تبص على كارت مقلوب (مرة واحدة في الراوند)، أو تسأل حد سؤال والكل يسمع الإجابة. بس ممكن يكدب عليك 🤥، ولو حاسس إنه كداب دوس «🚨 كداب!». اشطب اللي مش في الخزنة، ولما تعرف الـ ٣ افتح.'],
   ['📜','الوصية','آخر كل راوند الأقل في النقط بيخرج، ووصيته اللي كتبها في الأول تتنفذ: يدي نقطه لحد، ينتقم، أو يعاقب حد في القعدة 😂. آخر واحد يفضل يكسب.']
  ], helpOld:[
   ['📜','الوصية','قبل ما اللعبة تبدأ، كل واحد يكتب وصية سرية. بتتنفذ لما يخرج: يدي نقطه لحد، أو ينتقم، أو يفضح حد. وممكن يحط «عقاب في القعدة» لحد يعمله بجد.'],
@@ -702,6 +727,9 @@ ar:{
 },
 en:{
  title:'El Wasseya',
+ nF:'Files', fHelp:'Every answer is filed under whoever gave it, and the game works out what their card could be. If someone lied and nobody caught it, the file can be wrong!', fSum:'Sum', fMax:'Highest', fBig:'above {n}', fSame:'same color', fEven:'even', fNone:'Nobody asked them yet', fContra:'The answers don\'t add up, someone lied!', fMaybe:'Could be:', fGot:'You know their card!', fGotOne:'You know one of their cards!', fCross:'Cross out', fLiar:'{p} was caught lying before, their answers may be lies', fMem:'🧠 Memory round: files are locked, remember it yourself!', fToast:'🎯 You figured out {p}\'s card! Check Files in your notes',
+ chQ:'Think {p} lied? Right: they −3, you +2. Wrong: you −2.', kaddab:'Liar!', chSent:'Sent...', chHelp:'Think it was a lie? Tap fast! Right: they −3, you +2. Wrong: you −2.', chWait:'Someone might call "Liar!" now...', chCalled:'{p} called {t} a liar!', chWasLie:'😱 {t} was lying!', chWasTrue:'😇 {t} told the truth!', chTruth:'The truth:', chPtsLie:'{t} −3 · {p} +2', chPtsTrue:'{p} −2 · {t} +1', chLogLie:'caught', chLogTrue:'was honest',
+ tip_ch:['🚨','Liar!','After any answer, anyone can tap "Liar!" within 8 seconds. If it was a lie: the liar −3, the caller +2, and the truth is shown. If it was true: the caller −2.'],
  peekUsed:'Peeked', qoNote:'Each turn gives you 3 different questions.', tutAnsRed:'Omar has a red card, so one red card isn\'t in the vault.', tutAnsNo:'Now you know something about Omar\'s card, and it\'s never in the vault. Every answer gets you closer.',
  tutBtn:'🎓 Learn in 2 minutes', tutExit:'Exit', tutNext:'Next', omar:'Omar', mona:'Mona', tutAskQ:'Got a red card?', tutMonaQ:'Got a blue card?', tutAnsO:'Yes ✅',
  tutWill1:'My points go to {p}', tutDare:'{p} buys the drinks', tutPlay:'🤖 Play with bots', tutHome:'🏠 Home', tutBad:'Not those 😅 Pick the 3 that aren\'t crossed out.',
@@ -722,7 +750,7 @@ en:{
  ],
  tutPeek2:['👀','Seen it!','That card is on the table, so it\'s not in the vault. Cross it out below too.'],
  tutAsk2:['💡','Everyone saw the answer','Everyone at the table saw Omar\'s answer. Each turn gives you 3 different questions to pick from.'],
- tutLie2:['😈','Mona believed you!','You can lie once per round. But at round end every lie is exposed, and if Mona accuses you, you lose 2.'],
+ tutLie2:['😈','Mona believed you!','But careful: after any answer, anyone can tap "🚨 Liar!". If they catch you, you lose 3 and everyone sees the truth. And every lie is exposed at round end.'],
  tutTruth2:['😇','Honest!','Fine. But lying is the fun part: once per round you can mislead someone, and +1 if nobody catches you.'],
  nX:'✕ Not in it', nS:'🤔 Suspect', notesHelpS2:'Mark cards you suspect are in the vault. They stay marked in front of you and are ready when you open.', susT:'Suspects:', susBtn:'Suspects', useSus:'🤔 Use my 3 suspects',
  fadT:'🤥 This round\'s scandals', fadLine:'{a} lied to {b}', fadSaid:'said', fadTruth:'truth was', fadCaught:'Caught! −2', fadFree:'Got away +1', fadNone:'Nobody lied this round. Such honest people 😇', fadWrong:'{a} wrongly accused {b} (−1)',
@@ -847,7 +875,7 @@ en:{
  H0:'Vault sum is between {a} and {b}', H1:'No {c} card in the vault', H2:'The vault has {n} {c} card(s)', H3:'Highest vault number is {n}', H4:'The vault has {n} even number(s)', H5:'A card above {n}? {y}', H4z:'All vault numbers are odd', H6:'Lowest vault number is {n}', H7y:'The vault has 3 different colors', H7n:'A color repeats in the vault', H8y:'There is a {n} in the vault', H8n:'No {n} in the vault', H9:'Golden hint: {c} {n} is in the vault!',
  help:[
   ['🔐','The idea','A vault hides 3 secret cards. Each round everyone tries to figure them out; open it right and fast for the most points.'],
-  ['❓','How do you find them?','On your turn: peek at a face-down card (once per round), or ask someone a question everyone hears. But they might lie 🤥! Cross out what isn\'t in the vault, and open when you know the 3.'],
+  ['❓','How do you find them?','On your turn: peek at a face-down card (once per round), or ask someone a question everyone hears. But they might lie 🤥, so if you smell a lie tap "🚨 Liar!". Cross out what isn\'t in the vault, and open when you know the 3.'],
   ['📜','The will','Each round the lowest score goes out and the will they wrote at the start runs: give points away, take revenge, or give someone a real-life dare 😂. Last one standing wins.']
  ], helpOld:[
   ['📜','The will','Before the game, everyone writes a secret will. It runs when they\'re out: give points away, take revenge, or expose someone. It can even hold a real-life dare.'],
@@ -924,7 +952,9 @@ function recvState(ns){
   if(!ns) return;
   if(S && ns.v === S.v && ns.h === S.h) return;
   const prevK = S?.k;
-  S = ns; U.dlLocal = Date.now() + (ns.rem||0);
+  S = ns; U.dlLocal = Date.now() + (ns.rem||0); U.chUntil = Date.now() + (ns.chw||0);
+  const chKey = ns.chal ? ns.k + ns.chal[0] : '';
+  if(chKey && chKey !== U.chSeen){ U.chSeen = chKey; SFX.play(ns.chal[2] ? 'dare' : 'meh'); buzz(ns.chal[1]===me && ns.chal[2] ? [300,100,300] : 120); setTimeout(()=>{ const e = document.querySelector('.chres'); if(e) try{ e.scrollIntoView({behavior:'smooth', block:'center'}); }catch(_){} }, 60); }
   if(prevK !== ns.k){ U.phaseDur = Math.max(1, ns.rem||1); onPhaseChange(); }
   const ar = ns.pv?.[me]?.ar || [];
   if(ns.r !== U.arR){ U.arR = ns.r; U.arSeen = 0; }
@@ -946,6 +976,7 @@ function onPhaseChange(){
   if(S.ph==='ans'){ U.lieMode = false; if(S.pend && S.pend.t===me){ buzz([80,60,80]); SFX.play('ask'); } }
   if(S.ph==='turn'){ U.selPeek=null; U.askT=null; U.askQ=null; if(S.cur===me){ buzz(120); SFX.play('turn'); } }
   if(S.ph==='wills'){ U.wStep = 0; U.willAll = false; }
+  if(S.ph==='reveal' || S.ph==='turn') setTimeout(fileNews, 50);
   phaseTips();
   if(S.r !== U.notesR){ U.notes = {}; U.seen = {}; U.tpk = {}; U.pick = []; U.mode = null; U.sheet = null; U.notesR = S.r; U.seenHints = 0; U.whSel = {}; setIn({g:null, o:null, a:null, ac:null}); }
   if(S.ph==='reveal'){ const pk = S.pv?.[me]?.pk; if(pk && pk[2]===S.tn){ U.tpk[pk[0]] = pk[1]; U.peekUntil = Date.now()+3000; setTimeout(render, 3100); U.notes[pk[1]]=1; U.seen[pk[1]]=1; } }
@@ -1023,6 +1054,60 @@ function willSentence(k, a, b){ return t('WS_'+k, {a: a?`<b>${nm(a)}</b>`:'…',
 function qT(i){ if(i===0 && S?.hs===1) return T[lang].Q0one; return T[lang].Q[i].replace('{n}', S?.th ?? 3).replace('{h}', S?.hs===1 ? T[lang].oneCard : T[lang].twoCards); }
 function remMs(){ if(S && S.pz) return S.rem||0; return Math.max(0, U.dlLocal - Date.now()); }
 const stars = () => Object.keys(U.notes).filter(k=>U.notes[k]===2).map(Number);
+/* ---- player files: every answer is filed under the player who gave it ---- */
+function factText(q, a){
+  const th = S.th ?? 3;
+  switch(q){
+    case 0: return `${t('fSum')} = ${a}`;
+    case 1: case 2: case 3: return `${a?'✓':'✗'} ${T[lang].colors[q-1]}`;
+    case 4: return `${a?'✓':'✗'} ${t('fBig',{n:th})}`;
+    case 5: return `${a?'✓':'✗'} ${t('fSame')}`;
+    case 6: return `${t('fMax')} = ${a}`;
+    case 7: return `${a?'✓':'✗'} ${t('fEven')}`;
+    case 8: return `🔍 ${a}`;
+  }
+  return '';
+}
+function visAns(l, ix){ if(l[5]){ const w = (S.pv?.[me]?.wa||[]).find(x=>x[0]===ix); return w ? w[1] : undefined; } return l[4]; }
+function fileFor(id){
+  const facts = [];
+  S.lg.forEach((l,ix)=>{ if(l[2]!==id) return; let a = visAns(l, ix); if(a==null) return; let fixed = false;
+    if(l[7] && l[7][1] && l[7][2]!=null){ a = l[7][2]; fixed = true; }
+    facts.push({q:l[3], a, fixed, ok: !!(l[7] && !l[7][1])}); });
+  const hs = S.hs||2, NM = S.nm||5;
+  const excl = new Set([...myHand(), ...Object.values(U.tpk||{}).map(Number), ...(S.pkp||[]).map(p=>p[2])]);
+  const pool = []; for(const col of [0,1,2]) for(let n=0;n<NM;n++){ const c = col*9+n; if(!excl.has(c)) pool.push(c); }
+  const hands = []; if(hs===1) for(const c of pool) hands.push([c]); else for(let i=0;i<pool.length;i++) for(let j=i+1;j<pool.length;j++) hands.push([pool[i],pool[j]]);
+  const nums = s => String(s).split('·').map(x=>+x.trim()).sort((a,b)=>a-b).join(',');
+  const ok = hands.filter(h=>facts.every(f=> f.q===8 ? h.map(cNum).sort((a,b)=>a-b).join(',')===nums(f.a) : answer(h, f.q, S.th)===f.a));
+  const poss = [...new Set(ok.flat())].sort((a,b)=>a-b);
+  const sure = ok.length ? poss.filter(c=>ok.every(h=>h.includes(c))) : [];
+  return {facts, ok:ok.length, poss, sure};
+}
+function filesBlock(){
+  if(S.evk==='memory') return `<p class="small muted">${t('fMem')}</p>`;
+  const ids = ((S.ord && S.ord.length) ? S.ord : S.P.map(x=>x[0])).filter(id=>id!==me && isAlive(P(id)));
+  return `<p class="small muted">${t('fHelp')}</p>` + ids.map(id=>{
+    const f = fileFor(id), liar = S.lg.some(l=>l[2]===id && l[7] && l[7][1]);
+    const hit = f.facts.length && f.ok && f.sure.length, bad = f.facts.length && !f.ok;
+    const chips = f.facts.map(x=>{ const s = factText(x.q, x.a); return `<span class="fact ${s.startsWith('✗')?'n':'y'} ${liar && !x.fixed && !x.ok ? 'warn':''}">${s}${x.fixed?' 🚨':''}${x.ok?' ✔️':''}</span>`; }).join('');
+    let poss;
+    if(!f.facts.length) poss = `<span class="small muted">${t('fNone')}</span>`;
+    else if(bad) poss = `<span class="small fbad">🤥 ${t('fContra')}</span>`;
+    else if(hit && f.poss.length===f.sure.length) poss = '';
+    else poss = `<span class="small">${t('fMaybe')}</span>${f.poss.slice(0,8).map(c=>card(c,'mini')).join('')}${f.poss.length>8?`<span class="cnt">+${f.poss.length-8}</span>`:''}`;
+    const todo = f.sure.filter(c=>U.notes[c]!==1);
+    const head = hit ? ` 🎯 ${f.sure.length >= (S.hs||2) ? t('fGot') : t('fGotOne')}` : '';
+    return `<div class="pfile ${hit?'hit':''}">${avatar(id)}<div class="pbody"><b class="pname">${nm(id)}${head}</b>${chips?`<div class="facts">${chips}</div>`:''}${poss?`<div class="poss">${poss}</div>`:''}
+      ${hit ? `<div class="poss">${f.sure.map(c=>card(c,'')).join('')}${todo.length?`<button class="btn gold small" data-act="fcross" data-c="${todo.join(',')}">✕ ${t('fCross')}</button>`:`<span class="saved">✓</span>`}</div>` : ''}
+      ${liar?`<div class="warnline">⚠️ ${t('fLiar',{p:nm(id)})}</div>`:''}</div></div>`;
+  }).join('');
+}
+function fileNews(){
+  if(!S || S.evk==='memory' || !meP() || !isAlive(meP())) return;
+  if(U.fR !== S.r){ U.fR = S.r; U.fAnn = {}; }
+  for(const id of ((S.ord||[]).filter(x=>x!==me && isAlive(P(x))))){ const f = fileFor(id); if(f.ok && f.sure.length && !U.fAnn[id+':'+f.sure.join(',')]){ U.fAnn[id+':'+f.sure.join(',')] = 1; toastText(t('fToast',{p:P(id)?.[1]||''})); SFX.play('good'); } }
+}
 function susLine(){ const s = stars(); if(!s.length) return ''; return `<div class="susline"><span>🤔 ${t('susT')}</span><span class="row">${s.sort((a,b)=>a-b).map(c=>card(c,'mini')).join('')}</span></div>`; }
 const isHost = () => solo ? !!host : !!(S && S.h===me);
 const myHand = () => S?.pv?.[me]?.h || [];
@@ -1088,6 +1173,7 @@ function phaseTips(){
   if(S.ph==='ans' && S.pend && S.pend.t===me) tipT('tip_ans', ['ans']);
   if(S.ph==='accuse' && alive && !(mp[3]&(2|4|512))) tipT('tip_accuse', ['accuse']);
   if(S.ph==='results') tipT('tip_results', ['results']);
+  if(S.ph==='reveal' && S.la && S.la[1]==='q' && alive) tipT('tip_ch', ['reveal']);
   if(S.ph==='talk') tipT('tip_court', ['talk','vote']);
   if(S.ph==='accuse' && alive && S.lg.some(l=>l[1]===me && !l[6])) tipT('tip_acc', ['accuse']);
   if(mp[3]&1024) tipT('tip_late', ['intro','turn','reveal','ans','accuse','results','talk','vote','wills']);
@@ -1374,7 +1460,7 @@ function logAns(l, ix){
   return ansBadge(l[3], a);
 }
 const logItem = (l, ix) => { if(ix==null) ix = S.lg.indexOf(l); const q = l[3]===8 ? `🔍 ${t('mo7Q')}` : qT(l[3]);
-  return `<div class="bub ${l[6]===1?'abl':''}">${avatar(l[1],'sm')}<div class="q"><b>${nm(l[1])}</b> ${lang==='ar'?'←':'→'} <b>${nm(l[2])}</b>${l[6]===2?' <span class="tagx">❓+</span>':''}${l[5]?' <span class="tagx">🎭</span>':''}<br>${q}</div>${logAns(l, ix)}</div>`; };
+  return `<div class="bub ${l[6]===1?'abl':''}">${avatar(l[1],'sm')}<div class="q"><b>${nm(l[1])}</b> ${lang==='ar'?'←':'→'} <b>${nm(l[2])}</b>${l[6]===2?' <span class="tagx">❓+</span>':''}${l[5]?' <span class="tagx">🎭</span>':''}${l[7]?` <span class="tagx ${l[7][1]?'chl':''}">🚨 ${l[7][1]?t('chLogLie'):t('chLogTrue')}</span>`:''}<br>${q}</div>${logAns(l, ix)}</div>`; };
 const pkItem = p => `<div class="event">📢 ${t('pkPub',{p:nm(p[1])})} ${card(p[2],'mini')}</div>`;
 const evItem = e => `<div class="event">${e[1]===1?t('evOk',{p:nm(e[0])}):e[1]===2?t('evHalf',{p:nm(e[0])}):t('evBad',{p:nm(e[0])})}</div>`;
 function lieBlock(){
@@ -1473,6 +1559,16 @@ function statusBlock(){
   return `<div class="status go"><span class="bigemoji">🎯</span><div><b>${t('yourTurn')}</b><p class="small muted">${t('yourTurnS')}</p></div><button class="btn ghost small" data-act="pass">${t('pass')}</button></div>`;
 }
 function okBtn(){ const done = IN.rk === S.k; return `<div class="okrow">${done?`<span class="saved">✓ ${t('okWait')}</span>`:`<button class="btn gold block" data-act="rk">👍 ${t('okNext')}</button>`}</div>`; }
+function chalBlock(l){
+  if(!l || l[6]) return '';
+  const c = S.chal;
+  if(c) return `<div class="chres ${c[2]?'lie':'truth'}"><div class="chstamp">🚨 ${t('kaddab')}</div><p>${t('chCalled',{p:nm(c[0]), t:nm(c[1])})}</p>
+    <h3>${c[2] ? t('chWasLie',{t:nm(c[1])}) : t('chWasTrue',{t:nm(c[1])})}</h3>${c[2] && c[3]!=null ? `<p>${t('chTruth')} ${ansTxt(c[4], c[3])}</p>` : ''}
+    <p class="small">${c[2] ? t('chPtsLie',{p:nm(c[0]), t:nm(c[1])}) : t('chPtsTrue',{p:nm(c[0]), t:nm(c[1])})}</p></div>`;
+  if(!(S.chw > 0) || Date.now() >= (U.chUntil||0)) return '';
+  const mp = meP(); if(!isAlive(mp) || l[2]===me || (l[5] && l[1]!==me)) return `<p class="small center chwait">🚨 ${t('chWait')}</p>`;
+  return `<p class="small center chwait">🚨 ${t('chHelp')}</p>`;
+}
 function revealBig(){
   const la = S.la; if(!la) return '';
   const who = la[0];
@@ -1481,7 +1577,7 @@ function revealBig(){
     const ix = S.lg.findIndex(l=>l[0]===S.tn && l[1]===who && l[6]===0);
     const l = S.lg[ix];
     if(l){ return `<div class="bigq"><div class="row center">${avatar(l[1])}<span class="arrow2">${lang==='ar'?'←':'→'}</span>${avatar(l[2])}</div>
-      <p><b>${nm(l[1])}</b> ${t('asked')} <b>${nm(l[2])}</b></p><p class="qtext">${l[3]===8?'🔍 '+t('mo7Q'):qT(l[3])}</p><div class="bigans">${logAns(l, ix)}</div></div>${extra}`; }
+      <p><b>${nm(l[1])}</b> ${t('asked')} <b>${nm(l[2])}</b></p><p class="qtext">${l[3]===8?'🔍 '+t('mo7Q'):qT(l[3])}</p><div class="bigans">${logAns(l, ix)}</div></div>${chalBlock(l)}${extra}`; }
   }
   if(la[1]==='p'){
     const pk = S.pv?.[me]?.pk, mine = who===me && pk && pk[2]===S.tn, showing = mine && Date.now() < U.peekUntil;
@@ -1516,8 +1612,17 @@ function tableView(){
     ${hand.length?`<div class="handrow"><div><b>🖐 ${t('hand')}</b><div class="small muted">${t('handNote')}</div></div><div class="hand">${hand.map((h,i)=>card(h, i?'tilt2':'tilt1')).join('')}</div></div>`:''}
   </div>` + peopleRow();
 }
+function chalOpen(){
+  if(S.ph!=='reveal' || !S.la || S.la[1]!=='q' || S.chal || !(S.chw>0) || Date.now() >= (U.chUntil||0)) return null;
+  const l = S.lg.find(x=>x[0]===S.tn && x[1]===S.la[0] && x[6]===0); if(!l) return null;
+  if(!isAlive(meP()) || l[2]===me || (l[5] && l[1]!==me)) return null;
+  return l;
+}
 function controller(){
   const mp = meP(), f = mp[3], alive = isAlive(mp), pv = S.pv?.[me] || {};
+  const cl = chalOpen();
+  if(cl){ const sent = IN.ch && IN.ch.k===S.k;
+    return `<div class="ctl"><div class="ctl-in"><button class="btn lg block kaddab" data-act="kaddab" ${sent?'disabled':''}>🚨 ${sent?t('chSent'):t('kaddab')} <span class="num" id="chtimer"></span></button><p class="small center muted2" style="margin:6px 0 0">${t('chQ',{p:nm(cl[2])})}</p></div></div>`; }
   const canAct = alive && myTurn() && !(f&(2|4|8|512)) && !chosen();
   const askOk = canAct && S.evk!=='silence' && !pv.mu;
   const abLeft = (pv.ab||[]).filter(k=>!(pv.au||[]).includes(k)).length;
@@ -1532,7 +1637,7 @@ function controller(){
     if(pv.lm===0) lie = `<span class="sb off" title="${t('noLieShort')}">🤥 ✕</span>`;
     else lie = `<span class="sb ${pv.lu?'off':''}" title="${t('liesLeft',{n:Math.max(0,(pv.lm||0)-(pv.lc||0))})}">🤥 <b class="num">${Math.max(0,(pv.lm||0)-(pv.lc||0))}</b></span>`;
   }
-  const sub = alive ? `<div class="sub"><button class="sb" data-act="sheet" data-v="notes">📝 ${t('tNotesS')}</button><button class="sb" data-act="susnotes">🤔 ${t('susBtn')}${stars().length?` <span class="badge num">${stars().length}</span>`:''}</button><button class="sb" data-act="sheet" data-v="log">📋 ${t('tLogS')}${logN?` <span class="badge num">${logN}</span>`:''}</button>${lie}</div>` : '';
+  const sub = alive ? `<div class="sub"><button class="sb" data-act="sheet" data-v="notes">📝 ${t('tNotesS')}</button><button class="sb" data-act="sheet" data-v="log">📋 ${t('tLogS')}${logN?` <span class="badge num">${logN}</span>`:''}</button>${lie}</div>` : '';
   return `<div class="ctl"><div class="ctl-in"><div class="main">${main}</div>${sub}</div></div>`;
 }
 function sheetView(){
@@ -1547,7 +1652,7 @@ function sheetView(){
   else if((U.mode==='open' || U.mode==='confirm') && canOpen()) body = openFlow();
   else if(String(U.mode).startsWith('ab:')) body = abilityFlow(U.mode.slice(3));
   else if(s==='abs') body = abilityBlock() || `<p class="muted center">${t('noAb')}</p>`;
-  else if(s==='notes') body = `<span class="sheet-t">📝 ${t('tNotesS')}</span>${deckLine()}<div class="seg"><button class="${U.noteMode!=='s'?'on':''}" data-act="nmode" data-v="x">${t('nX')}</button><button class="${U.noteMode==='s'?'on':''}" data-act="nmode" data-v="s">${t('nS')}</button></div><p class="small muted">${U.noteMode==='s'?t('notesHelpS2'):t('notesHelp1')}</p>${notesGrid()}${susLine()}<div class="hints" style="margin-top:6px">${allHintsHTML().join('')}</div>`;
+  else if(s==='notes') body = `<span class="sheet-t">📝 ${t('tNotesS')}</span>${deckLine()}<div class="seg"><button class="${U.noteMode==='x'||!U.noteMode?'on':''}" data-act="nmode" data-v="x">${t('nX')}</button><button class="${U.noteMode==='s'?'on':''}" data-act="nmode" data-v="s">${t('nS')}</button><button class="${U.noteMode==='f'?'on':''}" data-act="nmode" data-v="f">🗂️ ${t('nF')}</button></div>${U.noteMode==='f' ? filesBlock() : `<p class="small muted">${U.noteMode==='s'?t('notesHelpS2'):t('notesHelp1')}</p>${notesGrid()}${susLine()}`}<div class="hints" style="margin-top:6px">${allHintsHTML().join('')}</div>`;
   else if(s==='log') body = `<span class="sheet-t">📋 ${t('tLogS')}</span>${logHTML()}`;
   else if(s==='hints') body = `<span class="sheet-t">🔑 ${t('hints')}</span><div class="hints">${allHintsHTML().join('')}</div>`;
   else if(s==='ghost') body = ghostBlock();
@@ -1638,7 +1743,7 @@ function accBlock(){
 const ansTxt = (q, a) => (q===0||q===6) ? `<b class="num">${a}</b>` : `<b>${a?t('yes'):t('no')}</b>`;
 function fadBlock(){
   const lies = S.lies || [], wrong = (S.accs||[]).filter(a=>!a[2]);
-  return `<div class="sec fad"><span class="sec-t">${t('fadT')}</span>${lies.length ? lies.map((l,i)=>`<div class="lierow ${l[5]?'caught':''}" style="animation-delay:${.2+i*.35}s">${avatar(l[0],'sm')}<div style="min-width:0"><b>${t('fadLine',{a:nm(l[0]), b:nm(l[1])})}</b><div class="small">${qT(l[2])} ${t('fadSaid')} ${ansTxt(l[2],l[3])} ${t('fadTruth')} ${ansTxt(l[2],l[4])}</div></div><span class="tagx">${l[5]?t('fadCaught'):t('fadFree')}</span></div>`).join('') : `<p class="small muted">${t('fadNone')}</p>`}
+  return `<div class="sec fad"><span class="sec-t">${t('fadT')}</span>${lies.length ? lies.map((l,i)=>`<div class="lierow ${l[5]?'caught':''}" style="animation-delay:${.2+i*.35}s">${avatar(l[0],'sm')}<div style="min-width:0"><b>${t('fadLine',{a:nm(l[0]), b:nm(l[1])})}</b><div class="small">${qT(l[2])} ${t('fadSaid')} ${ansTxt(l[2],l[3])} ${t('fadTruth')} ${ansTxt(l[2],l[4])}</div></div><span class="tagx">${l[6]?'🚨 '+t('fadCaught'):l[5]?t('fadCaught'):t('fadFree')}</span></div>`).join('') : `<p class="small muted">${t('fadNone')}</p>`}
     ${wrong.map(a=>`<div class="small muted">🙃 ${t('fadWrong',{a:nm(a[0]), b:nm(a[1])})}</div>`).join('')}</div>`;
 }
 function nightBlock(){
@@ -1658,8 +1763,8 @@ function resultsView(){
   const podium = `<div class="podium">${order.map((r,i)=> r ? `<div class="pod ${cls[i]}">${avatar(r[0], i===1?'lg':'')}<span class="nm">${nm(r[0])}</span><div class="blk">${r[1]>0?'+':''}${r[1]}</div></div>` : '<div></div>').join('')}</div>`;
   const alive = S.P.filter(isAlive).sort((a,b)=>a[2]-b[2]);
   const minTot = alive[0]?.[2];
-  const rows = [...res].sort((a,b)=>P(b[0])[2]-P(a[0])[2]).map(r=>{ const [id, rp, rank, c, acc, liar, gh, beq] = r; const x = P(id), f = x[3];
-    const tags = [ (f&2)?t('opened'):(f&512)?t('halfO'):(f&4)?t('wrongO'):t('correctN',{n:c}), acc?`${t('t_acc')} ${acc>0?'+':''}${acc}`:'', liar?`${t('t_liar')} ${liar>0?'+':''}${liar}`:'', gh?`${t('t_gh')} ${gh>0?'+':''}${gh}`:'', beq?`${t('t_beq')} +${beq}`:'' ].filter(Boolean).join(' · ');
+  const rows = [...res].sort((a,b)=>P(b[0])[2]-P(a[0])[2]).map(r=>{ const [id, rp, rank, c, acc, liar, gh, beq, chx] = r; const x = P(id), f = x[3];
+    const tags = [ (f&2)?t('opened'):(f&512)?t('halfO'):(f&4)?t('wrongO'):t('correctN',{n:c}), acc?`${t('t_acc')} ${acc>0?'+':''}${acc}`:'', liar?`${t('t_liar')} ${liar>0?'+':''}${liar}`:'', gh?`${t('t_gh')} ${gh>0?'+':''}${gh}`:'', beq?`${t('t_beq')} +${beq}`:'', chx?`🚨 ${chx>0?'+':''}${chx}`:'' ].filter(Boolean).join(' · ');
     const danger = x[2]===minTot;
     return `<div class="lrow ${danger?'danger':''} ${id===me?'me':''}">${avatar(id,'sm')}<div style="min-width:0"><b>${esc(x[1])}</b>${danger?` <span class="small" style="color:#d0233a">⚠️ ${t('danger')}</span>`:''}<div class="tags">${tags}</div></div><span class="delta ${rp>0?'p':rp<0?'m':'z'} num">${rp>0?'+':''}${rp}</span><span class="tot num">${x[2]}</span></div>`; }).join('');
   return fadBlock() + `<div class="sec">${podium}</div>
@@ -1971,7 +2076,7 @@ document.addEventListener('click', e=>{
     case 'wready': setIn({wd: IN.wd ? null : 1}); saveWill(); render(); break;
     case 'wcancel': U.pendingW = null; render(); break;
     case 'wdel': U.draft.c.splice(+d.i,1); saveWill(); render(); break;
-    case 'sheet': U.sheet = d.v; U.mode = null; if(d.v==='notes') U.noteMode = 'x'; render(); break;
+    case 'sheet': U.sheet = d.v; U.mode = null; render(); break;
     case 'closesheet': U.sheet = null; U.mode = null; render(); break;
     case 'mode': U.sheet = null; U.mode = d.v || null; U.selPeek=null; if(U.mode==='ask'){U.askT=null;U.askQ=null;} render(); break;
     case 'selpeek': U.selPeek = +d.i; render(); break;
@@ -1983,6 +2088,7 @@ document.addEventListener('click', e=>{
     case 'lie': { const pv = S.pv?.[me]; if(!pv || pv.lu) break; const on = IN.lie && IN.lie.r===S.r && IN.lie.n===pv.lc; setIn({lie: on ? null : {r:S.r, n:pv.lc}}); render(); break; }
     case 'side': U.side = d.v; render(); break;
     case 'nmode': U.noteMode = d.v; render(); break;
+    case 'fcross': { for(const c of String(d.c).split(',').map(Number)) U.notes[c] = 1; SFX.play('pop'); render(); break; }
     case 'abgo': U.mode = 'ab:'+d.k; U.abSel = {}; if(d.k==='tabdeel' && myHand().length===1) U.abSel.i = 0; if(!ABNEED[d.k]){ const au = (IN.au && IN.au.r===S.r) ? {...IN.au} : {r:S.r}; au[d.k] = {}; setIn({au}); U.mode = null; U.sheet = 'abs'; } render(); break;
     case 'abt': U.abSel.t = d.t; render(); break;
     case 'abq': U.abSel.q = +d.q; render(); break;
@@ -2009,6 +2115,7 @@ document.addEventListener('click', e=>{
     case 'whs': U.whSel.s = +d.s; render(); break;
     case 'whgo': if(U.whSel.t && U.whSel.s!=null){ setIn({wh:{r:S.r, t:U.whSel.t, s:U.whSel.s}}); U.whSel = {}; render(); } break;
     case 'rk': setIn({rk:S.k}); render(); break;
+    case 'kaddab': if(S && S.chw>0 && Date.now() < (U.chUntil||0)){ setIn({ch:{k:S.k}}); SFX.play('ask'); render(); } break;
     case 'pause': if(host) host.pause(); else if(typeof cmd==='function') cmd('pause'); break;
     case 'resume': if(host) host.resume(); else if(typeof cmd==='function') cmd('resume'); break;
     case 'chat': U.chatOpen = true; U.chatAnim = true; U.unread = 0; U.sheet = null; if(!['open','confirm'].includes(U.mode)) U.mode = null; render(); U.chatAnim = false; break;
@@ -2039,6 +2146,7 @@ function tickTimer(){
   const ring = document.getElementById('ring'), fg = document.getElementById('ringfg');
   if(fg) fg.setAttribute('stroke-dashoffset', String(144.5 * (1 - Math.min(1, ms/U.phaseDur))));
   if(ring) ring.classList.toggle('low', s<=5);
+  const ct = document.getElementById('chtimer'); if(ct){ const cs = Math.ceil(Math.max(0, (U.chUntil||0) - Date.now())/1000); ct.textContent = cs ? cs : ''; if(!cs) render(); }
   if(S && S.ph==='wills' && U.screen==='game'){
     const n = willShown();
     if(n !== U.wStep){
