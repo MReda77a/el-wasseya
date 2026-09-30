@@ -4,7 +4,7 @@
    ========================================================== */
 const SPEED = (typeof location!=='undefined' && location.hash==='#fast') ? 0.08
             : (typeof process!=='undefined' && process.env && process.env.WSY_FAST) ? 0.08 : 1;
-const D = {INTRO:8, WILL:75, TURN:25, REVEAL:5, ANS:10, ACCUSE:25, RESULTS:14, TALK:30, VOTE:20, WILLS:10, WILLEACH:7};
+const D = {INTRO:8, WILL:75, TURN:40, REVEAL:15, ANS:10, ACCUSE:25, RESULTS:14, TALK:30, VOTE:20, WILLS:10, WILLEACH:7};
 const dur = k => D[k]*1000*SPEED;
 const TURNS = 6, MAXP = 10, MINP = 4;
 
@@ -23,6 +23,7 @@ const ABIL = ['mo7','sa2r','nadara','talmee7','dar3','kashf','ekhras','fakh','ta
 const ABNEED = {mo7:'T', sa2r:'I', kashf:'T', ekhras:'T', tabdeel:'H'};
 function ansOptions(q, nmax, hs){ if(q===0){ const o=[]; for(let x=hs; x<=nmax*hs; x++) o.push(x); return o; } if(q===6){ const o=[]; for(let x=1;x<=nmax;x++) o.push(x); return o; } return [1,0]; }
 const EVENTS = ['dark','truth','liars','fast','fakehint','double','silence','kareem','fadee7a','memory'];
+const LEVELS = { easy:{tb:3, init:2, gold:2}, normal:{tb:8, init:1, gold:1}, hard:{tb:9, init:1, gold:0} };
 const NEEDT = {give:1,minus:1,skip:1,take:1,swap:2,expose:1,cancel:1};
 
 function answer(hand, q, th){
@@ -69,12 +70,12 @@ class Host {
   constructor(code, myId, solo){
     this.code = code; this.me = myId; this.solo = solo;
     this.P = []; this.ph = 'lobby'; this.v = 0; this.r = 0; this.R = 1; this.tn = 0; this.fin = false;
-    this.peersPids = new Set(); this.peerInputs = {}; this.myInput = {};
+    this.peersPids = new Set(); this.peerInputs = {}; this.myInput = {}; this.lvl = 'normal';
     this.resetGame();
   }
   resetGame(){
     this.r=0; this.tn=0; this.fin=false; this.vault=[]; this.hands={}; this.table=[]; this.hints=[]; this.lg=[]; this.ev=[]; this.peeks={};
-    this.acts=[]; this.res=null; this.court=null; this.el=null; this.win=null; this.revCount=0; this.evk=null; this.elimOrder=[]; this.pending=[]; this.courtNo=0; this.opens=0; this.dl=0;
+    this.paused=false; this.acts=[]; this.res=null; this.court=null; this.el=null; this.win=null; this.revCount=0; this.evk=null; this.elimOrder=[]; this.pending=[]; this.courtNo=0; this.opens=0; this.dl=0;
     for(const p of this.P) Object.assign(p, {pts:0, alive:true, rp:0, open:null, lieUsed:false, liedTo:[], caught:false, skip:false, skipNext:false, will:null, willUsed:false, cancelled:false, askedBy:{}, acted:false, outPts:0});
   }
   add(id, name, bot){
@@ -86,6 +87,9 @@ class Host {
   conn(p){ return p.bot || this.solo || this.peersPids.has(p.id); }
   inputs(){ const I = {...this.peerInputs}; if(this.solo) I[this.me] = this.myInput; for(const p of this.P) if(p.bot) I[p.id] = p.bi || {}; return I; }
   eligible(){ return this.P.filter(p=>p.alive && !p.skip && !p.open && this.conn(p)); }
+  allOk(I){ const k = this.key(); const hs = this.P.filter(p=>!p.bot && this.conn(p)); return hs.length>0 && hs.every(p=>I[p.id]?.rk===k); }
+  pause(){ if(this.paused || this.ph==='lobby' || this.ph==='over') return; this.paused = true; this.pauseAt = Date.now(); }
+  resume(){ if(!this.paused) return; this.dl += Date.now() - this.pauseAt; this.paused = false; }
   key(){ return `${this.ph}-${this.r}-${this.tn}-${this.courtNo}`; }
   set(ph, k){ this.ph = ph; this.dl = Date.now() + (k ? dur(k) : 0); }
 
@@ -98,6 +102,7 @@ class Host {
   tick(){
     const now = Date.now(), I = this.inputs();
     if(this.ph==='lobby' || this.ph==='over') return;
+    if(this.paused) return;
     this.bots(I, now);
     const hx = I[this.me]?.nx === this.key();
     switch(this.ph){
@@ -126,7 +131,7 @@ class Host {
       case 'reveal':
         this.processAbilities(I);
         this.processOpens(I);
-        if(this.ph==='reveal' && now > this.dl) this.afterReveal();
+        if(this.ph==='reveal' && (now > this.dl || this.allOk(I))) this.afterReveal();
         break;
       case 'accuse': {
         const humans = this.alive().filter(p=>!p.bot && !p.open && this.conn(p));
@@ -153,7 +158,7 @@ class Host {
     return {c, x: String(w.x||'').slice(0,80)};
   }
   startRound(){
-    this.r++; this.tn = 0; this.hints = []; this.lg = []; this.ev = []; this.peeks = {}; this.opens = 0; this.res = null; this.el = null; this.court = null; this.pkp = []; this.mutes = [];
+    this.r++; this.tn = 0; this.hints = []; this.lg = []; this.ev = []; this.peeks = {}; this.opens = 0; this.res = null; this.el = null; this.court = null; this.pkp = []; this.mutes = []; this.pkl = [];
     this.revs = [];
     for(const p of this.P){ if(!p.alive && p.reviveNext){ const mins = this.alive().map(x=>x.pts); p.alive = true; p.pts = mins.length ? Math.min(...mins) : 0; p.reviveNext = false; this.revCount = (this.revCount||0)+1; p.revived = true; this.revs.push(p.id); } }
     const prevEv = this.evk;
@@ -161,14 +166,14 @@ class Host {
     const al = this.alive(); this.fin = al.length === 2;
     const n = al.length;
     this.hs = n>=5 ? 1 : 2;
-    this.nmax = Math.min(9, Math.max(4, Math.ceil((3 + this.hs*n + 3)/3)));
+    const LV = LEVELS[this.lvl] || LEVELS.normal; this.nmax = Math.min(9, Math.max(4, Math.ceil((3 + this.hs*n + LV.tb)/3)));
     this.th = Math.ceil(this.nmax/2);
     const deck = shuffle(deckFor(this.nmax));
     this.vault = deck.splice(0,3); this.hands = {};
     for(const p of al){ this.hands[p.id] = deck.splice(0,this.hs); p.known = [...this.hands[p.id]]; p.pkIdx = []; }
     this.table = deck;
     this.fakeAt = this.evk==='fakehint' ? pick([1,2,4,5]) : -1; this.fk = null;
-    if(this.evk!=='dark'){ this.addHint(0); this.addHint(0); }
+    if(this.evk!=='dark'){ for(let q=0; q<LV.init; q++) this.addHint(0); }
     for(const p of this.P){ p.rp=0; p.open=null; p.lieUsed=false; p.lies=0; p.liedTo=[]; p.caught=false; p.acted=false; p.skip = p.alive && p.skipNext; p.skipNext=false;
       p.ab=[]; p.abUsed=[]; p.ar=[]; p.shield=0; p.trap=0; p.whisper=0; p.muted=0; p.privHints=[]; }
     const pool = ABIL.filter(k=>!(this.evk==='silence' && k==='so2al') && !(this.evk==='truth' && ['fakh','dar3','kashf'].includes(k)) && !(k==='tabdeel' && !this.table.length) && !(k==='sa2r' && !this.table.length));
@@ -182,7 +187,7 @@ class Host {
   }
   canTurn(id){ const p = this.p(id); return p && p.alive && !p.skip && !p.open && this.conn(p); }
   lapEnd(){
-    if(this.lap===1 || (this.lap===2 && this.alive().length>=8)){ const left = this.vault.filter(c=>!this.hints.some(h=>h[0]===9 && h[1]===c)); if(left.length) this.hints.push([9, pick(left), 1]); }
+    const gold = (LEVELS[this.lvl]||LEVELS.normal).gold; if((gold>=1 && this.lap===1) || (gold>=2 && this.lap===2 && this.alive().length>=8)){ const left = this.vault.filter(c=>!this.hints.some(h=>h[0]===9 && h[1]===c)); if(left.length) this.hints.push([9, pick(left), 1]); }
   }
   nextTurn(){
     if(!this.order.some(id=>this.canTurn(id))) return this.endTurns();
@@ -194,7 +199,7 @@ class Host {
     if(this.tn>0 && this.evk!=='dark' && this.tn % Math.max(2, Math.ceil(this.order.length/2)) === 0) this.addHint(this.tn);
     this.cur = this.order[this.ti]; this.tn++; this.la = null;
     for(const p of this.P) p.acted = p.id===this.cur ? false : p.acted;
-    this.set('turn','TURN'); if(this.evk==='fast') this.dl = Date.now() + 12000*SPEED;
+    this.set('turn','TURN'); if(this.evk==='fast') this.dl = Date.now() + 20000*SPEED;
   }
   endTurns(){
     this.cur = null;
@@ -260,17 +265,17 @@ class Host {
   resolveTurn(I, a){
     const cp = this.p(this.cur); if(cp){ cp.acted = true; }
     if(cp && cp.muted){ cp.muted = false; }
-    if(!a || a.k==='n'){ this.la = [this.cur, 'n']; this.set('reveal'); this.dl = Date.now() + 1800*SPEED; return; }
+    if(!a || a.k==='n'){ this.la = [this.cur, 'n']; this.set('reveal'); this.dl = Date.now() + 3000*SPEED; return; }
     if(a.k==='p' && Number.isInteger(a.i) && a.i>=0 && a.i<this.table.length){
-      this.peeks[a.id] = [a.i, this.table[a.i], this.tn]; if(this.evk==='fadee7a') this.pkp.push([this.tn, a.id, this.table[a.i]]);
+      this.peeks[a.id] = [a.i, this.table[a.i], this.tn]; (this.pkl = this.pkl || []).push([this.tn, a.id, a.i]); if(this.evk==='fadee7a') this.pkp.push([this.tn, a.id, this.table[a.i]]);
       const pp=this.p(a.id); if(pp){ pp.known=pp.known||[]; if(!pp.known.includes(this.table[a.i])) pp.known.push(this.table[a.i]); pp.pkIdx=(pp.pkIdx||[]); pp.pkIdx.push(a.i); }
-      this.la = [a.id, 'p', a.i]; this.set('reveal'); this.dl = Date.now() + 4000*SPEED; return;
+      this.la = [a.id, 'p', a.i]; this.set('reveal'); this.dl = Date.now() + 8000*SPEED; return;
     }
     if(a.k==='q'){ const A = this.p(a.id), T = this.p(a.t), q = a.q;
       if(A && T && T.alive && T.id!==A.id && this.hands[T.id] && q>=0 && q<8 && !(this.hs===1 && [0,5,6].includes(q))){
         this.pend = {a:A.id, t:T.id, q, truth:answer(this.hands[T.id], q, this.th), k:this.r+'-'+this.tn};
         this.set('ans','ANS'); return; } }
-    this.la = [this.cur, 'n']; this.set('reveal'); this.dl = Date.now() + 1800*SPEED;
+    this.la = [this.cur, 'n']; this.set('reveal'); this.dl = Date.now() + 3000*SPEED;
   }
   canLie(T, A){ return this.evk!=='truth' && A && A.shield!==this.r && (T.lies||0) < this.lieMax() + (T.trap===this.r ? 1 : 0); }
   finishAns(v){
@@ -284,7 +289,7 @@ class Host {
   }
   afterReveal(){
     const cp = this.p(this.cur);
-    if(cp && cp.extraQ===this.r && this.la && this.la[1]!=='n' && this.canTurn(cp.id)){ cp.extraQ = -1; cp.acted = false; this.tn++; this.la = null; this.set('turn','TURN'); if(this.evk==='fast') this.dl = Date.now() + 12000*SPEED; return; }
+    if(cp && cp.extraQ===this.r && this.la && this.la[1]!=='n' && this.canTurn(cp.id)){ cp.extraQ = -1; cp.acted = false; this.tn++; this.la = null; this.set('turn','TURN'); if(this.evk==='fast') this.dl = Date.now() + 20000*SPEED; return; }
     this.nextTurn();
   }
   scoreRound(I){
@@ -435,14 +440,14 @@ class Host {
     const S = {
       c:this.code, h:this.me, ph:this.ph, r:this.r, R:this.R, tn:this.tn, TT:this.LAPS||2, lap:this.lap||1, cur:this.cur||null, pend:this.pend?{a:this.pend.a,t:this.pend.t,q:this.pend.q,k:this.pend.k}:null, la:this.la||null, ord:this.order||[], fin:this.fin?1:0, k:this.key(),
       P:this.P.map(p=>[p.id, p.name, p.alive?p.pts:(p.outPts||0), (p.alive?1:0)|(p.open?.ok?2:0)|(p.open&&!p.open.ok&&!p.open.half?4:0)|(p.open?.half?512:0)|(p.skip?8:0)|(p.bot?16:0)|(p.id===this.cur?32:0)|(this.conn(p)?64:0)|(p.wd?128:0), p.rp]),
-      tc:this.table.length, nm:this.nmax||5, hs:this.hs||2, th:this.th||3, hi:this.hints, lg:lgPub, ev:this.ev, pv, evk:this.evk||null, pkp:this.pkp||[], revs:this.revs||[], mutes:this.mutes||[], fk:(this.ph==='results'&&this.fk!=null)?this.hints[this.fk]:null, fki:this.ph==='results'?this.fk:null,
+      tc:this.table.length, pz:this.paused?1:0, lvl:this.lvl, pkl:this.pkl||[], nm:this.nmax||5, hs:this.hs||2, th:this.th||3, hi:this.hints, lg:lgPub, ev:this.ev, pv, evk:this.evk||null, pkp:this.pkp||[], revs:this.revs||[], mutes:this.mutes||[], fk:(this.ph==='results'&&this.fk!=null)?this.hints[this.fk]:null, fki:this.ph==='results'?this.fk:null,
       res:this.ph==='results'?this.res:null, lv:this.ph==='results'||this.ph==='over'?(this.lastVault||this.vault):null,
       ct:this.court&&['talk','vote','over'].includes(this.ph)?{d:this.court.d, m:this.court.m, w:this.court.win?1:0, k:this.courtKey(), cnt:this.court.cnt||null}:null,
       el:this.ph==='wills'?this.el:null, win:this.win
     };
     const body = JSON.stringify(S);
     if(body !== this._last){ this._last = body; this.v++; }
-    S.v = this.v; S.rem = Math.max(0, this.dl - now);
+    S.v = this.v; S.rem = Math.max(0, this.dl - (this.paused ? this.pauseAt : now));
     return S;
   }
 }

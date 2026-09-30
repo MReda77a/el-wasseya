@@ -21,6 +21,7 @@
       this.host = null; this.owner = null; this.pub = true;
       this.conns = new Map();   // pid -> conn
       this.lastV = -1; this.lastN = -1; this.emptySince = null;
+      this.chat = []; this.chatSeq = 0; this.rate = {};
     }
     /** What the "open rooms" list shows. */
     summary(){
@@ -38,6 +39,7 @@
         case 'input':  return this.input(conn, msg.d);
         case 'cmd':    return this.cmd(conn, msg);
         case 'leave':  return this.close(conn, true);
+        case 'chat':   return this.chatMsg(conn, msg.m);
       }
     }
     create(conn, msg){
@@ -69,6 +71,7 @@
       this.conns.set(pid, conn); conn.pid = pid;
       this.host.peersPids.add(pid);
       this.emptySince = null;
+      conn.send({t:'chatlog', c:this.chat.slice(-30)});
       this.sendState(true); this.changed();
     }
     close(conn, explicit){
@@ -109,8 +112,21 @@
           for(const k in h.peerInputs) h.peerInputs[k] = { n: h.peerInputs[k].n };
         } break;
         case 'pub': this.pub = !!d.v; break;
+        case 'pause': h.pause(); break;
+        case 'resume': h.resume(); break;
+        case 'lvl': if(h.ph === 'lobby' && ['easy','normal','hard'].includes(d.v)) h.lvl = d.v; break;
       }
       this.sendState(true); this.changed();
+    }
+    chatMsg(conn, m){
+      const pid = conn.pid, h = this.host; if(!pid || !h) return;
+      m = String(m || '').replace(/[\u0000-\u001f]/g, '').trim().slice(0, 100); if(!m) return;
+      const now = Date.now(), recent = (this.rate[pid] || []).filter(x => now - x < 10000);
+      if(recent.length >= 8) return;
+      recent.push(now); this.rate[pid] = recent;
+      const p = h.p(pid), c = { id:'s' + (++this.chatSeq), pid, n: p ? p.name : '?', m };
+      this.chat.push(c); if(this.chat.length > 50) this.chat.shift();
+      for(const cn of this.conns.values()) cn.send({t:'chat', c});
     }
     /** Called every 200 ms while someone is connected. */
     tick(){

@@ -245,7 +245,8 @@ button.def{background:var(--panel2)}
 
 /* overlay */
 .ov{position:fixed;inset:0;z-index:50;background:rgba(20,6,50,.7);backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px}
-.ovc{width:100%;max-width:400px;background:var(--panel);color:var(--ink);border:var(--line);border-radius:28px;padding:22px;display:flex;flex-direction:column;gap:14px;text-align:center;animation:rise .35s cubic-bezier(.3,1.5,.5,1);box-shadow:0 8px 0 var(--ink)}
+.ovc{width:100%;max-width:400px;background:var(--panel);color:var(--ink);border:var(--line);border-radius:28px;padding:22px;display:flex;flex-direction:column;gap:14px;text-align:center;box-shadow:0 8px 0 var(--ink)}
+.ovc.anim{animation:rise .35s cubic-bezier(.3,1.5,.5,1)}
 .ovc .big{font-size:3.8rem;line-height:1;width:96px;height:96px;margin-inline:auto;display:grid;place-items:center;border-radius:50%;background:var(--yellow);border:var(--line)}
 .ovc h2{font-size:1.8rem}
 .ovc p{font-size:1.05rem;font-weight:600;opacity:.8}
@@ -368,7 +369,8 @@ button.def{background:var(--panel2)}
 .sb.off{opacity:.6}
 .sb.lie2.on{background:var(--pink);border-color:var(--ink)}
 .sheet-bg{position:fixed;inset:0;z-index:30;background:rgba(20,6,50,.55)}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:31;max-height:84vh;overflow-y:auto;background:var(--panel);color:var(--ink);border-top:3px solid var(--ink);border-radius:26px 26px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.3);animation:slideup .28s cubic-bezier(.3,1.3,.5,1)}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:31;max-height:84vh;overflow-y:auto;background:var(--panel);color:var(--ink);border-top:3px solid var(--ink);border-radius:26px 26px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.3)}
+.sheet.anim{animation:slideup .28s cubic-bezier(.3,1.3,.5,1)}
 @keyframes slideup{from{transform:translateY(40%);opacity:.3}}
 .sheet-in{max-width:520px;margin-inline:auto;padding:6px 16px calc(22px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}
 .sheet-h{position:sticky;top:0;display:flex;justify-content:center;align-items:center;padding:8px 0 4px;background:var(--panel);z-index:2}
@@ -397,6 +399,55 @@ button.def{background:var(--panel2)}
 .aopt.sent{opacity:1;outline:4px solid var(--yellow)}
 .liebtn{background:#fff;color:var(--ink)}
 .liebtn.on{background:var(--pink);color:#fff}
+.fullscr{position:fixed;inset:0;z-index:40;overflow-y:auto;background:radial-gradient(120% 60% at 50% 0%,#8b3dff,var(--bg) 55%,var(--bg-lo))}
+.fullscr.anim{animation:rise .25s ease-out}
+.fs-in{max-width:520px;margin-inline:auto;min-height:100vh;min-height:100dvh;padding:calc(12px + env(safe-area-inset-top,0px)) 16px 0;display:flex;flex-direction:column;gap:12px;color:var(--on-bg)}
+.fs-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.fs-head .sheet-t{font-size:1.45rem;text-shadow:0 3px 0 var(--ink)}
+.back2{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:999px;padding:6px 14px;font-weight:800;box-shadow:0 3px 0 var(--ink)}
+.pgrid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:16px 10px;justify-items:center;padding:8px 0 16px}
+.pcell{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px}
+.pcell .card.big{width:84px;height:118px}
+.pcell.on .card{transform:translateY(-8px) rotate(-4deg);box-shadow:0 0 0 5px var(--yellow),0 9px 0 var(--ink)}
+.pcell.seen .card{opacity:.9}
+.pcell .tagme{position:absolute;top:-10px;inset-inline-end:-8px;font-style:normal;font-size:.72rem;font-weight:800;background:#fff;color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:1px 6px}
+.pcell .who{display:flex;gap:2px;min-height:22px;align-items:center}
+.pcell .who b{font-size:.7rem}
+.av.xs{width:22px;height:22px;font-size:.65rem;border-width:2px;box-shadow:none}
+.fs-foot{margin-top:auto;position:sticky;bottom:0;margin-inline:-16px;padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--bg-lo) 35%)}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mode{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding:10px 6px;border-radius:18px;background:#fff;border:2px solid var(--ink);box-shadow:0 3px 0 var(--ink);color:var(--ink)}
+.mode .mi{font-size:1.8rem;line-height:1}
+.mode b{font-weight:800;font-size:1rem;line-height:1.1}
+.mode span:last-child{font-size:.72rem;opacity:.65;line-height:1.25}
+.mode.sel{background:var(--yellow);transform:translateY(-2px);box-shadow:0 5px 0 var(--ink)}
+.mode:disabled{cursor:default;opacity:1}
+.okrow{display:flex;justify-content:center}
+.chatfab{position:fixed;z-index:25;inset-inline-end:14px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;background:#fff;border:3px solid var(--ink);box-shadow:0 5px 0 var(--ink);font-size:1.6rem;display:grid;place-items:center}
+.chatfab.up{bottom:calc(196px + env(safe-area-inset-bottom,0px));width:48px;height:48px;font-size:1.35rem}
+.chatfab i{position:absolute;top:-6px;inset-inline-start:-6px;font-style:normal;background:var(--pink);color:#fff;border:2px solid var(--ink);border-radius:999px;min-width:22px;padding:0 5px;font-size:.75rem;font-weight:800}
+.sheet.chat .sheet-in{gap:10px}
+.chatlist{display:flex;flex-direction:column;gap:8px;max-height:42vh;min-height:120px;overflow-y:auto;padding:4px 2px}
+.cmsg{display:flex;gap:8px;align-items:flex-end}
+.cmsg.mine{justify-content:flex-end}
+.cbub{max-width:78%;background:var(--panel2);border:2px solid var(--ink);border-radius:16px 16px 16px 4px;padding:6px 10px;display:flex;flex-direction:column;gap:1px;font-weight:600;word-break:break-word}
+[dir=rtl] .cbub{border-radius:16px 16px 4px 16px}
+.cbub b{font-size:.75rem;opacity:.7}
+.cmsg.mine .cbub{background:var(--yellow);border-radius:16px 16px 4px 16px}
+[dir=rtl] .cmsg.mine .cbub{border-radius:16px 16px 16px 4px}
+.cmsg.emo .cbub{background:transparent;border:0;font-size:2.2rem;padding:0}
+.emobar{display:flex;gap:4px;overflow-x:auto;padding:2px 0}
+.emobar button{font-size:1.55rem;padding:4px 6px;border-radius:12px;flex:none}
+.emobar button:active{transform:scale(1.3)}
+.quick{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.quick .chipb{flex:none;font-size:.85rem;padding:6px 10px}
+.chatin{display:flex;gap:8px}
+.chatin input{flex:1;padding:10px 14px;font-size:1rem}
+.floaters{position:fixed;inset:0;pointer-events:none;z-index:70;overflow:hidden}
+.floatemo{position:absolute;bottom:-70px;font-size:3.2rem;animation:floatup 2.6s ease-out forwards;filter:drop-shadow(0 4px 0 rgba(36,16,74,.35))}
+@keyframes floatup{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:1;transform:translateY(-15vh) scale(1.1)}100%{transform:translateY(-95vh) scale(1) rotate(-12deg);opacity:0}}
+.toast{position:absolute;top:calc(74px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);max-width:88%;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:18px;padding:8px 14px;box-shadow:0 5px 0 var(--ink);font-weight:600;animation:rise .3s ease-out;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast.out{opacity:0;transition:opacity .4s}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 <style>
@@ -418,7 +469,12 @@ const AVC = ['#ffd23f','#ff7eb3','#4fd1ff','#6ff0a6','#c3a2ff','#ff9a3c','#2ee6c
 const T = {
 ar:{
  title:'الوصية',
+ starting:'بنبدأ...',
+ chatT:'الشات', chatPh:'اكتب رسالة...', send:'ابعت', chatEmpty:'لسه محدش كتب حاجة. ابدأ انت!', quick:['كداب! 🤥','يا ساتر 😱','برافو 👏','ركّز يا عم 🧠','هتخرج 😂','حظ حلو 🍀','استنوا عليا ⏳'],
+ pausedT:'اللعبة واقفة', pausedHost:'محدش يقدر يلعب لحد ما تكمّل.', pausedWait:'{p} وقّف اللعبة. استنى لحد ما يكمّل.', resume:'كمّل', okNext:'تمام، كمّل', okWait:'مستنيين الباقي...',
+ lvlT:'مستوى الصعوبة', lvlHost:'صاحب الأوضة هو اللي بيختار.', lv_easy:'سهل', lv_normal:'عادي', lv_hard:'صعب', lvd_easy:'ترابيزة صغيرة وتلميحات كتير', lvd_normal:'ترابيزة مليانة وتلميح دهبي', lvd_hard:'من غير تلميح دهبي',
  noServer:'مش قادرين نوصل للسيرفر. اتأكد من النت وجرّب تاني، أو العب لوحدك مع البوتات.', errStarted:'اللعبة في الأوضة دي بدأت خلاص.', errFull:'الأوضة مليانة.',
+ tableT:'الترابيزة ({n} كروت)', peekHelp2:'اختار كارت تبص عليه. الوشوش اللي تحت الكارت = مين بص عليه قبل كده.', youSaw:'شفته', pickCard:'اختار كارت', tableEmpty:'مفيش كروت على الترابيزة.',
  b_asked:'{p} بيسألك!', b_answering:'{p} بيجاوب...', truthTag:'الحقيقة', lieBtn:'اكدب', lieCancel:'رجوع للحقيقة', ansHelp:'دوس على الإجابة. الحقيقة بس مفتوحة، ولو عايز تكدب دوس «اكدب».', lieHelp2:'اختار الكدبة اللي عايزها. محدش هيعرف.', ansSent:'اتبعتت ✓', liesLeft:'كدبات: {n}', shieldNote:'اللي بيسألك معاه درع، مينفعش تكدب عليه.',
 
  b_their:'دور {p}', b_their_s:'استنى دورك، وركّز في الإجابة.', b_mine:'دورك! 🎯', b_rev2:'{p} لعب', theirS:'بيفكر... ركّز عشان تسمع الإجابة', asked:'سأل', youPeeked:'بصيت على كارت {i}', hePeeked:'{p} بص على كارت {i}', hePassed:'{p} عدّى دوره',
@@ -528,7 +584,12 @@ ar:{
 },
 en:{
  title:'El Wasseya',
+ starting:'Starting...',
+ chatT:'Chat', chatPh:'Type a message...', send:'Send', chatEmpty:'No messages yet. Say something!', quick:['Liar! 🤥','Oh no 😱','Nice 👏','Focus! 🧠','You\'re out 😂','Good luck 🍀','Wait for me ⏳'],
+ pausedT:'Game paused', pausedHost:'Nobody can play until you resume.', pausedWait:'{p} paused the game. Wait for them to resume.', resume:'Resume', okNext:'OK, next', okWait:'Waiting for the others...',
+ lvlT:'Difficulty', lvlHost:'The host picks.', lv_easy:'Easy', lv_normal:'Normal', lv_hard:'Hard', lvd_easy:'Small table, lots of hints', lvd_normal:'Full table, one golden hint', lvd_hard:'No golden hint',
  noServer:'Can\'t reach the server. Check your connection and try again, or play solo with bots.', errStarted:'That room already started.', errFull:'That room is full.',
+ tableT:'The table ({n} cards)', peekHelp2:'Pick a card to peek at. Faces under a card = who already peeked at it.', youSaw:'seen', pickCard:'Pick a card', tableEmpty:'No cards on the table.',
  b_asked:'{p} is asking you!', b_answering:'{p} is answering...', truthTag:'truth', lieBtn:'Lie', lieCancel:'Back to the truth', ansHelp:'Tap your answer. Only the truth is open; tap "Lie" to unlock the rest.', lieHelp2:'Pick whatever lie you want. Nobody will know.', ansSent:'Sent ✓', liesLeft:'lies: {n}', shieldNote:'The asker has a shield, you can\'t lie to them.',
 
  b_their:'{p}\'s turn', b_their_s:'Wait for your turn and watch the answer.', b_mine:'Your turn! 🎯', b_rev2:'{p} played', theirS:'Thinking... watch for the answer', asked:'asked', youPeeked:'You peeked at card {i}', hePeeked:'{p} peeked at card {i}', hePassed:'{p} skipped their turn',
@@ -637,7 +698,7 @@ function applyLang(){ document.documentElement.lang = lang; document.documentEle
 /* ============ CLIENT STATE ============ */
 let me = store.get('wsy_pid'); if(!me){ me = rid(6); store.set('wsy_pid', me); }
 const U = { screen:'home', name: store.get('wsy_name')||'', code:'', err:'', mode:null, selPeek:null, askT:null, askQ:null,
-  notes:{}, seen:{}, notesR:0, pick:[], sheet:null, arSeen:0, abSel:{}, rooms:[], lobbyOk:false, pubRoom:true, lastPub:'', noteMode:'x', side:'notes', draft:{c:[], x:''}, pendingW:null, dlLocal:0, phaseDur:1,
+  notes:{}, seen:{}, tpk:{}, notesR:0, chat:[], chatOpen:false, unread:0, chatDraft:'', chatAnim:false, pick:[], sheet:null, arSeen:0, abSel:{}, rooms:[], lobbyOk:false, pubRoom:true, lastPub:'', noteMode:'x', side:'notes', draft:{c:[], x:''}, pendingW:null, dlLocal:0, phaseDur:1,
   peekUntil:0, copied:false, help:false, helpI:0, seenHints:0, confetti:false };
 let S = null, IN = {}, host = null, hostTimer = null, joinTimer = null, solo = false;
 
@@ -654,6 +715,8 @@ function netOpen(code, first, onReply){
   ws.onopen = ()=>{ NET.retry = 0; ws.send(JSON.stringify(first)); };
   ws.onmessage = ev=>{ let m; try{ m = JSON.parse(ev.data); }catch(e){ return; }
     if(m.t==='ok' || m.t==='err'){ if(!replied){ replied = true; onReply && onReply(m); } if(m.t==='ok') sendInput(true); return; }
+    if(m.t==='chat' && m.c){ addChat({...m.c, ts:Date.now()}); return; }
+    if(m.t==='chatlog' && Array.isArray(m.c)){ for(const c of m.c) addChat({...c, old:1}); render(); return; }
     if(m.t==='state' && !solo) recvState(m.S);
     if(m.t==='kicked'){ NET.want = false; store.set('wsy_room',''); S = null; U.screen='home'; render(); }
   };
@@ -672,6 +735,7 @@ function sendInput(now){
   if(now) go(); else sendTimer = setTimeout(go, 40);
 }
 function setIn(patch){ for(const k in patch){ if(patch[k]===null) delete IN[k]; else IN[k]=patch[k]; } if(host) host.myInput = {...IN}; sendInput(); }
+function chatSend(m){ if(solo){ addChat({id:'l'+Date.now(), pid:me, n:U.name, m, ts:Date.now()}); return; } netSend({t:'chat', m}); }
 function cmd(c, v){ if(!solo) netSend({t:'cmd', c, v}); }
 /* open public rooms: ask the server every few seconds while you're on the home screen */
 async function pollRooms(){
@@ -690,19 +754,20 @@ function recvState(ns){
   if(prevK !== ns.k){ U.phaseDur = Math.max(1, ns.rem||1); onPhaseChange(); }
   const ar = ns.pv?.[me]?.ar || [];
   if(ns.r !== U.arR){ U.arR = ns.r; U.arSeen = 0; }
-  for(let k=U.arSeen; k<ar.length; k++){ const a = ar[k]; if(a[0]==='sa2r' && U.notes[a[2]]!==2){ U.notes[a[2]]=1; U.seen[a[2]]=1; } if(a[0]==='tabdeel'){ U.notes[a[1]]=1; } }
+  for(let k=U.arSeen; k<ar.length; k++){ const a = ar[k]; if(a[0]==='sa2r'){ U.tpk[a[1]] = a[2]; if(U.notes[a[2]]!==2){ U.notes[a[2]]=1; U.seen[a[2]]=1; } } if(a[0]==='tabdeel'){ U.notes[a[1]]=1; } }
   U.arSeen = ar.length;
   U.screen = 'game';
   render();
 }
 function onPhaseChange(){
+  U.phaseAt = Date.now();
   if(!((['open','confirm'].includes(U.mode) || String(U.mode).startsWith('ab:')) && ['turn','reveal'].includes(S.ph))) U.mode = null;
   if(S.ph==='ans'){ U.lieMode = false; if(S.pend && S.pend.t===me){ try{ navigator.vibrate && navigator.vibrate([80,60,80]); }catch(_){} } }
   if(S.ph==='turn'){ U.selPeek=null; U.askT=null; U.askQ=null; if(S.cur===me){ try{ navigator.vibrate && navigator.vibrate(120); }catch(_){} } }
-  if(S.r !== U.notesR){ U.notes = {}; U.seen = {}; U.pick = []; U.mode = null; U.sheet = null; U.notesR = S.r; U.seenHints = 0; setIn({g:null, o:null, a:null, ac:null}); }
-  if(S.ph==='reveal'){ const pk = S.pv?.[me]?.pk; if(pk && pk[2]===S.tn){ U.peekUntil = Date.now()+3000; setTimeout(render, 3100); if(U.notes[pk[1]]!==2) U.notes[pk[1]]=1; U.seen[pk[1]]=1; } }
-  if(S.ph==='over'){ U.confetti = true; setTimeout(()=>{U.confetti=false; render();}, 3500); }
-  if(S.ph==='lobby' || S.ph==='will'){ if(S.ph==='lobby') U.draft = {c:[], x:''}; setIn({wd:null}); }
+  if(S.r !== U.notesR){ U.notes = {}; U.seen = {}; U.tpk = {}; U.pick = []; U.mode = null; U.sheet = null; U.notesR = S.r; U.seenHints = 0; setIn({g:null, o:null, a:null, ac:null}); }
+  if(S.ph==='reveal'){ const pk = S.pv?.[me]?.pk; if(pk && pk[2]===S.tn){ U.tpk[pk[0]] = pk[1]; U.peekUntil = Date.now()+3000; setTimeout(render, 3100); if(U.notes[pk[1]]!==2) U.notes[pk[1]]=1; U.seen[pk[1]]=1; } }
+  if(S.ph==='over'){ U.confetti = true; setTimeout(()=>{U.confetti=false; U.confHTML=null; render();}, 3500); }
+  if(S.ph==='lobby' || S.ph==='will'){ U.draft = {c:[], x:''}; U.pendingW = null; U.starting = false; setIn({wd:null}); }
   try{ window.scrollTo({top:0}); }catch(_){}
 }
 function startHostLoop(){
@@ -745,7 +810,7 @@ function leave(){
   clearInterval(hostTimer);
   if(!solo) netClose(true);
   store.set('wsy_room','');
-  host = null; S = null; IN = {};
+  host = null; S = null; IN = {}; U.chat = []; U.unread = 0; U.chatOpen = false;
   solo = false; U.screen = 'home'; U.code=''; U.err=''; render();
 }
 
@@ -772,7 +837,7 @@ function hintText(h){ const col = n => T[lang].colors[n];
 function ansBadge(q, a){ if(q===0||q===6) return `<span class="ansb v num">${a}</span>`; return a ? `<span class="ansb y">${t('yes')}</span>` : `<span class="ansb n">${t('no')}</span>`; }
 function willSentence(k, a, b){ return t('WS_'+k, {a: a?`<b>${nm(a)}</b>`:'…', b: b?`<b>${nm(b)}</b>`:'…'}); }
 function qT(i){ if(i===0 && S?.hs===1) return T[lang].Q0one; return T[lang].Q[i].replace('{n}', S?.th ?? 3).replace('{h}', S?.hs===1 ? T[lang].oneCard : T[lang].twoCards); }
-function remMs(){ return Math.max(0, U.dlLocal - Date.now()); }
+function remMs(){ if(S && S.pz) return S.rem||0; return Math.max(0, U.dlLocal - Date.now()); }
 const stars = () => Object.keys(U.notes).filter(k=>U.notes[k]===2).map(Number);
 const isHost = () => solo ? !!host : !!(S && S.h===me);
 const myHand = () => S?.pv?.[me]?.h || [];
@@ -792,13 +857,29 @@ function logoHTML(sm){
 }
 /* ============ RENDER ============ */
 const app = document.getElementById('app');
+const layerEl = (()=>{ const d = document.createElement('div'); d.id = 'layer'; document.body.appendChild(d); return d; })();
+function pauseView(){ return `<div class="ov"><div class="ovc"><div class="big">⏸️</div><h2>${t('pausedT')}</h2><p>${isHost()?t('pausedHost'):t('pausedWait',{p:nm(S.h)})}</p>${isHost()?`<button class="btn gold lg block" data-act="resume">▶️ ${t('resume')}</button>`:''}</div></div>`; }
 function render(){
   applyLang();
   const a = document.activeElement, fid = a && a.id, sel = a && a.selectionStart;
-  let html = U.screen==='home' ? homeView() : U.screen==='wait' ? waitView() : gameView();
-  if(U.help) html += helpView();
-  if(U.confetti) html += confettiView();
-  app.innerHTML = html;
+  const html = U.screen==='home' ? homeView() : U.screen==='wait' ? waitView() : gameView();
+  let layer = '';
+  const ansMe = S && S.ph==='ans' && S.pend && S.pend.t===me;
+  if(U.screen==='game' && S){
+    if(!ansMe) layer += chatFab();
+    if(U.chatOpen && !ansMe) layer += chatView();
+    else if(P(me) && ['turn','reveal','ans'].includes(S.ph)) layer += sheetView();
+  }
+  if(U.screen==='game' && S && S.pz) layer += pauseView();
+  if(U.help) layer += helpView();
+  if(U.confetti) layer += confettiView();
+  if(html !== U.lastMain){ app.innerHTML = html; U.lastMain = html; }
+  if(layer !== U.lastLayer){
+    const old = layerEl.querySelector('.sheet,.fullscr'), top = old ? old.scrollTop : 0;
+    layerEl.innerHTML = layer; U.lastLayer = layer;
+    const cl = document.getElementById('chatlist'); if(cl) cl.scrollTop = cl.scrollHeight;
+    const nw = layerEl.querySelector('.sheet,.fullscr'); if(nw && top) nw.scrollTop = top;
+  }
   if(fid){ const e = document.getElementById(fid); if(e){ e.focus(); try{ if(sel!=null) e.setSelectionRange(sel, sel); }catch(_){} } }
   tickTimer();
 }
@@ -838,7 +919,7 @@ function hud(){
   const timed = !['lobby','over'].includes(S.ph);
   return `<header class="hud"><div><span class="pill">${rl}</span>${dots}</div>
    <div class="ring" id="ring" ${timed?'':'hidden'}><svg viewBox="0 0 54 54"><circle class="tr" cx="27" cy="27" r="23"/><circle class="fg" id="ringfg" cx="27" cy="27" r="23" stroke-dasharray="144.5" stroke-dashoffset="0"/></svg><span id="timer" class="num"></span></div>
-   <div class="hud-r"><div class="score"><b class="num">${mp?mp[2]:0}</b><small>${t('pts')}</small></div><button class="qbtn" data-act="help" aria-label="${t('how')}">?</button></div></header>`;
+   <div class="hud-r"><div class="score"><b class="num">${mp?mp[2]:0}</b><small>${t('pts')}</small></div>${(isHost() && !['lobby','over'].includes(S.ph)) ? `<button class="qbtn" data-act="pause" aria-label="pause">⏸</button>` : ''}<button class="qbtn" data-act="help" aria-label="${t('how')}">?</button></div></header>`;
 }
 function banner(compact){
   const mp = meP(), f = mp ? mp[3] : 0;
@@ -884,7 +965,7 @@ function gameView(){
     case 'lobby': body = lobbyView(); break;
     case 'will': body = willView(); break;
     case 'intro': body = introView(); break;
-    case 'turn': case 'reveal': case 'ans': return hud() + banner(true) + roundView() + footer() + `<div class="ctl-space"></div>` + controller() + sheetView();
+    case 'turn': case 'reveal': case 'ans': return hud() + banner(true) + roundView() + footer() + `<div class="ctl-space"></div>` + controller();
     case 'accuse': body = accuseView(); break;
     case 'results': body = resultsView(); break;
     case 'talk': case 'vote': body = courtView(); break;
@@ -901,9 +982,11 @@ function lobbyView(){
   const people = `<div class="sec"><div class="spread"><span class="sec-t">👥 ${lang==='ar'?'اللعيبة':'Players'}</span><span class="pill num">${n}/${MAXP}</span></div>
     <div class="pgrid">${S.P.map(x=>`<div class="person ${x[0]===me?'me':''}">${avatar(x[0],'lg', x[0]===S.h?'👑':'')}<span class="nm">${esc(x[1])}</span></div>`).join('')}
     ${isHost() && n<MAXP ? `<button class="person" data-act="addbot"><span class="av lg" style="--av:#ffffff">+</span><span class="nm muted">${t('addBot').replace('+ ','')}</span></button>`:''}</div></div>`;
-  const start = isHost() ? `${n<MINP?`<p class="muted center small">${t('needMore',{n:MINP})}</p>`:''}<button class="btn gold lg block" data-act="start" ${n<MINP?'disabled':''}>${t('start')} 🎲</button>` : `<div class="waitbox"><div class="bigemoji">⏳</div></div>`;
+  const start = isHost() ? `${n<MINP?`<p class="muted center small">${t('needMore',{n:MINP})}</p>`:''}<button class="btn gold lg block" data-act="start" ${(n<MINP||U.starting)?'disabled':''}>${U.starting?'⏳ '+t('starting'):t('start')+' 🎲'}</button>` : `<div class="waitbox"><div class="bigemoji">⏳</div></div>`;
   const pubBlock = (isHost() && !solo) ? `<button class="lie pubsw ${U.pubRoom?'on':''}" data-act="pubtoggle" aria-pressed="${U.pubRoom}"><span style="font-size:1.6rem">${U.pubRoom?'🌍':'🔒'}</span><span><b>${U.pubRoom?t('pubOn'):t('pubOff')}</b><br><span class="small muted">${U.pubRoom?t('pubOnS'):t('pubOffS')}</span></span><span class="tg"></span></button>` : '';
-  return `<div class="hero" style="padding-top:0">${logoHTML(true)}</div>` + codeBlock + pubBlock + people + start + `<button class="btn ghost block" data-act="help">❔ ${t('how')}</button>`;
+  const lv = S.lvl || 'normal';
+  const lvlBlock = `<div class="sec"><span class="sec-t">🎚️ ${t('lvlT')}</span><div class="modes">${['easy','normal','hard'].map(k=>`<button class="mode ${lv===k?'sel':''}" data-act="lvl" data-v="${k}" ${isHost()?'':'disabled'}><span class="mi">${k==='easy'?'😌':k==='normal'?'🧠':'🔥'}</span><b>${t('lv_'+k)}</b><span>${t('lvd_'+k)}</span></button>`).join('')}</div>${isHost()?'':`<p class="small muted">${t('lvlHost')}</p>`}</div>`;
+  return `<div class="hero" style="padding-top:0">${logoHTML(true)}</div>` + codeBlock + pubBlock + lvlBlock + people + start + `<button class="btn ghost block" data-act="help">❔ ${t('how')}</button>`;
 }
 
 /* ---- will ---- */
@@ -1055,9 +1138,18 @@ function ghostBlock(){
       <button class="btn small ${done&&IN.gh.t===x[0]&&IN.gh.s<0?'red':''}" data-act="ghost" data-t="${x[0]}" data-s="-1" ${done?'disabled':''}>−2</button></div></div>`).join('')}
     ${done?`<p class="saved">${t('ghostDone')}</p>`:''}</div>`;
 }
-function peekSheet(){ let g=''; for(let i=0;i<S.tc;i++) g += backCard(i, U.selPeek===i);
-  return `<span class="sheet-t">👀 ${t('peekT')}</span><p class="small muted">${t('aPeekS')}</p><div class="tgrid">${g}</div>
-    <button class="btn gold lg block" data-act="dopeek" ${U.selPeek==null?'disabled':''}>${U.selPeek==null?t('aPeek'):t('peekGo',{i:U.selPeek+1})}</button>`; }
+function peekSheet(){
+  const n = S.tc||0; let g = '';
+  for(let i=0;i<n;i++){
+    const who = [...new Set((S.pkl||[]).filter(x=>x[2]===i && x[1]!==me).map(x=>x[1]))];
+    const mine = U.tpk[i];
+    const face = mine!=null ? card(mine,'big') : `<div class="card big facedown ${U.selPeek===i?'sel':''}">${SEAL}<span class="idx num">${i+1}</span></div>`;
+    g += `<button class="pcell ${U.selPeek===i?'on':''} ${mine!=null?'seen':''}" data-act="selpeek" data-i="${i}" aria-label="${i+1}">${face}${mine!=null?`<i class="tagme">👀 ${t('youSaw')}</i>`:''}<span class="who">${who.length?who.slice(0,4).map(id=>avatar(id,'xs')).join('')+(who.length>4?`<b>+${who.length-4}</b>`:''):''}</span></button>`;
+  }
+  return `<div class="fs-head"><button class="back2" data-act="closesheet">${lang==='ar'?'→':'←'} ${t('back')}</button><span class="sheet-t">🃏 ${t('tableT',{n})}</span></div>
+    <p class="small muted">${t('peekHelp2')}</p>
+    <div class="pgrid2">${g || `<p class="muted center">${t('tableEmpty')}</p>`}</div>
+    <div class="fs-foot"><button class="btn gold lg block" data-act="dopeek" ${U.selPeek==null?'disabled':''}>👀 ${U.selPeek==null?t('pickCard'):t('peekGo',{i:U.selPeek+1})}</button></div>`; }
 function askSheet(){
   const ps = S.P.filter(x=>isAlive(x) && x[0]!==me).map(x=>`<button class="person pick-person ${U.askT===x[0]?'sel':''}" data-act="askt" data-t="${x[0]}">${avatar(x[0])}<span class="nm">${esc(x[1])}</span></button>`).join('');
   const qs = T[lang].Q.map((q,i)=> ((i===0||i===5||i===6) && S.hs===1) ? '' : `<button class="chipb ${U.askQ===i?'sel':''}" data-act="askq" data-q="${i}">${qT(i)}</button>`).join('');
@@ -1080,7 +1172,7 @@ function statusBlock(){
   if(f&(2|4|512)){ const k = (f&2)?'3':(f&512)?'2':'0';
     return `<div class="status resultcard r${k}"><span class="bigemoji">${k==='3'?'🎉':k==='2'?'👏':'💥'}</span><div><b>${t('res'+k)}</b><p class="small muted">${t('res'+k+'s')}</p></div></div>`; }
   if(f&8) return `<div class="status"><span class="bigemoji">⛔</span><p>${t('b_skip_s')}</p></div>`;
-  if(S.ph==='reveal') return revealBig();
+  if(S.ph==='reveal') return revealBig() + okBtn();
   if(S.ph==='ans' && S.pend){ const pd = S.pend;
     return `<div class="bigq"><div class="row center">${avatar(pd.a)}<span class="arrow2">${lang==='ar'?'←':'→'}</span>${avatar(pd.t,'pulse')}</div><p><b>${nm(pd.a)}</b> ${t('asked')} <b>${nm(pd.t)}</b></p><p class="qtext">${qT(pd.q)}</p><div class="bigans"><span class="ansb v">🤔 ...</span></div><p class="small muted">${t('b_answering',{p:nm(pd.t)})}</p></div>`; }
   if(S.cur!==me){
@@ -1090,6 +1182,7 @@ function statusBlock(){
   if(ch) return `<div class="status"><span class="bigemoji">⏳</span><div><b>${t('b_chosen')}</b></div></div>`;
   return `<div class="status go"><span class="bigemoji">🎯</span><div><b>${t('yourTurn')}</b><p class="small muted">${t('yourTurnS')}</p></div><button class="btn ghost small" data-act="pass">${t('pass')}</button></div>`;
 }
+function okBtn(){ const done = IN.rk === S.k; return `<div class="okrow">${done?`<span class="saved">✓ ${t('okWait')}</span>`:`<button class="btn gold block" data-act="rk">👍 ${t('okNext')}</button>`}</div>`; }
 function revealBig(){
   const la = S.la; if(!la) return '';
   const who = la[0];
@@ -1164,8 +1257,11 @@ function sheetView(){
   else if(s==='log') body = `<span class="sheet-t">📋 ${t('tLogS')}</span>${logHTML()}`;
   else if(s==='hints') body = `<span class="sheet-t">🔑 ${t('hints')}</span><div class="hints">${allHintsHTML().join('')}</div>`;
   else if(s==='ghost') body = ghostBlock();
-  if(!body) return '';
-  return `<div class="sheet-bg" data-act="closesheet"></div><div class="sheet" role="dialog" aria-modal="true"><div class="sheet-in"><div class="sheet-h"><span class="grab"></span><button class="x" data-act="closesheet" aria-label="close">✕</button></div>${body}</div></div>`;
+  const key = String(U.mode||U.sheet);
+  if(!body){ U.lastSheet = null; return ''; }
+  const anim = key !== U.lastSheet ? 'anim' : ''; U.lastSheet = key;
+  if(U.mode==='peek') return `<div class="fullscr ${anim}" role="dialog" aria-modal="true"><div class="fs-in">${body}</div></div>`;
+  return `<div class="sheet-bg" data-act="closesheet"></div><div class="sheet ${anim}" role="dialog" aria-modal="true"><div class="sheet-in"><div class="sheet-h"><span class="grab"></span><button class="x" data-act="closesheet" aria-label="close">✕</button></div>${body}</div></div>`;
 }
 function roundView(){ return tableView(); }
 
@@ -1294,32 +1390,70 @@ function overView(){
    ${isHost()?`<button class="btn gold lg block" data-act="newgame">${t('newGame')} 🎲</button>`:''}`;
 }
 
+
+/* ---- chat ---- */
+const EMOS = ['😂','🔥','😱','🤥','👀','🤔','👏','😭','💀','🫡','❤️','🙏'];
+const floatEl = (()=>{ const d = document.createElement('div'); d.className = 'floaters'; document.body.appendChild(d); return d; })();
+function isEmojiOnly(s){ try{ return /^(\p{Extended_Pictographic}|️|‍|\s)+$/u.test(String(s)) && String(s).trim().length <= 12; }catch(e){ return false; } }
+function addChat(msg){
+  if(!msg || !msg.id || U.chat.some(x=>x.id===msg.id)) return;
+  U.chat.push(msg); if(U.chat.length > 80) U.chat.splice(0, U.chat.length-80);
+  if(msg.old) return;
+  if(isEmojiOnly(msg.m)) floatEmoji(msg.m);
+  if(msg.pid !== me && !U.chatOpen){ U.unread++; toast(msg); }
+  render();
+}
+function chatName(m){ const x = P(m.pid); return x ? x[1] : (m.n || '?'); }
+function floatEmoji(e){ const s = document.createElement('div'); s.className = 'floatemo'; s.textContent = e; s.style.left = (8 + Math.random()*80) + '%'; s.style.animationDuration = (2.2 + Math.random()*0.8) + 's'; floatEl.appendChild(s); setTimeout(()=>s.remove(), 3200); }
+function toast(m){ if(isEmojiOnly(m.m)) return; const d = document.createElement('div'); d.className = 'toast'; d.innerHTML = `<b>${esc(chatName(m))}:</b> ${esc(m.m)}`; floatEl.appendChild(d); setTimeout(()=>d.classList.add('out'), 2400); setTimeout(()=>d.remove(), 2900); }
+function chatFab(){ const up = S && ['turn','reveal','ans'].includes(S.ph) && P(me); return `<button class="chatfab ${up?'up':''}" data-act="chat" aria-label="chat">💬${U.unread?`<i class="num">${U.unread>9?'9+':U.unread}</i>`:''}</button>`; }
+function chatView(){
+  const rows = U.chat.map(m=>{ const mine = m.pid===me, emo = isEmojiOnly(m.m);
+    return `<div class="cmsg ${mine?'mine':''} ${emo?'emo':''}">${mine?'':avatar(m.pid,'sm')}<div class="cbub">${mine?'':`<b>${esc(chatName(m))}</b>`}<span>${esc(m.m)}</span></div></div>`; }).join('') || `<p class="muted center small">${t('chatEmpty')}</p>`;
+  return `<div class="sheet-bg" data-act="chatclose"></div><div class="sheet chat ${U.chatAnim?'anim':''}" role="dialog" aria-modal="true"><div class="sheet-in"><div class="sheet-h"><span class="grab"></span><button class="x" data-act="chatclose" aria-label="close">✕</button></div>
+   <span class="sheet-t">💬 ${t('chatT')}</span>
+   <div class="chatlist" id="chatlist">${rows}</div>
+   <div class="emobar">${EMOS.map(e=>`<button data-act="chatsend" data-m="${e}" aria-label="${e}">${e}</button>`).join('')}</div>
+   <div class="quick">${T[lang].quick.map(q=>`<button class="chipb" data-act="chatsend" data-m="${esc(q)}">${esc(q)}</button>`).join('')}</div>
+   <div class="chatin"><input type="text" id="chatinput" maxlength="100" placeholder="${t('chatPh')}" value="${esc(U.chatDraft)}" data-bind="chat" autocomplete="off"><button class="btn gold" data-act="chatsendin">${t('send')}</button></div>
+  </div></div>`;
+}
+let lastChatAt = 0;
+function sendChat(m){ m = String(m||'').replace(/[\u0000-\u001f]/g,'').trim().slice(0,100); if(!m) return false; if(Date.now()-lastChatAt < 600) return false; lastChatAt = Date.now(); chatSend(m); return true; }
+
 /* ---- overlays ---- */
 function helpView(){
   const H = T[lang].help, i = Math.min(U.helpI, H.length-1), [ic, h, p] = H[i];
-  return `<div class="ov" data-act="helpbg"><div class="ovc" role="dialog" aria-modal="true"><div class="big">${ic}</div><h2>${h}</h2><p>${p}</p>
+  const key = 'h'+i, anim = U.helpKey !== key ? 'anim' : ''; U.helpKey = key;
+  return `<div class="ov" data-act="helpbg"><div class="ovc ${anim}" role="dialog" aria-modal="true"><div class="big">${ic}</div><h2>${h}</h2><p>${p}</p>
     <div class="sdots">${H.map((_,j)=>`<i class="${j===i?'on':''}"></i>`).join('')}</div>
     <div class="row" style="justify-content:space-between"><button class="btn ghost" data-act="helpclose">${t('helpSkip')}</button>
     ${i<H.length-1?`<button class="btn gold" data-act="helpnext">${t('helpNext')}</button>`:`<button class="btn gold" data-act="helpclose">${t('helpDone')}</button>`}</div></div></div>`;
 }
-function confettiView(){ const cols = AVC; let s=''; for(let i=0;i<40;i++) s += `<i style="left:${Math.random()*100}%;background:${cols[i%cols.length]};animation-delay:${Math.random()*1.2}s"></i>`; return `<div class="confetti">${s}</div>`; }
+function confettiView(){ if(U.confHTML) return U.confHTML; const cols = AVC; let s=''; for(let i=0;i<40;i++) s += `<i style="left:${Math.random()*100}%;background:${cols[i%cols.length]};animation-delay:${Math.random()*1.2}s"></i>`; U.confHTML = `<div class="confetti">${s}</div>`; return U.confHTML; }
 
 /* ============ events ============ */
-app.addEventListener('input', e=>{
+document.addEventListener('input', e=>{
   const b = e.target.dataset.bind;
   if(b==='name') U.name = e.target.value;
   else if(b==='code') U.code = e.target.value.toUpperCase();
+  else if(b==='chat'){ U.chatDraft = e.target.value; }
   else if(b==='willx'){ U.draft.x = e.target.value; saveWill(); }
 });
-app.addEventListener('keydown', e=>{ if(e.key==='Enter'){ if(e.target.id==='in-code') joinRoom(); else if(e.target.id==='in-name') createRoom(); } });
-app.addEventListener('change', e=>{ if(e.target.id==='wx') render(); });
-app.addEventListener('click', e=>{
+document.addEventListener('keydown', e=>{ if(e.key==='Enter'){ if(e.target.id==='chatinput'){ if(sendChat(U.chatDraft)){ U.chatDraft=''; render(); const ci=document.getElementById('chatinput'); if(ci) ci.focus(); } return; } if(e.target.id==='in-code') joinRoom(); else if(e.target.id==='in-name') createRoom(); } });
+document.addEventListener('change', e=>{ if(e.target.id==='wx') render(); });
+document.addEventListener('click', e=>{
   const el = e.target.closest('[data-act]'); if(!el) return;
   const act = el.dataset.act, d = el.dataset;
+  // ignore taps that land right after the screen changed (the finger was meant for the previous screen)
+  const nowT = Date.now(), sincePh = nowT - (U.phaseAt||0);
+  const spam = sincePh < 900 || (sincePh < 6000 && U.ignAt && nowT - U.ignAt < 450);
+  if(spam && !['lang','help','helpnext','helpclose','helpbg','closesheet','leave','pause','resume','chat','chatclose','chatsend','chatsendin'].includes(act)){ U.ignAt = nowT; return; }
+  if(false && !['lang','help','helpnext','helpclose','helpbg','closesheet','leave','pause','resume','chat','chatclose','chatsend','chatsendin'].includes(act)) return;
   if(act==='helpbg' && e.target!==el) return;
   switch(act){
     case 'lang': lang = lang==='ar'?'en':'ar'; store.set('wsy_lang', lang); render(); break;
-    case 'help': U.help = true; U.helpI = 0; render(); break;
+    case 'help': U.helpKey = null; U.help = true; U.helpI = 0; render(); break;
     case 'helpnext': U.helpI++; render(); break;
     case 'helpclose': case 'helpbg': U.help = false; render(); break;
     case 'create': createRoom(); break;
@@ -1330,7 +1464,7 @@ app.addEventListener('click', e=>{
     case 'leave': leave(); break;
     case 'copy': { const done=()=>{U.copied=true; render(); setTimeout(()=>{U.copied=false; render();},1500);}; try{ navigator.clipboard.writeText(S.c).then(done, ()=>{}); }catch(_){} break; }
     case 'addbot': if(solo && host){ addBot(); } else cmd('addbot', lang); break;
-    case 'start': if(solo && host) host.start(); else cmd('start'); break;
+    case 'start': if(U.starting) break; U.starting = true; render(); if(solo && host) host.start(); else cmd('start'); setTimeout(()=>{ U.starting=false; render(); }, 4000); break;
     case 'newgame': IN={}; if(solo && host){ host.resetGame(); host.ph='lobby'; setIn({}); } else { setIn({}); cmd('newgame'); } break;
     case 'next': setIn({nx:S.k}); break;
     case 'wpick': { const k = d.k; if(U.draft.c.length>=2 || (GIVE.includes(k) && U.draft.c.some(x=>GIVE.includes(x[0]))) || U.draft.c.some(x=>x[0]===k)) break; if(NEEDT[k]) U.pendingW = [k, null]; else { U.draft.c.push([k,null,null]); saveWill(); } render(); break; }
@@ -1357,6 +1491,14 @@ app.addEventListener('click', e=>{
     case 'abdo': { const au = (IN.au && IN.au.r===S.r) ? {...IN.au} : {r:S.r}; au[d.k] = {...U.abSel}; setIn({au}); U.mode = null; U.abSel = {}; U.sheet = 'abs'; render(); break; }
     case 'answer': if(S.pend){ setIn({ans:{k:S.pend.k, v:+d.v}}); U.lieMode = false; render(); } break;
     case 'liemode': U.lieMode = !U.lieMode; render(); break;
+    case 'lvl': if(solo && host){ if(host.ph==='lobby') host.lvl = d.v; } else cmd('lvl', d.v); break;
+    case 'rk': setIn({rk:S.k}); render(); break;
+    case 'pause': if(host) host.pause(); else if(typeof cmd==='function') cmd('pause'); break;
+    case 'resume': if(host) host.resume(); else if(typeof cmd==='function') cmd('resume'); break;
+    case 'chat': U.chatOpen = true; U.chatAnim = true; U.unread = 0; U.sheet = null; if(!['open','confirm'].includes(U.mode)) U.mode = null; render(); U.chatAnim = false; break;
+    case 'chatclose': U.chatOpen = false; render(); break;
+    case 'chatsend': sendChat(d.m); break;
+    case 'chatsendin': if(sendChat(U.chatDraft)){ U.chatDraft = ''; render(); const ci = document.getElementById('chatinput'); if(ci) ci.focus(); } break;
     case 'pick': { const c = +d.c; const k = U.pick.indexOf(c); if(k>=0) U.pick.splice(k,1); else if(U.pick.length<3) U.pick.push(c); setIn({g:[...U.pick]}); render(); break; }
     case 'unpick': { const k = U.pick.indexOf(+d.c); if(k>=0) U.pick.splice(k,1); setIn({g:[...U.pick]}); render(); break; }
     case 'toconfirm': if(U.pick.length===3){ U.mode='confirm'; render(); } break;
@@ -1384,7 +1526,6 @@ setInterval(tickTimer, 250);
 applyLang(); render();
 if(!store.get('wsy_seenhelp')){ U.help = true; store.set('wsy_seenhelp','1'); render(); }
 window.__wsy = {get S(){return S;}, get host(){return host;}, IN:()=>IN, U};
-
 })();
 </script>
 </body>
