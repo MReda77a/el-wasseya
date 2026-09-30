@@ -364,8 +364,8 @@ button.def{background:var(--panel2)}
 @keyframes hot{50%{box-shadow:0 5px 0 var(--ink),0 0 0 6px rgba(255,210,63,.55)}}
 .cb:disabled{opacity:.38;box-shadow:0 2px 0 var(--ink);animation:none;transform:none;cursor:not-allowed}
 .cb .bdg{position:absolute;top:-8px;inset-inline-end:-6px;font-style:normal;background:var(--pink);color:#fff;border:2px solid var(--ink);border-radius:999px;min-width:22px;padding:0 5px;font-size:.75rem}
-.ctl .sub{display:flex;gap:8px;justify-content:center}
-.sb{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.14);color:#fff;border:2px solid rgba(255,255,255,.35);font-weight:700;font-size:.88rem}
+.ctl .sub{display:flex;gap:6px;justify-content:center;flex-wrap:nowrap}
+.sb{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;padding:5px 8px;font-size:.84rem!important;border-radius:999px;background:rgba(255,255,255,.14);color:#fff;border:2px solid rgba(255,255,255,.35);font-weight:700;font-size:.88rem}
 .sb.off{opacity:.6}
 .sb.lie2.on{background:var(--pink);border-color:var(--ink)}
 .sheet-bg{position:fixed;inset:0;z-index:30;background:rgba(20,6,50,.55)}
@@ -379,7 +379,7 @@ button.def{background:var(--panel2)}
 .sheet-t{font-weight:800;font-size:1.3rem}
 .sheet .sec{box-shadow:none;border-width:2px;padding:12px}
 .sheet .back{display:none}
-.bigq{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;background:#fff3c4;border:3px solid var(--ink);border-radius:22px;padding:14px;box-shadow:0 5px 0 var(--ink);animation:rise .4s cubic-bezier(.3,1.5,.5,1)}
+.bigq{color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;background:#fff3c4;border:3px solid var(--ink);border-radius:22px;padding:14px;box-shadow:0 5px 0 var(--ink);animation:rise .4s cubic-bezier(.3,1.5,.5,1)}
 .bigq .qtext{font-size:1.25rem;font-weight:800}
 .bigq .arrow2{font-size:1.6rem;font-weight:800}
 .bigans .ansb{font-size:2rem;padding:6px 22px;border-radius:18px;border-width:3px;box-shadow:0 5px 0 var(--ink)}
@@ -486,6 +486,26 @@ button.def{background:var(--panel2)}
 .lierow .tagx{margin-inline-start:auto;flex:none;background:var(--mint);border:2px solid var(--ink);border-radius:999px;padding:0 8px;font-weight:800;font-size:.8rem}
 .lierow.caught{background:#ffe1e7} .lierow.caught .tagx{background:var(--pink);color:#fff}
 .fad{gap:8px}
+.nc.sus{outline:4px solid var(--yellow);outline-offset:1px;box-shadow:0 0 0 7px rgba(255,210,63,.35)}
+.nc.sus::after{content:"🤔";position:absolute;font-size:.8rem;top:-10px;inset-inline-start:-8px;z-index:2}
+.susline{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;font-weight:800;font-size:.9rem;background:#fff6cf;border:2px dashed var(--ink);border-radius:16px;padding:6px 10px;margin-top:8px}
+.susline .card.mini{transform:none}
+.susbtn{background:var(--yellow)}
+.tuthead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 0}
+.tuthead .sdots{flex:1;justify-content:center}
+.sdots i.done{background:var(--yellow);opacity:.7}
+.tutbub{display:flex;gap:12px;align-items:flex-start;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:22px;padding:14px;box-shadow:0 6px 0 var(--ink);margin-bottom:16px;animation:rise .4s cubic-bezier(.3,1.5,.5,1)}
+.tutbub .tutic{font-size:2rem;flex:none;width:56px;height:56px;border-radius:50%;background:var(--yellow);border:3px solid var(--ink);display:grid;place-items:center}
+.tutbub b{font-size:1.25rem;display:block} .tutbub p{margin:.2em 0 0;font-weight:600;font-size:1rem;line-height:1.45}
+.tutbody{display:flex;flex-direction:column;gap:14px;margin-bottom:16px}
+.tutcenter{display:flex;flex-direction:column;align-items:center;gap:10px}
+.tuthl{animation:hot 1.1s ease-in-out infinite;outline:4px solid var(--yellow);outline-offset:2px}
+.tutpts{font-size:1.6rem;padding:4px 16px}
+.tutnote{color:var(--on-bg);opacity:.85}
+.tutbig{margin-top:6px}
+.newhint{opacity:.85}
+.qlist{display:flex;flex-direction:column;gap:8px}
+.qlist .chipb{width:100%;text-align:start;font-size:1.05rem;padding:12px 14px}
 .deckrows{display:flex;flex-direction:column;gap:6px;margin:4px 0}
 .deckrow{display:grid;gap:4px;justify-content:center}
 .deckrow .nc{font-size:.85rem;cursor:default}
@@ -514,7 +534,30 @@ const AVC = ['#ffd23f','#ff7eb3','#4fd1ff','#6ff0a6','#c3a2ff','#ff9a3c','#2ee6c
 const T = {
 ar:{
  title:'الوصية',
- fadT:'🤥 فضايح الراوند', fadLine:'{a} كدب على {b}', fadSaid:'قال', fadTruth:'والحقيقة', fadCaught:'اتقفش! −٢', fadFree:'عدّت عليه +٢', fadNone:'محدش كدب الراوند ده. ناس محترمة 😇', fadWrong:'{a} اتهم {b} ظلم (−١)',
+ peekUsed:'بصيت', qoNote:'كل دور بيطلعلك ٣ أسئلة مختلفة.', tutAnsRed:'عمر معاه كارت أحمر، يعني واحد من الأحمر مش في الخزنة.', tutAnsNo:'كده عرفت حاجة عن كارت عمر، وكارته أكيد مش في الخزنة. كل إجابة بتقربك.',
+ tutBtn:'🎓 اتعلم اللعبة في دقيقتين', tutExit:'اخرج', tutNext:'كمّل', omar:'عمر', mona:'منى', tutAskQ:'معاك كارت أحمر؟', tutMonaQ:'معاك كارت أزرق؟', tutAnsO:'آه ✅',
+ tutWill1:'نقطي تروح لـ {p}', tutDare:'{p} يدفع المشاريب', tutPlay:'🤖 العب مع بوتات', tutHome:'🏠 الرئيسية', tutBad:'مش دول 😅 اختار الـ ٣ اللي مش مشطوبين.',
+ tutHint1:'مفيش رقم ٣ أحمر ولا أخضر في الخزنة', tutHint2:'في الخزنة كارت من كل لون', tutWelcomeT:'أول مرة؟ 👋', tutWelcomeS:'اتعلم اللعبة وانت بتلعب راوند صغير. دقيقتين بس.', tutKnow:'عارفها، يلا',
+ lobbyNew:'فيه حد جديد؟ خليه يدوس «اتعلم اللعبة» من الصفحة الرئيسية الأول.', tutPoints:'+١٠ نقط', tutWillX:'وانت كمان هتكتب وصيتك في أول كل جيم.',
+ tut:[
+  ['📜','أهلاً في «الوصية»!','لعبة تخمين وكدب للقعدة. فيه خزنة فيها ٣ كروت سرية، وكل واحد بيحاول يعرفهم قبل التاني. يلا نلعب راوند صغير سوا.'],
+  ['🃏','دي كل الكروت','الراوند ده فيه ٩ كروت: أرقام من ١ لـ ٣ بـ ٣ ألوان. ٣ منهم مستخبيين في الخزنة 🔐. هدفك تعرف أنهي ٣.'],
+  ['🖐','ده كارتك','كل واحد معاه كارت، وكارتك أكيد مش في الخزنة. دوس عليه تحت عشان تشطبه ✕.'],
+  ['👀','دورك! بُص على كارت','الكروت الباقية مقلوبة على الترابيزة. دوس على أي كارت عشان تشوفه، انت بس اللي هتشوفه. البص مرة واحدة في الراوند.'],
+  ['❓','دلوقتي اسأل','البص مرة واحدة بس في الراوند، فباقي أدوارك هتسأل. اختار عمر، واختار سؤال، ودوس «اسأل». الكل هيشوف الإجابة.'],
+  ['🤥','منى بتسألك!','لما حد يسألك انت اللي بتجاوب. الحقيقة مفتوحة، ولو عايز تكدب دوس «اكدب». جرّب!'],
+  ['🔑','كام دور كمان...','الأدوار بتلف، والتلميحات بتظهر، وانت بتشطب اللي عرفت إنه مش في الخزنة. لحد ما فضل ٣ كروت بس!'],
+  ['🔓','افتح الخزنة!','اختار الـ ٣ كروت اللي مش مشطوبين. تقدر تفتح في أي وقت، بس لو غلطت تخسر ٥.'],
+  ['🎉','فتحتها!','أول واحد يفتح ياخد أكتر نقط. واللي مفتحش بياخد نقط على حسب تخمينه.'],
+  ['📜','وبعدين... الوصية!','آخر كل راوند الأقل في النقط بيخرج. عمر كان الأقل فخرج، واتفتحت الوصية اللي كتبها في أول اللعبة:'],
+  ['🏆','كده انت فاهم!','كل راوند حد بيخرج، وآخر واحد يفضل يكسب. والباقي (قدرات، أحداث، أشباح) هتتعرفه وانت بتلعب.']
+ ],
+ tutPeek2:['👀','شفته!','الكارت ده على الترابيزة، يعني مش في الخزنة. اشطبه كمان تحت.'],
+ tutAsk2:['💡','الكل شاف الإجابة','كل واحد في القعدة شاف إجابة عمر. كل دور بيطلعلك ٣ أسئلة مختلفة تختار منهم.'],
+ tutLie2:['😈','منى صدقتك!','الكدب مسموح مرة في الراوند. بس آخر الراوند كل كدبة بتتفضح قدام الكل، ولو منى اتهمتك هتخسر ٢.'],
+ tutTruth2:['😇','صادق!','تمام. بس الكدب هو المتعة: مرة في الراوند تقدر تضلل حد، ولو محدش قفشك تاخد +١.'],
+ nX:'✕ مش فيها', nS:'🤔 شاكك فيه', notesHelpS2:'علّم الكروت اللي شاكك إنها في الخزنة. هتفضل متعلمة قدامك، ولما تيجي تفتح تلاقيها جاهزة.', susT:'شاكك في:', susBtn:'شكوكي', useSus:'🤔 حط الـ ٣ اللي شاكك فيهم',
+ fadT:'🤥 فضايح الراوند', fadLine:'{a} كدب على {b}', fadSaid:'قال', fadTruth:'والحقيقة', fadCaught:'اتقفش! −٢', fadFree:'عدّت عليه +١', fadNone:'محدش كدب الراوند ده. ناس محترمة 😇', fadWrong:'{a} اتهم {b} ظلم (−١)',
  tip_acc:['🕵️','حد كدب عليك؟','لو حاسس إن حد كدب عليك لما سألته، اتهمه. لو صح: انت +٢ وهو −٢. لو غلط: انت −١.'],
  nightT:'🏆 سكور القعدة', nightS:'بيتجمع من كل الجيمات في الأوضة دي', nightW:'{n} فوز', nightG:'{n} جيم',
  b_late_s:'دخلت والجيم شغالة، فهتلعب شبح لحد الجيم الجاية. راهن واهمس!', tip_late:['👋','أهلاً!','الجيم كانت بدأت، فانت شبح دلوقتي: تقدر تراهن مين هيخرج وتهمس بتلميحات. الجيم الجاية هتلعب عادي.'],
@@ -563,7 +606,7 @@ ar:{
  EV_fast:'راوند سريع', EVD_fast:'كل دور ٢٠ ثانية بس.',
  EV_fakehint:'تلميح كداب', EVD_fakehint:'واحد من تلميحات الراوند ده كدب. مين؟ هتعرف في الآخر.',
  EV_double:'دبل', EVD_double:'نقط الراوند ده في ٢، والخسارة كمان.',
- EV_silence:'صمت', EVD_silence:'ممنوع الأسئلة الراوند ده. بص بس.',
+ EV_silence:'صمت', EVD_silence:'ممنوع الأسئلة الراوند ده، بس تقدر تبص في كل دور.',
  EV_kareem:'كريم', EVD_kareem:'كل واحد واخد قدرتين بدل واحدة.',
  EV_fadee7a:'فضيحة', EVD_fadee7a:'أي كارت حد يبص عليه بيظهر للكل.',
  EV_memory:'ذاكرة', EVD_memory:'الإجابات بتختفي بعد نتيجة الدور. افتكر!',
@@ -614,7 +657,7 @@ ar:{
  WS_minus:'{a} يخسر ٥ نقط', WS_skip:'{a} ميلعبش الراوند الجاي', WS_take:'خد {a} معايا (لو في آخر ٣)', WS_swap:'بدّل نقط {a} و {b}', WS_expose:'افضح وصية {a}', WS_cancel:'الغي وصية {a}',
  // round
  vault:'الخزنة', hand:'كروتك', handNote:'كروتك مش في الخزنة أكيد', hints:'تلميحات', noHints:'مفيش تلميحات لسه 🔑', newHint:'تلميح جديد!',
- aPeek:'بُص', aPeekS:'اتفرج على كارت مقلوب ٣ ثواني', aAsk:'اسأل', aAskS:'اسأل حد سؤال والكل يسمع الإجابة', aOpen:'افتح الخزنة', aOpenS:'٣ صح = نقط كاملة · ٢ صح = أقل · أقل من كده = −٥',
+ aPeek:'بُص', aPeekS:'اتفرج على كارت مقلوب (مرة في الراوند)', aAsk:'اسأل', aAskS:'اسأل حد سؤال والكل يسمع الإجابة', aOpen:'افتح الخزنة', aOpenS:'٣ صح = نقط كاملة · ٢ صح = أقل · أقل من كده = −٥',
  back:'رجوع', peekT:'اختار كارت من الترابيزة', peekGo:'بُص على كارت {i}', askWho:'١. تسأل مين؟', askWhat:'٢. تسأله إيه؟', askGo:'اسأل',
  openT:'إيه الـ ٣ كروت اللي في الخزنة؟', openBtn:'افتح الخزنة', openAny:'في أي وقت، ومش بياخد دورك', step1:'اختار', step2:'اتأكد', pickHelp:'دوس على ٣ كروت. الكروت اللي شطبتها باهتة عشان تفتكر.', nextStep:'كمّل ←',
  out3:'٣ صح', out3s:'نقط كاملة، وأسرع واحد ياخد أكتر', out2:'٢ صح', out2s:'نقط أقل', out1:'أقل من ٢', out1s:'−٥ نقط', lockNote:'بعد ما تفتح مش هتقدر تعمل حاجة تانية الراوند ده.',
@@ -626,7 +669,7 @@ ar:{
  noLog:'لسه محدش سأل حاجة', turnN:'دور {n}', evOk:'🔓 {p} فتح الخزنة!', evBad:'🔒 {p} فتح غلط', evHalf:'🔓 {p} فتح بـ ٢ صح من ٣',
  peekSaw:'الكارت اللي شفته', peekGone:'اختفى! بس اتشطب في النوتة لوحده ✓', noAction:'مفيش حاجة جديدة ليك الدور ده',
  // accuse
- accT:'حد كدب عليك؟', accS:'لو صح: انت +٢ وهو −٢. لو غلط: انت −١. والكداب اللي محدش كشفه ياخد +٢. كل الكدب هيتفضح آخر الراوند!', nobody:'محدش', guessT:'تخمينك الأخير', guessS:'اللي مفتحش بيترتب بعدد الكروت الصح.', done:'خلصت ✓', doneW:'مستنيين الباقي...',
+ accT:'حد كدب عليك؟', accS:'لو صح: انت +٢ وهو −٢. لو غلط: انت −١. والكداب اللي محدش كشفه ياخد +١. كل الكدب هيتفضح آخر الراوند!', nobody:'محدش', guessT:'تخمينك الأخير', guessS:'اللي مفتحش بيترتب بعدد الكروت الصح.', done:'خلصت ✓', doneW:'مستنيين الباقي...',
  // ghost
  ghostT:'قوة الشبح', ghostS:'مرة في الراوند: ادّي حد +٢ أو اخصم منه ٢.', ghostDone:'اتسجل ✓ هيتحسب آخر الراوند',
  // results
@@ -644,18 +687,45 @@ ar:{
  Q:['مجموع {h} كام؟','معاك كارت أحمر؟','معاك كارت أزرق؟','معاك كارت أخضر؟','معاك كارت أكبر من {n}؟','كروتك نفس اللون؟','أعلى رقم معاك كام؟','معاك رقم زوجي؟'], oneCard:'رقم كارتك', Q0one:'رقم كارتك كام؟', twoCards:'كروتك',
  H0:'مجموع الخزنة بين {a} و {b}', H1:'مفيش كارت {c} في الخزنة', H2:'في الخزنة {n} كارت {c}', H3:'أعلى رقم في الخزنة {n}', H4:'في الخزنة {n} رقم زوجي', H5:'فيه كارت أكبر من {n}؟ {y}', H4z:'كل أرقام الخزنة فردية', H6:'أصغر رقم في الخزنة {n}', H7y:'كروت الخزنة ٣ ألوان مختلفة', H7n:'فيه لون متكرر في الخزنة', H8y:'فيه رقم {n} في الخزنة', H8n:'مفيش رقم {n} في الخزنة', H9:'تلميح دهبي: {c} {n} في الخزنة!',
  help:[
+  ['🔐','الفكرة','فيه خزنة فيها ٣ كروت سرية. كل راوند الكل بيحاول يعرفهم، واللي يفتحها صح وأسرع ياخد نقط أكتر.'],
+  ['❓','إزاي تعرفهم؟','في دورك: تبص على كارت مقلوب (مرة واحدة في الراوند)، أو تسأل حد سؤال والكل يسمع الإجابة. بس ممكن يكدب عليك 🤥! اشطب اللي مش في الخزنة، ولما تعرف الـ ٣ افتح.'],
+  ['📜','الوصية','آخر كل راوند الأقل في النقط بيخرج، ووصيته اللي كتبها في الأول تتنفذ: يدي نقطه لحد، ينتقم، أو يعاقب حد في القعدة 😂. آخر واحد يفضل يكسب.']
+ ], helpOld:[
   ['📜','الوصية','قبل ما اللعبة تبدأ، كل واحد يكتب وصية سرية. بتتنفذ لما يخرج: يدي نقطه لحد، أو ينتقم، أو يفضح حد. وممكن يحط «عقاب في القعدة» لحد يعمله بجد.'],
   ['🔐','الخزنة','في الخزنة ٣ كروت سرية. كل واحد معاه كارت أو اتنين، والباقي مقلوب على الترابيزة. كروتك أكيد مش في الخزنة. في أول كل راوند اللعبة بتقولك الكروت كام وأرقامها من كام لكام.'],
   ['👀','الأدوار','كل واحد بيلعب في دوره (٤٠ ثانية) والكل بيتفرج: يبص على كارت من الترابيزة، أو يسأل حد سؤال والإجابة بتظهر كبيرة للكل.'],
-  ['🤥','الكدب','لما حد يسألك انت اللي بتجاوب. الحقيقة بس مفتوحة، ولو دوست «اكدب» تقدر تختار أي إجابة تانية. مرة في الراوند. بس آخر الراوند كل الكدب بيتفضح، ولو اللي كدبت عليه اتهمك تخسر ٢. لو محدش قفشك تاخد +٢.'],
+  ['🤥','الكدب','لما حد يسألك انت اللي بتجاوب. الحقيقة بس مفتوحة، ولو دوست «اكدب» تقدر تختار أي إجابة تانية. مرة في الراوند. بس آخر الراوند كل الكدب بيتفضح، ولو اللي كدبت عليه اتهمك تخسر ٢. لو محدش قفشك تاخد +١.'],
   ['✨','قدرات وأحداث','كل راوند بتاخد قدرة سرية عشوائية تستخدمها مرة. ومن الراوند التاني ممكن يطلع حدث يغير قواعد الراوند كله.'],
-  ['📝','النوتة والتلميحات','كل دور بيطلع تلميح جديد، وبعد الدور التاني تلميح دهبي بيكشف كارت من الخزنة. اشطب اللي مش فيها، ولما تعرف افتح. ٣ صح = نقط كاملة، ٢ صح = أقل، غير كده −٥.'],
+  ['📝','النوتة والتلميحات','كل دور بيطلع تلميح جديد، وبعد الدور التاني تلميح دهبي بيكشف كارت من الخزنة. اشطب اللي مش فيها، وعلّم 🤔 اللي شاكك فيه، ولما تعرف افتح. ٣ صح = نقط كاملة، ٢ صح = أقل، غير كده −٥.'],
   ['⚖️','الخروج','آخر كل راوند الأقل في المجموع يخرج ووصيته تتنفذ. لو فيه تعادل: محكمة وتصويت. آخر اتنين: أول واحد يفتح يكسب. واللي خرج يبقى شبح: يراهن ويهمس ويأثر في اللعبة.']
  ], helpNext:'التالي', helpDone:'فهمت، يلا', helpSkip:'تخطي'
 },
 en:{
  title:'El Wasseya',
- fadT:'🤥 This round\'s scandals', fadLine:'{a} lied to {b}', fadSaid:'said', fadTruth:'truth was', fadCaught:'Caught! −2', fadFree:'Got away +2', fadNone:'Nobody lied this round. Such honest people 😇', fadWrong:'{a} wrongly accused {b} (−1)',
+ peekUsed:'Peeked', qoNote:'Each turn gives you 3 different questions.', tutAnsRed:'Omar has a red card, so one red card isn\'t in the vault.', tutAnsNo:'Now you know something about Omar\'s card, and it\'s never in the vault. Every answer gets you closer.',
+ tutBtn:'🎓 Learn in 2 minutes', tutExit:'Exit', tutNext:'Next', omar:'Omar', mona:'Mona', tutAskQ:'Got a red card?', tutMonaQ:'Got a blue card?', tutAnsO:'Yes ✅',
+ tutWill1:'My points go to {p}', tutDare:'{p} buys the drinks', tutPlay:'🤖 Play with bots', tutHome:'🏠 Home', tutBad:'Not those 😅 Pick the 3 that aren\'t crossed out.',
+ tutHint1:'No red 3 or green 3 in the vault', tutHint2:'The vault has one card of each color', tutWelcomeT:'First time? 👋', tutWelcomeS:'Learn by playing one tiny round. Just 2 minutes.', tutKnow:'I know it, let\'s go',
+ lobbyNew:'Someone new? Have them tap "Learn in 2 minutes" on the home screen first.', tutPoints:'+10 pts', tutWillX:'You\'ll write your own will at the start of every game.',
+ tut:[
+  ['📜','Welcome to El Wasseya!','A guessing-and-lying party game. A vault hides 3 secret cards, and everyone races to figure them out. Let\'s play a tiny round together.'],
+  ['🃏','These are all the cards','This round has 9 cards: numbers 1 to 3 in 3 colors. 3 of them hide in the vault 🔐. Your goal: find which 3.'],
+  ['🖐','This is your card','Everyone holds a card, and yours is never in the vault. Tap it below to cross it out ✕.'],
+  ['👀','Your turn! Peek at a card','The other cards lie face-down on the table. Tap one to see it; only you will. You can peek once per round.'],
+  ['❓','Now ask','You can peek only once per round, so on other turns you ask. Pick Omar, pick a question, and tap "Ask". Everyone sees the answer.'],
+  ['🤥','Mona is asking you!','When asked, you answer. The truth is open; to lie, tap "Lie". Try it!'],
+  ['🔑','A few turns later...','Turns go around, hints appear, and you cross out what isn\'t in the vault. Until only 3 cards are left!'],
+  ['🔓','Open the vault!','Pick the 3 cards that aren\'t crossed out. You can open any time, but a wrong guess costs 5.'],
+  ['🎉','You cracked it!','The first to open gets the most points. Others score by how good their guess was.'],
+  ['📜','And then... the will!','At the end of every round the lowest score goes out. Omar was lowest, so his will from the start of the game opens:'],
+  ['🏆','You\'ve got it!','Each round someone goes out; the last one standing wins. The rest (powers, events, ghosts) you\'ll learn while playing.']
+ ],
+ tutPeek2:['👀','Seen it!','That card is on the table, so it\'s not in the vault. Cross it out below too.'],
+ tutAsk2:['💡','Everyone saw the answer','Everyone at the table saw Omar\'s answer. Each turn gives you 3 different questions to pick from.'],
+ tutLie2:['😈','Mona believed you!','You can lie once per round. But at round end every lie is exposed, and if Mona accuses you, you lose 2.'],
+ tutTruth2:['😇','Honest!','Fine. But lying is the fun part: once per round you can mislead someone, and +1 if nobody catches you.'],
+ nX:'✕ Not in it', nS:'🤔 Suspect', notesHelpS2:'Mark cards you suspect are in the vault. They stay marked in front of you and are ready when you open.', susT:'Suspects:', susBtn:'Suspects', useSus:'🤔 Use my 3 suspects',
+ fadT:'🤥 This round\'s scandals', fadLine:'{a} lied to {b}', fadSaid:'said', fadTruth:'truth was', fadCaught:'Caught! −2', fadFree:'Got away +1', fadNone:'Nobody lied this round. Such honest people 😇', fadWrong:'{a} wrongly accused {b} (−1)',
  tip_acc:['🕵️','Did someone lie to you?','If you think someone lied when you asked them, accuse them. Right: you +2, they −2. Wrong: you −1.'],
  nightT:'🏆 Tonight\'s scores', nightS:'Adds up every game in this room', nightW:'{n} wins', nightG:'{n} games',
  b_late_s:'You joined mid-game, so you\'re a ghost until the next one. Bet and whisper!', tip_late:['👋','Welcome!','The game already started, so you\'re a ghost for now: bet on who goes out and whisper hints. Next game you play normally.'],
@@ -704,7 +774,7 @@ en:{
  EV_fast:'Speed round', EVD_fast:'Every turn is only 20 seconds.',
  EV_fakehint:'Lying hint', EVD_fakehint:'One of this round\'s hints is false. Which? You\'ll find out at the end.',
  EV_double:'Double', EVD_double:'Round points ×2, losses too.',
- EV_silence:'Silence', EVD_silence:'No questions this round. Peek only.',
+ EV_silence:'Silence', EVD_silence:'No questions this round, but you can peek every turn.',
  EV_kareem:'Generous', EVD_kareem:'Everyone gets two powers instead of one.',
  EV_fadee7a:'Exposed', EVD_fadee7a:'Any card someone peeks at is shown to everyone.',
  EV_memory:'Memory', EVD_memory:'Answers vanish after each turn\'s results. Remember them!',
@@ -752,7 +822,7 @@ en:{
  WS_give:'My points go to {a}', WS_asker:'My points go to whoever asked me most', WS_above:'My points go to the player above me', WS_first:'My points go to next round\'s first opener', WS_revive:'Bring back the last one out with my points',
  WS_minus:'{a} loses 5 points', WS_skip:'{a} sits out next round', WS_take:'Take {a} with me (if bottom 3)', WS_swap:'Swap scores of {a} and {b}', WS_expose:'Expose {a}\'s will', WS_cancel:'Cancel {a}\'s will',
  vault:'The vault', hand:'Your cards', handNote:'Your cards are never in the vault', hints:'Hints', noHints:'No hints yet 🔑', newHint:'New hint!',
- aPeek:'Peek', aPeekS:'See a face-down card for 3 seconds', aAsk:'Ask', aAskS:'Ask someone; everyone hears the answer', aOpen:'Open the vault', aOpenS:'3 right = full points · 2 right = fewer · less = −5',
+ aPeek:'Peek', aPeekS:'See a face-down card (once per round)', aAsk:'Ask', aAskS:'Ask someone; everyone hears the answer', aOpen:'Open the vault', aOpenS:'3 right = full points · 2 right = fewer · less = −5',
  back:'Back', peekT:'Pick a card from the table', peekGo:'Peek at card {i}', askWho:'1. Ask who?', askWhat:'2. Ask what?', askGo:'Ask',
  openT:'Which 3 cards are in the vault?', openBtn:'Open the vault', openAny:'Any time, and it doesn\'t use your turn', step1:'Pick', step2:'Confirm', pickHelp:'Tap 3 cards. Cards you crossed out look faded to remind you.', nextStep:'Continue →',
  out3:'3 right', out3s:'Full points, fastest gets the most', out2:'2 right', out2s:'Fewer points', out1:'Under 2', out1s:'−5 points', lockNote:'Once you open, you can\'t do anything else this round.',
@@ -763,7 +833,7 @@ en:{
  tNotes:'📝 Notes', tLog:'📋 What happened', notesHelpX:'Cross out cards you know are not in the vault.', notesHelpS:'Star the 3 cards you think are in the vault.', mX:'✕ Cross', mS:'⭐ Guess',
  noLog:'No questions yet', turnN:'Turn {n}', evOk:'🔓 {p} opened the vault!', evBad:'🔒 {p} opened wrong', evHalf:'🔓 {p} opened with 2 of 3',
  peekSaw:'The card you saw', peekGone:'Gone! It\'s crossed out in your notes ✓', noAction:'Nothing new for you this turn',
- accT:'Did someone lie to you?', accS:'Right: you +2, they −2. Wrong: you −1. A liar nobody catches gets +2. All lies get exposed at round end!', nobody:'Nobody', guessT:'Your final guess', guessS:'Players who didn\'t open are ranked by correct cards.', done:'Done ✓', doneW:'Waiting for the others...',
+ accT:'Did someone lie to you?', accS:'Right: you +2, they −2. Wrong: you −1. A liar nobody catches gets +1. All lies get exposed at round end!', nobody:'Nobody', guessT:'Your final guess', guessS:'Players who didn\'t open are ranked by correct cards.', done:'Done ✓', doneW:'Waiting for the others...',
  ghostT:'Ghost power', ghostS:'Once per round: give someone +2 or take 2.', ghostDone:'Saved ✓ applies at round end',
  vaultWas:'The vault was', danger:'in danger', next:'Next',
  t_acc:'🕵️ accusation', t_liar:'🤥 lie', t_gh:'👻 ghost', t_beq:'📜 will', correctN:'{n}/3 right', opened:'opened 🔓', halfO:'opened 2 of 3', wrongO:'opened wrong',
@@ -776,12 +846,16 @@ en:{
  Q:['Sum of {h}?','Got a red card?','Got a blue card?','Got a green card?','Got a card above {n}?','Are your cards the same color?','Your highest number?','Got an even number?'], oneCard:'your card', Q0one:'What number is your card?', twoCards:'your cards',
  H0:'Vault sum is between {a} and {b}', H1:'No {c} card in the vault', H2:'The vault has {n} {c} card(s)', H3:'Highest vault number is {n}', H4:'The vault has {n} even number(s)', H5:'A card above {n}? {y}', H4z:'All vault numbers are odd', H6:'Lowest vault number is {n}', H7y:'The vault has 3 different colors', H7n:'A color repeats in the vault', H8y:'There is a {n} in the vault', H8n:'No {n} in the vault', H9:'Golden hint: {c} {n} is in the vault!',
  help:[
+  ['🔐','The idea','A vault hides 3 secret cards. Each round everyone tries to figure them out; open it right and fast for the most points.'],
+  ['❓','How do you find them?','On your turn: peek at a face-down card (once per round), or ask someone a question everyone hears. But they might lie 🤥! Cross out what isn\'t in the vault, and open when you know the 3.'],
+  ['📜','The will','Each round the lowest score goes out and the will they wrote at the start runs: give points away, take revenge, or give someone a real-life dare 😂. Last one standing wins.']
+ ], helpOld:[
   ['📜','The will','Before the game, everyone writes a secret will. It runs when they\'re out: give points away, take revenge, or expose someone. It can even hold a real-life dare.'],
   ['🔐','The vault','The vault holds 3 secret cards. Everyone holds 1 or 2, the rest lie face-down. Your own cards are never in the vault. Each round starts by showing how many cards there are and their numbers.'],
   ['👀','Turns','Players go one at a time (40s) while everyone watches: peek at a table card, or ask someone a question and the answer shows big for everyone.'],
-  ['🤥','Lying','When asked, you answer yourself. Only the truth is open; tap "Lie" to pick any other answer. Once per round. At round end every lie is exposed: if your victim accused you, you lose 2. Got away with it? +2.'],
+  ['🤥','Lying','When asked, you answer yourself. Only the truth is open; tap "Lie" to pick any other answer. Once per round. At round end every lie is exposed: if your victim accused you, you lose 2. Got away with it? +1.'],
   ['✨','Powers and events','Each round you get a random secret power to use once. From round 2, an event may change the rules for the whole round.'],
-  ['📝','Notes and hints','A new hint every turn, and after turn 2 a golden hint reveals one vault card. Cross out what isn\'t there and open when you know. 3 right = full, 2 right = fewer, else −5.'],
+  ['📝','Notes and hints','A new hint every turn, and after turn 2 a golden hint reveals one vault card. Cross out what isn\'t there, mark 🤔 what you suspect, and open when you know. 3 right = full, 2 right = fewer, else −5.'],
   ['⚖️','Going out','Each round the lowest total goes out and their will runs. Ties go to court. Last two: first to open wins. Whoever\'s out becomes a ghost who bets, whispers and meddles.']
  ], helpNext:'Next', helpDone:'Got it', helpSkip:'Skip'
 }};
@@ -854,7 +928,7 @@ function recvState(ns){
   if(prevK !== ns.k){ U.phaseDur = Math.max(1, ns.rem||1); onPhaseChange(); }
   const ar = ns.pv?.[me]?.ar || [];
   if(ns.r !== U.arR){ U.arR = ns.r; U.arSeen = 0; }
-  for(let k=U.arSeen; k<ar.length; k++){ const a = ar[k]; if(a[0]==='sa2r'){ U.tpk[a[1]] = a[2]; if(U.notes[a[2]]!==2){ U.notes[a[2]]=1; U.seen[a[2]]=1; } } if(a[0]==='tabdeel'){ U.notes[a[1]]=1; } }
+  for(let k=U.arSeen; k<ar.length; k++){ const a = ar[k]; if(a[0]==='sa2r'){ U.tpk[a[1]] = a[2]; U.notes[a[2]]=1; U.seen[a[2]]=1; } if(a[0]==='tabdeel'){ U.notes[a[1]]=1; } }
   U.arSeen = ar.length;
   const evN = ns.ev ? ns.ev.length : 0;
   if(ns.r===U.evR && evN > (U.evN||0)){ const e = ns.ev[evN-1]; SFX.play(e[1]===0 ? 'wrong' : 'open'); }
@@ -874,7 +948,7 @@ function onPhaseChange(){
   if(S.ph==='wills'){ U.wStep = 0; U.willAll = false; }
   phaseTips();
   if(S.r !== U.notesR){ U.notes = {}; U.seen = {}; U.tpk = {}; U.pick = []; U.mode = null; U.sheet = null; U.notesR = S.r; U.seenHints = 0; U.whSel = {}; setIn({g:null, o:null, a:null, ac:null}); }
-  if(S.ph==='reveal'){ const pk = S.pv?.[me]?.pk; if(pk && pk[2]===S.tn){ U.tpk[pk[0]] = pk[1]; U.peekUntil = Date.now()+3000; setTimeout(render, 3100); if(U.notes[pk[1]]!==2) U.notes[pk[1]]=1; U.seen[pk[1]]=1; } }
+  if(S.ph==='reveal'){ const pk = S.pv?.[me]?.pk; if(pk && pk[2]===S.tn){ U.tpk[pk[0]] = pk[1]; U.peekUntil = Date.now()+3000; setTimeout(render, 3100); U.notes[pk[1]]=1; U.seen[pk[1]]=1; } }
   if(S.ph==='results' && S.lies && S.lies.length) SFX.play('dare');
   if(S.ph==='over'){ SFX.play('win'); U.confetti = true; setTimeout(()=>{U.confetti=false; U.confHTML=null; render();}, 3500); }
   if(S.ph==='lobby' || S.ph==='will'){ U.draft = {c:[], x:'', d:null}; U.dareP = null; U.dareX = ''; U.pendingW = null; U.starting = false; setIn({wd:null}); }
@@ -949,6 +1023,7 @@ function willSentence(k, a, b){ return t('WS_'+k, {a: a?`<b>${nm(a)}</b>`:'…',
 function qT(i){ if(i===0 && S?.hs===1) return T[lang].Q0one; return T[lang].Q[i].replace('{n}', S?.th ?? 3).replace('{h}', S?.hs===1 ? T[lang].oneCard : T[lang].twoCards); }
 function remMs(){ if(S && S.pz) return S.rem||0; return Math.max(0, U.dlLocal - Date.now()); }
 const stars = () => Object.keys(U.notes).filter(k=>U.notes[k]===2).map(Number);
+function susLine(){ const s = stars(); if(!s.length) return ''; return `<div class="susline"><span>🤔 ${t('susT')}</span><span class="row">${s.sort((a,b)=>a-b).map(c=>card(c,'mini')).join('')}</span></div>`; }
 const isHost = () => solo ? !!host : !!(S && S.h===me);
 const myHand = () => S?.pv?.[me]?.h || [];
 
@@ -1043,7 +1118,7 @@ function pauseView(){ return `<div class="ov"><div class="ovc"><div class="big">
 function render(){
   applyLang();
   const a = document.activeElement, fid = a && a.id, sel = a && a.selectionStart;
-  const html = U.screen==='home' ? homeView() : U.screen==='wait' ? waitView() : gameView();
+  const html = U.screen==='home' ? homeView() : U.screen==='wait' ? waitView() : U.screen==='tut' ? tutView() : gameView();
   let layer = '';
   const ansMe = S && S.ph==='ans' && S.pend && S.pend.t===me;
   if(U.screen==='game' && S){
@@ -1054,6 +1129,7 @@ function render(){
   if(U.screen==='game' && S && S.pz) layer += pauseView();
   if(U.shareImg) layer += shareImgView();
   if(U.help) layer += helpView();
+  if(U.welcome && U.screen==='home') layer += welcomeView();
   if(U.confetti) layer += confettiView();
   if(html !== U.lastMain){ app.innerHTML = html; U.lastMain = html; }
   if(layer !== U.lastLayer){
@@ -1070,7 +1146,8 @@ const langBtn = () => `<button class="btn ghost small" data-act="lang">${lang===
 function homeView(){
   return `<div class="topbar"><span class="muted small">${t('meta')}</span><div class="row">${muteBtn()}${langBtn()}</div></div>
   <div class="hero">${logoHTML()}<p>${t('tag')}</p>
-   <button class="btn ghost" data-act="help">❔ ${t('how')}</button></div>
+   <button class="btn gold lg block tutbig" data-act="tutstart">${t('tutBtn')}</button>
+   <button class="btn ghost small" data-act="help">❔ ${t('how')}</button></div>
   <div class="sec">
     <label class="lbl" for="in-name">${t('name')}</label>
     <input type="text" id="in-name" maxlength="14" placeholder="${t('namePh')}" value="${esc(U.name)}" data-bind="name" autocomplete="off">
@@ -1164,7 +1241,7 @@ function lobbyView(){
   const people = `<div class="sec"><div class="spread"><span class="sec-t">👥 ${lang==='ar'?'اللعيبة':'Players'}</span><span class="pill num">${n}/${MAXP}</span></div>
     <div class="pgrid">${S.P.map(x=>`<div class="person ${x[0]===me?'me':''}">${avatar(x[0],'lg', x[0]===S.h?'👑':'')}<span class="nm">${esc(x[1])}</span></div>`).join('')}
     ${isHost() && n<MAXP ? `<button class="person" data-act="addbot"><span class="av lg" style="--av:#ffffff">+</span><span class="nm muted">${t('addBot').replace('+ ','')}</span></button>`:''}</div></div>`;
-  const start = isHost() ? `${n<MINP?`<p class="muted center small">${t('needMore',{n:MINP})}</p>`:''}<button class="btn gold lg block" data-act="start" ${(n<MINP||U.starting)?'disabled':''}>${U.starting?'⏳ '+t('starting'):t('start')+' 🎲'}</button>` : `<div class="waitbox"><div class="bigemoji">⏳</div></div>`;
+  const start = (isHost() && !solo ? `<p class="small center newhint">🎓 ${t('lobbyNew')}</p>` : '') + (isHost() ? `${n<MINP?`<p class="muted center small">${t('needMore',{n:MINP})}</p>`:''}<button class="btn gold lg block" data-act="start" ${(n<MINP||U.starting)?'disabled':''}>${U.starting?'⏳ '+t('starting'):t('start')+' 🎲'}</button>` : `<div class="waitbox"><div class="bigemoji">⏳</div></div>`);
   const pubBlock = (isHost() && !solo) ? `<button class="lie pubsw ${U.pubRoom?'on':''}" data-act="pubtoggle" aria-pressed="${U.pubRoom}"><span style="font-size:1.6rem">${U.pubRoom?'🌍':'🔒'}</span><span><b>${U.pubRoom?t('pubOn'):t('pubOff')}</b><br><span class="small muted">${U.pubRoom?t('pubOnS'):t('pubOffS')}</span></span><span class="tg"></span></button>` : '';
   const sm = !!S.sm;
   const simpleBlock = `<button class="lie pubsw ${sm?'on':''}" data-act="simple" aria-pressed="${sm}" ${isHost()?'':'disabled'}><span style="font-size:1.6rem">${sm?'🐣':'✨'}</span><span><b>${sm?t('simpleOn'):t('simpleOff')}</b><br><span class="small muted">${sm?t('simpleOnS'):t('simpleOffS')}</span></span>${isHost()?'<span class="tg"></span>':''}</button>`;
@@ -1263,8 +1340,9 @@ function canOpen(){ const mp = meP(); if(!mp) return false; const f = mp[3]; ret
 function pickGrid(){
   const hand = myHand(), NM = S?.nm || 9; let cells = '';
   for(const col of [0,1,2]) for(let n=0;n<NM;n++){ const c = col*9+n, h = hand.includes(c), p = U.pick.includes(c), x = U.notes[c]===1;
-    cells += `<button class="nc ${CK[col]} ${h?'hand':p?'star':x?'x soft':''}" data-act="pick" data-c="${c}" ${h?'disabled':''} aria-pressed="${p}" aria-label="${T[lang].colors[col]} ${n+1}">${ncInner(col, n+1)}</button>`; }
-  return `<div class="notes" style="grid-template-columns:repeat(${NM},minmax(0,46px));justify-content:center">${cells}</div>`;
+    cells += `<button class="nc ${CK[col]} ${h?'hand':p?'star':x?'x soft':U.notes[c]===2?'sus':''}" data-act="pick" data-c="${c}" ${h?'disabled':''} aria-pressed="${p}" aria-label="${T[lang].colors[col]} ${n+1}">${ncInner(col, n+1)}</button>`; }
+  const s = stars().filter(c=>!hand.includes(c)), same = s.length===3 && s.every(c=>U.pick.includes(c));
+  return (s.length===3 && !same ? `<button class="btn block susbtn" data-act="usesus">${t('useSus')}</button>` : '') + `<div class="notes" style="grid-template-columns:repeat(${NM},minmax(0,46px));justify-content:center">${cells}</div>`;
 }
 function pickSlots(){ return `<div class="slots3">${[0,1,2].map(i=>U.pick[i]!=null?`<button class="slotbtn" data-act="unpick" data-c="${U.pick[i]}" aria-label="remove">${card(U.pick[i])}<i>✕</i></button>`:`<div class="slot3">?</div>`).join('')}</div>`; }
 function openFlow(){
@@ -1312,7 +1390,7 @@ function notesGrid(forceMode){
   const mode = forceMode || U.noteMode, hand = myHand();
   let cells = '';
   const NM = S?.nm || 9; for(const col of [0,1,2]) for(let n=0;n<NM;n++){ const c = col*9+n; const st = U.notes[c]||0; const h = hand.includes(c); const sn = U.seen[c] && st===1;
-    cells += `<button class="nc ${CK[col]} ${h?'hand':st===1?'x':''} ${sn?'seen':''}" data-act="note" data-c="${c}" ${h?'disabled':''} aria-label="${T[lang].colors[col]} ${n+1}">${ncInner(col, n+1)}</button>`; }
+    cells += `<button class="nc ${CK[col]} ${h?'hand':st===1?'x':st===2?'sus':''} ${sn?'seen':''}" data-act="note" data-c="${c}" ${h?'disabled':''} aria-label="${T[lang].colors[col]} ${n+1}">${ncInner(col, n+1)}</button>`; }
   return `<div class="notes" style="grid-template-columns:repeat(${NM},minmax(0,46px));justify-content:center">${cells}</div>`;
 }
 function sideTabs(){
@@ -1363,10 +1441,10 @@ function peekSheet(){
     <div class="fs-foot"><button class="btn gold lg block" data-act="dopeek" ${U.selPeek==null?'disabled':''}>👀 ${U.selPeek==null?t('pickCard'):t('peekGo',{i:U.selPeek+1})}</button></div>`; }
 function askSheet(){
   const ps = S.P.filter(x=>isAlive(x) && x[0]!==me).map(x=>`<button class="person pick-person ${U.askT===x[0]?'sel':''}" data-act="askt" data-t="${x[0]}">${avatar(x[0])}<span class="nm">${esc(x[1])}</span></button>`).join('');
-  const qs = T[lang].Q.map((q,i)=> ((i===0||i===5||i===6) && S.hs===1) ? '' : `<button class="chipb ${U.askQ===i?'sel':''}" data-act="askq" data-q="${i}">${qT(i)}</button>`).join('');
-  const ready = U.askT!=null && U.askQ!=null;
+  const qs = (S.qo || [1,2,3]).map(i=>`<button class="chipb qopt ${U.askQ===i?'sel':''}" data-act="askq" data-q="${i}">${qT(i)}</button>`).join('');
+  const ready = U.askT!=null && U.askQ!=null && (!S.qo || S.qo.includes(U.askQ));
   return `<span class="sheet-t">❓ ${t('askWho')}</span><div class="pgrid">${ps}</div>
-    <span class="sheet-t" style="${U.askT==null?'opacity:.4':''}">${t('askWhat')}</span><div class="chips">${qs}</div>
+    <span class="sheet-t" style="${U.askT==null?'opacity:.4':''}">${t('askWhat')}</span><p class="small muted">${t('qoNote')}</p><div class="qlist">${qs}</div>
     <button class="btn gold lg block" data-act="doask" ${ready?'':'disabled'}>${ready?`${t('askGo')} ${nm(U.askT)}: ${qT(U.askQ)}`:t('askGo')}</button>`; }
 function allHintsHTML(){
   const priv = (S.pv?.[me]?.ph||[]).map(h=>`<div class="hint priv">🧂 ${hintText(h)} <span class="tagx">${t('onlyYou')}</span></div>`);
@@ -1433,6 +1511,7 @@ function tableView(){
   return `${S.evk?evChip():''}<div class="sec table">
     <div class="vaultbox"><div class="vault small"><div class="slots"><span class="slot">?</span><span class="slot">?</span><span class="slot">?</span></div></div><div class="hints">${hintArea}</div></div>
     ${deckLine()}
+    ${susLine()}
     ${statusBlock()}
     ${hand.length?`<div class="handrow"><div><b>🖐 ${t('hand')}</b><div class="small muted">${t('handNote')}</div></div><div class="hand">${hand.map((h,i)=>card(h, i?'tilt2':'tilt1')).join('')}</div></div>`:''}
   </div>` + peopleRow();
@@ -1445,14 +1524,15 @@ function controller(){
   const logN = S.lg.length + S.ev.length + (S.pkp||[]).length;
   const cb = (act, v, icon, label, on, hot, badge) => `<button class="cb ${hot?'hot':''}" data-act="${act}" data-v="${v}" ${on?'':'disabled'}><span class="i">${icon}</span><span>${label}</span>${badge?`<i class="bdg num">${badge}</i>`:''}</button>`;
   let main;
-  if(alive) main = cb('mode','peek','👀',t('aPeek'),canAct,canAct) + cb('mode','ask', S.evk==='silence'?'🙊':pv.mu?'🤐':'❓', t('aAsk'), askOk, askOk) + cb('mode','open','🔐',t('aOpenShort'),canOpen(),false) + cb('sheet','abs','✨',t('abShort'),abLeft>0,false,abLeft||'');
+  const peekOk = canAct && !pv.pu;
+  if(alive) main = cb('mode','peek','👀',pv.pu?t('peekUsed'):t('aPeek'),peekOk,peekOk) + cb('mode','ask', S.evk==='silence'?'🙊':pv.mu?'🤐':'❓', t('aAsk'), askOk, askOk) + cb('mode','open','🔐',t('aOpenShort'),canOpen(),false) + cb('sheet','abs','✨',t('abShort'),abLeft>0,false,abLeft||'');
   else { const ghDone = !!(IN.gh && IN.gh.r===S.r); main = cb('sheet','ghost','👻',t('ghostT'),!ghDone,!ghDone) + cb('sheet','bet','🔮',t('betShort'),true,!(IN.bt && IN.bt.r===S.r)) + cb('sheet','whisper','🗣️',t('whShort'),true,!pv.ws) + (abLeft>0 ? cb('sheet','abs','✨',t('abShort'),true,true,abLeft) : cb('sheet','log','📋',t('tLogS'),true,false,logN||'')); }
   let lie = '';
   if(alive && !(f&8)){
-    if(pv.lm===0) lie = `<span class="sb off">🗣️ ${t('noLieShort')}</span>`;
-    else lie = `<span class="sb ${pv.lu?'off':''}">🤥 ${t('liesLeft',{n:Math.max(0,(pv.lm||0)-(pv.lc||0))})}</span>`;
+    if(pv.lm===0) lie = `<span class="sb off" title="${t('noLieShort')}">🤥 ✕</span>`;
+    else lie = `<span class="sb ${pv.lu?'off':''}" title="${t('liesLeft',{n:Math.max(0,(pv.lm||0)-(pv.lc||0))})}">🤥 <b class="num">${Math.max(0,(pv.lm||0)-(pv.lc||0))}</b></span>`;
   }
-  const sub = alive ? `<div class="sub"><button class="sb" data-act="sheet" data-v="notes">📝 ${t('tNotesS')}</button><button class="sb" data-act="sheet" data-v="log">📋 ${t('tLogS')}${logN?` <span class="badge num">${logN}</span>`:''}</button>${lie}</div>` : '';
+  const sub = alive ? `<div class="sub"><button class="sb" data-act="sheet" data-v="notes">📝 ${t('tNotesS')}</button><button class="sb" data-act="susnotes">🤔 ${t('susBtn')}${stars().length?` <span class="badge num">${stars().length}</span>`:''}</button><button class="sb" data-act="sheet" data-v="log">📋 ${t('tLogS')}${logN?` <span class="badge num">${logN}</span>`:''}</button>${lie}</div>` : '';
   return `<div class="ctl"><div class="ctl-in"><div class="main">${main}</div>${sub}</div></div>`;
 }
 function sheetView(){
@@ -1461,12 +1541,13 @@ function sheetView(){
   let body = '';
   const canActNow = myTurn() && !chosen() && isAlive(meP());
   if((m==='peek' || m==='ask') && !canActNow){ U.mode = null; }
+  if(m==='peek' && S.pv?.[me]?.pu){ U.mode = null; }
   if(U.mode==='peek') body = peekSheet();
   else if(U.mode==='ask') body = askSheet();
   else if((U.mode==='open' || U.mode==='confirm') && canOpen()) body = openFlow();
   else if(String(U.mode).startsWith('ab:')) body = abilityFlow(U.mode.slice(3));
   else if(s==='abs') body = abilityBlock() || `<p class="muted center">${t('noAb')}</p>`;
-  else if(s==='notes') body = `<span class="sheet-t">📝 ${t('tNotesS')}</span>${deckLine()}<p class="small muted">${t('notesHelp1')}</p>${notesGrid()}<div class="hints" style="margin-top:6px">${allHintsHTML().join('')}</div>`;
+  else if(s==='notes') body = `<span class="sheet-t">📝 ${t('tNotesS')}</span>${deckLine()}<div class="seg"><button class="${U.noteMode!=='s'?'on':''}" data-act="nmode" data-v="x">${t('nX')}</button><button class="${U.noteMode==='s'?'on':''}" data-act="nmode" data-v="s">${t('nS')}</button></div><p class="small muted">${U.noteMode==='s'?t('notesHelpS2'):t('notesHelp1')}</p>${notesGrid()}${susLine()}<div class="hints" style="margin-top:6px">${allHintsHTML().join('')}</div>`;
   else if(s==='log') body = `<span class="sheet-t">📋 ${t('tLogS')}</span>${logHTML()}`;
   else if(s==='hints') body = `<span class="sheet-t">🔑 ${t('hints')}</span><div class="hints">${allHintsHTML().join('')}</div>`;
   else if(s==='ghost') body = ghostBlock();
@@ -1770,6 +1851,58 @@ function chatView(){
 let lastChatAt = 0;
 function sendChat(m){ m = String(m||'').replace(/[\u0000-\u001f]/g,'').trim().slice(0,100); if(!m) return false; if(Date.now()-lastChatAt < 600) return false; lastChatAt = Date.now(); chatSend(m); return true; }
 
+/* ============ tutorial: one tiny guided round ============ */
+// cards: red 1-3 = 0,1,2 · blue 1-3 = 9,10,11 · green 1-3 = 18,19,20
+const TV = {vault:[1,11,18], hand:9, omar:0, mona:20, table:[2,10,19]};
+const TUT = {};
+function tutStart(){ Object.assign(TUT, {step:0, x:{}, pk:null, askT:false, q:null, asked:false, lie:false, ans:null, pick:[], bad:false}); U.help = false; U.welcome = false; U.screen = 'tut'; render(); try{ window.scrollTo({top:0}); }catch(_){} }
+function tutGo(n){ TUT.step = n; if(n===6) for(let c of [0,1,2,9,10,11,18,19,20]) if(!TV.vault.includes(c)) TUT.x[c] = 1; if(n===8){ SFX.play('open'); U.confetti = true; setTimeout(()=>{ U.confetti = false; U.confHTML = null; render(); }, 2500); } if(n===9) SFX.play('dare'); render(); try{ window.scrollTo({top:0, behavior:'smooth'}); }catch(_){} }
+const tAv = (ch, col, cls) => `<span class="av ${cls||''}" style="--av:${col}">${ch}</span>`;
+const meName = () => esc(U.name || t('you'));
+function tutGrid(act, hl){
+  let c = ''; for(const col of [0,1,2]) for(let n=0;n<3;n++){ const id = col*9+n, x = TUT.x[id], p = TUT.pick.includes(id);
+    c += `<button class="nc ${CK[col]} ${p?'star':x?'x':''} ${hl===id && !x ?'tuthl':''}" data-act="${act}" data-c="${id}" aria-label="${T[lang].colors[col]} ${n+1}">${ncInner(col,n+1)}</button>`; }
+  return `<div class="notes" style="grid-template-columns:repeat(3,minmax(0,58px));justify-content:center">${c}</div>`;
+}
+function tutView(){
+  const s = TUT.step, N = T[lang].tut.length; let bub = T[lang].tut[s], body = '', next = true;
+  const vault = `<div class="vault small"><div class="slots"><span class="slot">?</span><span class="slot">?</span><span class="slot">?</span></div></div>`;
+  switch(s){
+    case 0: body = `<div class="tutcenter">${logoHTML(true)}${vault}</div>`; break;
+    case 1: body = `<div class="tutcenter">${[0,1,2].map(col=>`<div class="row center">${[0,1,2].map(n=>card(col*9+n)).join('')}</div>`).join('')}</div>`; break;
+    case 2: body = `<div class="tutcenter">${card(TV.hand,'big')}</div>${tutGrid('tutx', TV.hand)}`; next = !!TUT.x[TV.hand]; break;
+    case 3: if(TUT.pk==null){ body = `<div class="row center">${TV.table.map((c,i)=>`<button class="card big facedown tuthl" data-act="tutpeek" data-i="${i}">${SEAL}<span class="idx num">${i+1}</span></button>`).join('')}</div>`; next = false; }
+      else { bub = T[lang].tutPeek2; body = `<div class="tutcenter">${card(TUT.pk,'big flip')}</div>${tutGrid('tutx', TUT.pk)}`; next = !!TUT.x[TUT.pk]; } break;
+    case 4: if(!TUT.asked){ next = false;
+        const TQ = [1,2,4];
+        body = `<div class="sec"><span class="sec-t">${t('askWho')}</span><div class="row center"><button class="person pick-person ${TUT.askT?'sel':'tuthl'}" data-act="tutaskt">${tAv('ع','#4fd1ff')}<span class="nm">${t('omar')}</span></button><div class="person" style="opacity:.45">${tAv('م','#ff7eb3')}<span class="nm">${t('mona')}</span></div></div>
+          <span class="sec-t" style="${TUT.askT?'':'opacity:.4'}">${t('askWhat')}</span><div class="qlist">${TQ.map(q=>`<button class="chipb qopt ${TUT.q===q?'sel':''} ${TUT.askT&&TUT.q==null?'tuthl':''}" data-act="tutq" data-q="${q}" ${TUT.askT?'':'disabled'}>${T[lang].Q[q].replace('{n}',2)}</button>`).join('')}</div>
+          <button class="btn gold lg block ${TUT.q!=null?'tuthl':''}" data-act="tutaskq" ${TUT.askT && TUT.q!=null?'':'disabled'}>❓ ${t('askGo')} ${t('omar')}</button></div>`; }
+      else { bub = T[lang].tutAsk2; const yes = TUT.q===1; body = `<div class="bigq"><div class="row center">${tAv(esc(initial(U.name)),'#ffd23f')}<span class="arrow2">${lang==='ar'?'←':'→'}</span>${tAv('ع','#4fd1ff')}</div><p class="qtext">${T[lang].Q[TUT.q].replace('{n}',2)}</p><div class="bigans"><span class="ansb ${yes?'y':'n'}">${yes?t('yes'):t('no')}</span></div></div><p class="small center tutnote">${yes?t('tutAnsRed'):t('tutAnsNo')}</p>`; } break;
+    case 5: if(TUT.ans==null){ next = false;
+        body = `<div class="sec"><div class="asker">${tAv('م','#ff7eb3','lg')}<div><span class="lbl">${t('b_asked',{p:t('mona')})}</span><p class="qtext">${t('tutMonaQ')}</p></div></div>
+        <div class="aopts yn"><button class="aopt yn truth" data-act="tutans" data-v="1"><span>${t('yes')}</span><i>✓ ${t('truthTag')}</i></button><button class="aopt yn ${TUT.lie?'lieopt':''}" data-act="tutans" data-v="0" ${TUT.lie?'':'disabled'}><span>${t('no')}</span>${TUT.lie?'':'<i>🔒</i>'}</button></div>
+        <button class="btn lg block liebtn ${TUT.lie?'on':''} ${TUT.lie?'':'tuthl'}" data-act="tutlie">🤥 ${TUT.lie?t('lieCancel'):t('lieBtn')}</button></div>`; }
+      else { bub = TUT.ans===0 ? T[lang].tutLie2 : T[lang].tutTruth2; body = `<div class="tutcenter"><div class="bigemoji">${TUT.ans===0?'😈':'😇'}</div></div>`; } break;
+    case 6: body = `<div class="sec"><span class="lbl">${t('hints')}</span><div class="hints"><div class="hint">🔑 ${t('tutHint1')}</div><div class="hint">🔑 ${t('tutHint2')}</div></div></div>${tutGrid('noop')}`; break;
+    case 7: body = `<div class="slots3">${[0,1,2].map(i=>TUT.pick[i]!=null?card(TUT.pick[i]):`<div class="slot3">?</div>`).join('')}</div>${TUT.bad?`<p class="err center">${t('tutBad')}</p>`:''}${tutGrid('tutpick')}`; next = false; break;
+    case 8: body = `<div class="tutcenter"><div class="row center">${TV.vault.map(c=>card(c,'big flip')).join('')}</div><span class="delta p num tutpts">${t('tutPoints')}</span></div>`; break;
+    case 9: body = `<div class="will-out"><div class="wo-head">${tAv('ع','#4fd1ff','lg dead')}<h3>${t('wDrum',{p:t('omar')})}</h3></div>
+        <div class="res good pop"><span class="mk">💰</span><div>${t('tutWill1',{p:`<b>${t('mona')}</b>`})}</div></div>
+        <div class="darecard"><span class="dstamp">${t('dareT')}</span><div class="dwho">${tAv(esc(initial(U.name)),'#ffd23f','lg')}<b>${meName()}</b></div><p>${t('tutDare',{p:meName()})} 😂</p></div></div>
+        <p class="small center tutnote">${t('tutWillX')}</p>`; break;
+    case 10: next = false; body = `<div class="tutcenter"><div class="bigemoji">🏆</div></div><button class="btn gold lg block" data-act="tutplay">${t('tutPlay')}</button><button class="btn block" data-act="tuthome">${t('tutHome')}</button>`; break;
+  }
+  return `<div class="tuthead"><button class="btn ghost small" data-act="tuthome">✕ ${t('tutExit')}</button><div class="sdots">${Array.from({length:N},(_,j)=>`<i class="${j===s?'on':j<s?'done':''}"></i>`).join('')}</div>${langBtn()}</div>
+    <div class="tutbub" key="${s}"><span class="tutic">${bub[0]}</span><div><b>${bub[1]}</b><p>${bub[2]}</p></div></div>
+    <div class="tutbody">${body}</div>
+    ${next?`<button class="btn gold lg block" data-act="tutnext">${t('tutNext')} ${lang==='ar'?'←':'→'}</button>`:''}`;
+}
+function welcomeView(){
+  return `<div class="ov"><div class="ovc anim" role="dialog" aria-modal="true">${logoHTML(true)}<h2>${t('tutWelcomeT')}</h2><p>${t('tutWelcomeS')}</p>
+    <button class="btn gold lg block" data-act="tutstart">${t('tutBtn')}</button><button class="btn ghost" data-act="welcomeclose">${t('tutKnow')}</button></div></div>`;
+}
+
 /* ---- overlays ---- */
 function helpView(){
   const H = T[lang].help, i = Math.min(U.helpI, H.length-1), [ic, h, p] = H[i];
@@ -1777,7 +1910,8 @@ function helpView(){
   return `<div class="ov" data-act="helpbg"><div class="ovc ${anim}" role="dialog" aria-modal="true"><div class="big">${ic}</div><h2>${h}</h2><p>${p}</p>
     <div class="sdots">${H.map((_,j)=>`<i class="${j===i?'on':''}"></i>`).join('')}</div>
     <div class="row" style="justify-content:space-between"><button class="btn ghost" data-act="helpclose">${t('helpSkip')}</button>
-    ${i<H.length-1?`<button class="btn gold" data-act="helpnext">${t('helpNext')}</button>`:`<button class="btn gold" data-act="helpclose">${t('helpDone')}</button>`}</div></div></div>`;
+    ${i<H.length-1?`<button class="btn gold" data-act="helpnext">${t('helpNext')}</button>`:`<button class="btn gold" data-act="helpclose">${t('helpDone')}</button>`}</div>
+    ${U.screen==='home'?`<button class="btn block" data-act="tutstart">${t('tutBtn')}</button>`:''}</div></div>`;
 }
 function confettiView(){ if(U.confHTML) return U.confHTML; const cols = AVC; let s=''; for(let i=0;i<40;i++) s += `<i style="left:${Math.random()*100}%;background:${cols[i%cols.length]};animation-delay:${Math.random()*1.2}s"></i>`; U.confHTML = `<div class="confetti">${s}</div>`; return U.confHTML; }
 
@@ -1802,6 +1936,21 @@ document.addEventListener('click', e=>{
   if(spam && !['lang','help','helpnext','helpclose','helpbg','closesheet','leave','pause','resume','chat','chatclose','chatsend','chatsendin','tipok','mute','imgclose'].includes(act)){ U.ignAt = nowT; return; }
   if((act==='helpbg' || (act==='imgclose' && el.classList.contains('ov'))) && e.target!==el) return;
   switch(act){
+    case 'tutstart': tutStart(); break;
+    case 'welcomeclose': U.welcome = false; render(); break;
+    case 'tuthome': U.screen = 'home'; render(); break;
+    case 'tutnext': if(TUT.step < T[lang].tut.length-1) tutGo(TUT.step+1); break;
+    case 'tutx': { const c = +d.c; const want = TUT.step===2 ? TV.hand : TUT.pk; if(c===want && !TUT.x[c]){ TUT.x[c] = 1; SFX.play('pop'); render(); } break; }
+    case 'tutpeek': if(TUT.pk==null){ TUT.pk = TV.table[+d.i]; SFX.play('pop'); render(); } break;
+    case 'tutaskt': TUT.askT = true; render(); break;
+    case 'tutq': if(TUT.askT){ TUT.q = +d.q; render(); } break;
+    case 'tutaskq': if(TUT.askT && TUT.q!=null){ TUT.asked = true; SFX.play('ask'); render(); } break;
+    case 'tutlie': TUT.lie = !TUT.lie; render(); break;
+    case 'tutans': { const v = +d.v; if(v===0 && !TUT.lie) break; TUT.ans = v; SFX.play(v===0?'bad':'good'); render(); break; }
+    case 'tutpick': { const c = +d.c, k = TUT.pick.indexOf(c); TUT.bad = false; if(k>=0) TUT.pick.splice(k,1); else if(TUT.pick.length<3) TUT.pick.push(c);
+      if(TUT.pick.length===3){ if(TUT.pick.every(x=>TV.vault.includes(x))){ render(); setTimeout(()=>tutGo(8), 500); } else { TUT.bad = true; SFX.play('wrong'); setTimeout(()=>{ TUT.pick = []; render(); }, 900); } }
+      render(); break; }
+    case 'tutplay': U.screen = 'home'; if((U.name||'').trim()) startSolo(); else { U.err = t('needName'); render(); setTimeout(()=>{ const e = document.getElementById('in-name'); if(e) e.focus(); }, 60); } break;
     case 'lang': lang = lang==='ar'?'en':'ar'; store.set('wsy_lang', lang); render(); break;
     case 'help': U.helpKey = null; U.help = true; U.helpI = 0; render(); break;
     case 'helpnext': U.helpI++; render(); break;
@@ -1822,7 +1971,7 @@ document.addEventListener('click', e=>{
     case 'wready': setIn({wd: IN.wd ? null : 1}); saveWill(); render(); break;
     case 'wcancel': U.pendingW = null; render(); break;
     case 'wdel': U.draft.c.splice(+d.i,1); saveWill(); render(); break;
-    case 'sheet': U.sheet = d.v; U.mode = null; render(); break;
+    case 'sheet': U.sheet = d.v; U.mode = null; if(d.v==='notes') U.noteMode = 'x'; render(); break;
     case 'closesheet': U.sheet = null; U.mode = null; render(); break;
     case 'mode': U.sheet = null; U.mode = d.v || null; U.selPeek=null; if(U.mode==='ask'){U.askT=null;U.askQ=null;} render(); break;
     case 'selpeek': U.selPeek = +d.i; render(); break;
@@ -1869,7 +2018,9 @@ document.addEventListener('click', e=>{
     case 'pick': { const c = +d.c; const k = U.pick.indexOf(c); if(k>=0) U.pick.splice(k,1); else if(U.pick.length<3) U.pick.push(c); setIn({g:[...U.pick]}); render(); break; }
     case 'unpick': { const k = U.pick.indexOf(+d.c); if(k>=0) U.pick.splice(k,1); setIn({g:[...U.pick]}); render(); break; }
     case 'toconfirm': if(U.pick.length===3){ U.mode='confirm'; render(); } break;
-    case 'note': { const c = +d.c; if(U.notes[c]===1) delete U.notes[c]; else U.notes[c]=1; render(); break; }
+    case 'note': { const c = +d.c, v = U.noteMode==='s' ? 2 : 1; if(U.notes[c]===v) delete U.notes[c]; else U.notes[c]=v; render(); break; }
+    case 'susnotes': U.noteMode = 's'; U.sheet = 'notes'; U.mode = null; render(); break;
+    case 'usesus': { const s = stars().filter(c=>!myHand().includes(c)); if(s.length===3){ U.pick = s; setIn({g:[...s]}); render(); } break; }
     case 'note_old': { const c = +d.c, m = d.m, st = U.notes[c]||0;
       if(m==='x'){ if(st===1) delete U.notes[c]; else U.notes[c]=1; }
       else { if(st===2) delete U.notes[c]; else if(stars().length<3) U.notes[c]=2; }
@@ -1901,7 +2052,7 @@ function tickTimer(){
 }
 setInterval(tickTimer, 250);
 applyLang(); render();
-if(!store.get('wsy_seenhelp')){ U.help = true; store.set('wsy_seenhelp','1'); render(); }
+if(!store.get('wsy_seenhelp')){ U.welcome = true; store.set('wsy_seenhelp','1'); render(); }
 window.__wsy = {get S(){return S;}, get host(){return host;}, IN:()=>IN, U};
 })();
 </script>

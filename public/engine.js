@@ -205,7 +205,7 @@ class Host {
     this.fakeAt = this.evk==='fakehint' ? pick([1,2,4,5]) : -1; this.fk = null;
     if(this.evk!=='dark'){ for(let q=0; q<LV.init; q++) this.addHint(0); }
     for(const p of this.P){ p.rp=0; p.open=null; p.lieUsed=false; p.lies=0; p.liedTo=[]; p.caught=false; p.acted=false; p.skip = p.alive && p.skipNext; p.skipNext=false;
-      p.ab=[]; p.abUsed=[]; p.ar=[]; p.shield=0; p.trap=0; p.whisper=0; p.muted=0; p.privHints=[]; p.ghH=[]; p.whS=null; }
+      p.pkR=0; p.ab=[]; p.abUsed=[]; p.ar=[]; p.shield=0; p.trap=0; p.whisper=0; p.muted=0; p.privHints=[]; p.ghH=[]; p.whS=null; }
     const pool = ABIL.filter(k=>!(this.evk==='silence' && k==='so2al') && !(this.evk==='truth' && ['fakh','dar3','kashf'].includes(k)) && !(k==='tabdeel' && !this.table.length) && !(k==='sa2r' && !this.table.length));
     for(const p of al) p.ab = this.simple ? [] : shuffle([...pool]).slice(0, this.evk==='kareem' ? 2 : 1);
     const ghosts = this.P.filter(x=>!x.alive && !x.revived);
@@ -215,6 +215,8 @@ class Host {
     this.LAPS = al.length<=4 ? 3 : 2; this.lap = 1; this.ti = -1; this.cur = null; this.la = null;
     this.set('intro','INTRO');
   }
+  /** 3 random questions to choose from on this turn (no fixed "best question"). */
+  rollQ(){ const pool = (this.hs===1 ? [1,2,3,4,7] : [0,1,2,3,4,5,6,7]); this.qo = shuffle([...pool]).slice(0,3).sort((a,b)=>a-b); }
   canTurn(id){ const p = this.p(id); return p && p.alive && !p.skip && !p.open && this.conn(p); }
   lapEnd(){
     const gold = (LEVELS[this.lvl]||LEVELS.normal).gold; if((gold>=1 && this.lap===1) || (gold>=2 && this.lap===2 && this.alive().length>=8)){ const left = this.vault.filter(c=>!this.hints.some(h=>h[0]===9 && h[1]===c)); if(left.length) this.hints.push([9, pick(left), 1]); }
@@ -227,7 +229,7 @@ class Host {
       if(this.canTurn(this.order[this.ti])) break;
     }
     if(this.tn>0 && this.evk!=='dark' && this.tn % Math.max(2, Math.ceil(this.order.length/2)) === 0) this.addHint(this.tn);
-    this.cur = this.order[this.ti]; this.tn++; this.la = null;
+    this.cur = this.order[this.ti]; this.tn++; this.la = null; this.rollQ();
     for(const p of this.P) p.acted = p.id===this.cur ? false : p.acted;
     this.set('turn','TURN'); if(this.evk==='fast') this.dl = Date.now() + 20000*SPEED;
   }
@@ -311,13 +313,15 @@ class Host {
     const cp = this.p(this.cur); if(cp){ cp.acted = true; }
     if(cp && cp.muted){ cp.muted = false; }
     if(!a || a.k==='n'){ this.la = [this.cur, 'n']; this.set('reveal'); this.dl = Date.now() + 3000*SPEED; return; }
-    if(a.k==='p' && Number.isInteger(a.i) && a.i>=0 && a.i<this.table.length){
+    const pk0 = this.p(a.id);
+    if(a.k==='p' && Number.isInteger(a.i) && a.i>=0 && a.i<this.table.length && pk0 && (pk0.pkR!==this.r || this.evk==='silence')){
+      pk0.pkR = this.r;
       this.peeks[a.id] = [a.i, this.table[a.i], this.tn]; this.stat(a.id,'pk'); (this.pkl = this.pkl || []).push([this.tn, a.id, a.i]); if(this.evk==='fadee7a') this.pkp.push([this.tn, a.id, this.table[a.i]]);
       const pp=this.p(a.id); if(pp){ pp.known=pp.known||[]; if(!pp.known.includes(this.table[a.i])) pp.known.push(this.table[a.i]); pp.pkIdx=(pp.pkIdx||[]); pp.pkIdx.push(a.i); }
       this.la = [a.id, 'p', a.i]; this.set('reveal'); this.dl = Date.now() + 8000*SPEED; return;
     }
     if(a.k==='q'){ const A = this.p(a.id), T = this.p(a.t), q = a.q;
-      if(A && T && T.alive && T.id!==A.id && this.hands[T.id] && q>=0 && q<8 && !(this.hs===1 && [0,5,6].includes(q))){
+      if(A && T && T.alive && T.id!==A.id && this.hands[T.id] && q>=0 && q<8 && !(this.hs===1 && [0,5,6].includes(q)) && (!this.qo || this.qo.includes(q))){
         this.pend = {a:A.id, t:T.id, q, truth:answer(this.hands[T.id], q, this.th), k:this.r+'-'+this.tn};
         this.set('ans','ANS'); return; } }
     this.la = [this.cur, 'n']; this.set('reveal'); this.dl = Date.now() + 3000*SPEED;
@@ -335,7 +339,7 @@ class Host {
   }
   afterReveal(){
     const cp = this.p(this.cur);
-    if(cp && cp.extraQ===this.r && this.la && this.la[1]!=='n' && this.canTurn(cp.id)){ cp.extraQ = -1; cp.acted = false; this.tn++; this.la = null; this.set('turn','TURN'); if(this.evk==='fast') this.dl = Date.now() + 20000*SPEED; return; }
+    if(cp && cp.extraQ===this.r && this.la && this.la[1]!=='n' && this.canTurn(cp.id)){ cp.extraQ = -1; cp.acted = false; this.tn++; this.la = null; this.rollQ(); this.set('turn','TURN'); if(this.evk==='fast') this.dl = Date.now() + 20000*SPEED; return; }
     this.nextTurn();
   }
   scoreRound(I){
@@ -360,7 +364,7 @@ class Host {
       const hit = this.lies.some(l=>l[1]===T.id && l[2]===A.id), d = hit ? 2 : -1;
       A.rp += d; D[A.id].acc = (D[A.id].acc||0) + d; this.accs.push([A.id, T.id, hit?1:0]);
       if(hit){ this.stat(A.id,'catch'); if(!caught.has(T.id) && D[T.id]){ caught.add(T.id); T.rp -= 2; D[T.id].liar = (D[T.id].liar||0) - 2; } } }
-    for(const id of new Set(this.lies.map(l=>l[1]))){ const L = this.p(id); if(!caught.has(id) && L && L.alive && D[id]){ L.rp += 2; D[id].liar = (D[id].liar||0) + 2; } }
+    for(const id of new Set(this.lies.map(l=>l[1]))){ const L = this.p(id); if(!caught.has(id) && L && L.alive && D[id]){ L.rp += 1; D[id].liar = (D[id].liar||0) + 1; } }
     if(this.pending.length){ const f = okO[0]; if(f){ const amt = this.pending.reduce((s,x)=>s+x,0); f.pts += amt; D[f.id].beq = amt; } this.pending = []; }
     for(const p of al) p.pts += p.rp;
     const order = [...okO, ...halfO, ...al.filter(p=>!p.open).sort((a,b)=>D[a.id].rank-D[b.id].rank), ...wrong];
@@ -475,8 +479,8 @@ class Host {
         const g = bestGuess(tr);
         {
           const idx = [...Array(this.table.length).keys()].filter(i=>!(b.pkIdx||[]).includes(i));
-          if(idx.length && Math.random()<.75) bi.a = {r:this.r, tn:this.tn, k:'p', i:pick(idx)};
-          else { const T = pick(this.alive().filter(p=>p.id!==b.id)); bi.a = (T && this.evk!=='silence' && !b.muted) ? {r:this.r, tn:this.tn, k:'q', t:T.id, q:pick(this.hs===1?[1,2,3,4,7]:[0,1,2,3,4,5,6,7])} : {r:this.r,tn:this.tn,k:'n'}; }
+          if(idx.length && (b.pkR!==this.r || this.evk==='silence') && Math.random()<.75) bi.a = {r:this.r, tn:this.tn, k:'p', i:pick(idx)};
+          else { const T = pick(this.alive().filter(p=>p.id!==b.id)); bi.a = (T && this.evk!=='silence' && !b.muted) ? {r:this.r, tn:this.tn, k:'q', t:T.id, q:pick(this.qo||[1])} : {r:this.r,tn:this.tn,k:'n'}; }
         }
       }
       if(this.ph==='accuse' && b.alive && bi.dn!==this.r){ bi.g = bestGuess(consistentTriples(deckFor(this.nmax).filter(c=>!(b.known||[]).includes(c)), this.hints)) || []; const askedIds = [...new Set(this.lg.filter(l=>l[1]===b.id && !l[6]).map(l=>l[2]))]; if(askedIds.length && Math.random()<.35) bi.ac={r:this.r,t:pick(askedIds)}; bi.dn=this.r; }
@@ -495,14 +499,14 @@ class Host {
     if(round || this.ph==='intro') for(const p of this.P){
       if(this.hands[p.id] && p.alive){ const wa = []; this.lg.forEach((l,ix)=>{ if(l[5] && (l[1]===p.id || l[2]===p.id)) wa.push([ix, l[4]]); });
         const lmx = lm + (p.trap===this.r?1:0);
-        pv[p.id] = {h:this.hands[p.id], pk:this.peeks[p.id]||null, lu:(p.lies||0)>=lmx?1:0, lc:p.lies||0, lm:lmx, tr:(this.pend && this.pend.t===p.id)?this.pend.truth:null, cl:(this.pend && this.pend.t===p.id)?(this.canLie(p, this.p(this.pend.a))?1:0):0, ab:p.ab||[], au:p.abUsed||[], ar:p.ar||[], ph:p.privHints||[], mu:p.muted?1:0, wa, gw:p.ghH||[]}; }
+        pv[p.id] = {h:this.hands[p.id], pk:this.peeks[p.id]||null, pu:(p.pkR===this.r && this.evk!=='silence')?1:0, lu:(p.lies||0)>=lmx?1:0, lc:p.lies||0, lm:lmx, tr:(this.pend && this.pend.t===p.id)?this.pend.truth:null, cl:(this.pend && this.pend.t===p.id)?(this.canLie(p, this.p(this.pend.a))?1:0):0, ab:p.ab||[], au:p.abUsed||[], ar:p.ar||[], ph:p.privHints||[], mu:p.muted?1:0, wa, gw:p.ghH||[]}; }
       else if(!p.alive) pv[p.id] = {ab:p.ab||[], au:p.abUsed||[], ar:p.ar||[], ws:(p.whS && p.whS[0]===this.r) ? p.whS.slice(1) : null};
     }
     const lgPub = this.lg.map(l=> l[5] ? [l[0],l[1],l[2],l[3],null,1,l[6]] : l);
     const S = {
       c:this.code, h:this.me, ph:this.ph, r:this.r, R:this.R, tn:this.tn, TT:this.LAPS||2, lap:this.lap||1, cur:this.cur||null, pend:this.pend?{a:this.pend.a,t:this.pend.t,q:this.pend.q,k:this.pend.k}:null, la:this.la||null, ord:this.order||[], fin:this.fin?1:0, k:this.key(),
       P:this.P.map(p=>[p.id, p.name, p.alive?p.pts:(p.outPts||0), (p.alive?1:0)|(p.open?.ok?2:0)|(p.open&&!p.open.ok&&!p.open.half?4:0)|(p.open?.half?512:0)|(p.skip?8:0)|(p.bot?16:0)|(p.id===this.cur?32:0)|(this.conn(p)?64:0)|(p.wd?128:0)|(p.late?1024:0), p.rp]),
-      tc:this.table.length, pz:this.paused?1:0, lvl:this.lvl, pkl:this.pkl||[], nm:this.nmax||5, hs:this.hs||2, th:this.th||3, hi:this.hints, lg:lgPub, ev:this.ev, pv, evk:this.evk||null, pkp:this.pkp||[], revs:this.revs||[], mutes:this.mutes||[], fk:(this.ph==='results'&&this.fk!=null)?this.hints[this.fk]:null, fki:this.ph==='results'?this.fk:null,
+      tc:this.table.length, qo:this.qo||null, pz:this.paused?1:0, lvl:this.lvl, pkl:this.pkl||[], nm:this.nmax||5, hs:this.hs||2, th:this.th||3, hi:this.hints, lg:lgPub, ev:this.ev, pv, evk:this.evk||null, pkp:this.pkp||[], revs:this.revs||[], mutes:this.mutes||[], fk:(this.ph==='results'&&this.fk!=null)?this.hints[this.fk]:null, fki:this.ph==='results'?this.fk:null,
       res:this.ph==='results'?this.res:null, lv:this.ph==='results'||this.ph==='over'?(this.lastVault||this.vault):null,
       ct:this.court&&['talk','vote','over'].includes(this.ph)?{d:this.court.d, m:this.court.m, w:this.court.win?1:0, k:this.courtKey(), cnt:this.court.cnt||null}:null,
       el:this.ph==='wills'?this.el:null, win:this.win, sm:this.simple?1:0, whs:this.whs||[], bo:this.ph==='wills'?this.bo:null,
