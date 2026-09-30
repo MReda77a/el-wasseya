@@ -56,9 +56,9 @@
       const pid = cleanPid(msg.pid), h = this.host;
       if(!pid || !h) return conn.send({t:'err', e:'notfound'});
       if(!h.p(pid)){
-        if(h.ph !== 'lobby') return conn.send({t:'err', e:'started'});
         if(h.P.length >= this.E.MAXP) return conn.send({t:'err', e:'full'});
-        h.add(pid, cleanName(msg.name), false);
+        if(h.ph === 'lobby') h.add(pid, cleanName(msg.name), false);
+        else if(!h.addLate(pid, cleanName(msg.name))) return conn.send({t:'err', e:'started'});
       }
       if(!this.conns.size && !(this.owner && h.p(this.owner))) this.setOwner(pid);
       conn.send({t:'ok', code:this.code});

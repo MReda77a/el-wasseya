@@ -4,7 +4,7 @@
    ========================================================== */
 const SPEED = (typeof location!=='undefined' && location.hash==='#fast') ? 0.08
             : (typeof process!=='undefined' && process.env && process.env.WSY_FAST) ? 0.08 : 1;
-const D = {INTRO:8, WILL:75, TURN:40, REVEAL:15, ANS:10, ACCUSE:25, RESULTS:14, TALK:30, VOTE:20, WILLS:6, WILLEACH:10};
+const D = {INTRO:8, WILL:75, TURN:40, REVEAL:15, ANS:10, ACCUSE:25, RESULTS:18, TALK:30, VOTE:20, WILLS:6, WILLEACH:10};
 const dur = k => D[k]*1000*SPEED;
 const TURNS = 6, MAXP = 10, MINP = 4;
 
@@ -71,13 +71,13 @@ class Host {
   constructor(code, myId, solo){
     this.code = code; this.me = myId; this.solo = solo;
     this.P = []; this.ph = 'lobby'; this.v = 0; this.r = 0; this.R = 1; this.tn = 0; this.fin = false;
-    this.peersPids = new Set(); this.peerInputs = {}; this.myInput = {}; this.lvl = 'normal'; this.simple = false;
+    this.peersPids = new Set(); this.peerInputs = {}; this.myInput = {}; this.lvl = 'normal'; this.simple = true; this.night = {}; this.games = 0;
     this.resetGame();
   }
   resetGame(){
     this.r=0; this.tn=0; this.fin=false; this.vault=[]; this.hands={}; this.table=[]; this.hints=[]; this.lg=[]; this.ev=[]; this.peeks={};
     this.paused=false; this.acts=[]; this.res=null; this.court=null; this.el=null; this.win=null; this.revCount=0; this.evk=null; this.elimOrder=[]; this.pending=[]; this.courtNo=0; this.opens=0; this.dl=0;
-    this.st={}; this.bestW=null; this.bo=[]; this.whs=[];
+    this.st={}; this.bestW=null; this.bo=[]; this.whs=[]; this.lies=[]; this.accs=[]; this.nightDone=false;
     for(const p of this.P) Object.assign(p, {pts:0, alive:true, rp:0, open:null, lieUsed:false, liedTo:[], caught:false, skip:false, skipNext:false, will:null, willUsed:false, cancelled:false, askedBy:{}, acted:false, outPts:0});
   }
   add(id, name, bot){
@@ -85,17 +85,34 @@ class Host {
     this.P.push({id, name:String(name).slice(0,14), bot:!!bot, pts:0, alive:true, rp:0, open:null, lieUsed:false, liedTo:[], caught:false, skip:false, skipNext:false, will:null, willUsed:false, cancelled:false, askedBy:{}, acted:false, outPts:0});
   }
   p(id){ return this.P.find(x=>x.id===id); }
+  /** Someone joins after the game started: before round 1 they play normally, later they join as a ghost. */
+  addLate(id, name){
+    if(this.P.find(p=>p.id===id) || this.P.length>=MAXP || this.ph==='over') return false;
+    this.add(id, name, false);
+    if(this.ph!=='will'){ const p = this.p(id); p.alive = false; p.late = true; p.revived = true; }
+    return true;
+  }
+  /** Scoreboard for the whole night (all games in this room). */
+  recordNight(){
+    if(this.nightDone) return; this.nightDone = true; this.games++;
+    const out = [...this.elimOrder].reverse();
+    const rank = [this.win, ...this.P.filter(p=>p.alive && p.id!==this.win).sort((a,b)=>b.pts-a.pts).map(p=>p.id), ...out.filter(id=>id!==this.win)];
+    const seen = new Set(); let pos = 0;
+    for(const id of rank){ const p = this.p(id); if(!p || seen.has(id) || p.late) continue; seen.add(id);
+      const n = this.night[id] || (this.night[id] = {n:p.name, w:0, g:0, s:0}); n.n = p.name; n.g++; if(pos===0) n.w++; n.s += [5,3,2][pos] ?? 1; pos++; }
+    if(this.simple && this.games===1) this.simple = false;   // first game was the easy one; the next starts full
+  }
   /** end-of-game stats for the awards */
   stat(id, k, n){ if(!id) return; const s = this.st[id] || (this.st[id] = {}); s[k] = (s[k]||0) + (n==null ? 1 : n); }
   alive(){ return this.P.filter(p=>p.alive); }
   conn(p){ return p.bot || this.solo || this.peersPids.has(p.id); }
   inputs(){ const I = {...this.peerInputs}; if(this.solo) I[this.me] = this.myInput; for(const p of this.P) if(p.bot) I[p.id] = p.bi || {}; return I; }
   eligible(){ return this.P.filter(p=>p.alive && !p.skip && !p.open && this.conn(p)); }
-  allOk(I){ const k = this.key(); const hs = this.P.filter(p=>!p.bot && this.conn(p)); return hs.length>0 && hs.every(p=>I[p.id]?.rk===k); }
+  allOk(I, aliveOnly){ const k = this.key(); const hs = this.P.filter(p=>!p.bot && this.conn(p) && (!aliveOnly || p.alive)); return hs.length>0 && hs.every(p=>I[p.id]?.rk===k); }
   pause(){ if(this.paused || this.ph==='lobby' || this.ph==='over') return; this.paused = true; this.pauseAt = Date.now(); }
   resume(){ if(!this.paused) return; this.dl += Date.now() - this.pauseAt; this.paused = false; }
   key(){ return `${this.ph}-${this.r}-${this.tn}-${this.courtNo}`; }
-  set(ph, k){ this.ph = ph; this.dl = Date.now() + (k ? dur(k) : 0); }
+  set(ph, k){ this.ph = ph; this.dl = Date.now() + (k ? dur(k) : 0); if(ph==='over') this.recordNight(); }
 
   start(){
     if(this.P.length < 2) return;
@@ -112,7 +129,7 @@ class Host {
     switch(this.ph){
       case 'will': {
         for(const p of this.P){ const w = I[p.id]?.w; if(w) p.will = this.cleanWill(w, p.id); p.wd = !!I[p.id]?.wd || p.bot; }
-        const humans = this.P.filter(p=>!p.bot && this.conn(p));
+        const humans = this.P.filter(p=>!p.bot && !p.late && this.conn(p));
         if(now > this.dl || humans.every(p=>p.wd)) { for(const p of this.P.filter(p=>p.bot)) if(!p.will) p.will = p.bi?.w ? this.cleanWill(p.bi.w,p.id) : null; this.startRound(); }
         break; }
       case 'intro': if(now > this.dl || hx) this.nextTurn(); break;
@@ -137,7 +154,7 @@ class Host {
         this.processGhosts(I);
         this.processAbilities(I);
         this.processOpens(I);
-        if(this.ph==='reveal' && (now > this.dl || this.allOk(I))) this.afterReveal();
+        if(this.ph==='reveal' && (now > this.dl || this.allOk(I, true))) this.afterReveal();
         break;
       case 'accuse': {
         const humans = this.alive().filter(p=>!p.bot && !p.open && this.conn(p));
@@ -171,7 +188,7 @@ class Host {
     return {c, x: String(w.x||'').slice(0,80), d};
   }
   startRound(){
-    this.r++; this.tn = 0; this.hints = []; this.lg = []; this.ev = []; this.peeks = {}; this.opens = 0; this.res = null; this.el = null; this.court = null; this.pkp = []; this.mutes = []; this.pkl = []; this.whs = []; this.bo = [];
+    this.r++; this.tn = 0; this.hints = []; this.lg = []; this.ev = []; this.peeks = {}; this.opens = 0; this.res = null; this.el = null; this.court = null; this.pkp = []; this.mutes = []; this.pkl = []; this.whs = []; this.bo = []; this.lies = []; this.accs = [];
     this.revs = [];
     for(const p of this.P){ if(!p.alive && p.reviveNext){ const mins = this.alive().map(x=>x.pts); p.alive = true; p.pts = mins.length ? Math.min(...mins) : 0; p.reviveNext = false; this.revCount = (this.revCount||0)+1; p.revived = true; this.revs.push(p.id); } }
     const prevEv = this.evk;
@@ -309,7 +326,7 @@ class Host {
   finishAns(v){
     const pd = this.pend, A = this.p(pd.a), T = this.p(pd.t);
     let ans = pd.truth;
-    if(T && v!==pd.truth && ansOptions(pd.q, this.nmax, this.hs).includes(v) && this.canLie(T, A)){ ans = v; T.lies = (T.lies||0)+1; T.lieUsed = T.lies >= this.lieMax() + (T.trap===this.r?1:0); T.liedTo.push(pd.a); }
+    if(T && v!==pd.truth && ansOptions(pd.q, this.nmax, this.hs).includes(v) && this.canLie(T, A)){ ans = v; this.lies.push([this.tn, T.id, pd.a, pd.q, v, pd.truth]); T.lies = (T.lies||0)+1; T.lieUsed = T.lies >= this.lieMax() + (T.trap===this.r?1:0); T.liedTo.push(pd.a); }
     if(T){ T.askedBy[pd.a] = (T.askedBy[pd.a]||0)+1; }
     this.stat(pd.a,'q'); this.stat(pd.t,'a'); if(ans!==pd.truth) this.stat(pd.t,'l');
     this.lg.push([this.tn, pd.a, pd.t, pd.q, ans, T && T.whisper===this.r ? 1 : 0, 0]);
@@ -337,6 +354,13 @@ class Host {
       const gh = I[g.id]?.gh; if(!gh || gh.r!==this.r) continue; const T = this.p(gh.t); if(!T || !T.alive) continue;
       const d = gh.s>0?2:-2; T.rp += d; D[T.id].gh = (D[T.id].gh||0)+d;
     }
+    // accusations: "you lied to me!" Right: accuser +2, liar -2. Wrong: accuser -1. A liar nobody caught gets +2.
+    const caught = new Set();
+    for(const A of al){ const ac = I[A.id]?.ac; if(!ac || ac.r!==this.r || !D[A.id]) continue; const T = this.p(ac.t); if(!T || T.id===A.id) continue;
+      const hit = this.lies.some(l=>l[1]===T.id && l[2]===A.id), d = hit ? 2 : -1;
+      A.rp += d; D[A.id].acc = (D[A.id].acc||0) + d; this.accs.push([A.id, T.id, hit?1:0]);
+      if(hit){ this.stat(A.id,'catch'); if(!caught.has(T.id) && D[T.id]){ caught.add(T.id); T.rp -= 2; D[T.id].liar = (D[T.id].liar||0) - 2; } } }
+    for(const id of new Set(this.lies.map(l=>l[1]))){ const L = this.p(id); if(!caught.has(id) && L && L.alive && D[id]){ L.rp += 2; D[id].liar = (D[id].liar||0) + 2; } }
     if(this.pending.length){ const f = okO[0]; if(f){ const amt = this.pending.reduce((s,x)=>s+x,0); f.pts += amt; D[f.id].beq = amt; } this.pending = []; }
     for(const p of al) p.pts += p.rp;
     const order = [...okO, ...halfO, ...al.filter(p=>!p.open).sort((a,b)=>D[a.id].rank-D[b.id].rank), ...wrong];
@@ -455,7 +479,7 @@ class Host {
           else { const T = pick(this.alive().filter(p=>p.id!==b.id)); bi.a = (T && this.evk!=='silence' && !b.muted) ? {r:this.r, tn:this.tn, k:'q', t:T.id, q:pick(this.hs===1?[1,2,3,4,7]:[0,1,2,3,4,5,6,7])} : {r:this.r,tn:this.tn,k:'n'}; }
         }
       }
-      if(this.ph==='accuse' && b.alive && bi.dn!==this.r){ bi.g = bestGuess(consistentTriples(deckFor(this.nmax).filter(c=>!(b.known||[]).includes(c)), this.hints)) || []; if(Math.random()<.5){ const T=pick(this.alive().filter(p=>p.id!==b.id)); if(T) bi.ac={r:this.r,t:T.id}; } bi.dn=this.r; }
+      if(this.ph==='accuse' && b.alive && bi.dn!==this.r){ bi.g = bestGuess(consistentTriples(deckFor(this.nmax).filter(c=>!(b.known||[]).includes(c)), this.hints)) || []; const askedIds = [...new Set(this.lg.filter(l=>l[1]===b.id && !l[6]).map(l=>l[2]))]; if(askedIds.length && Math.random()<.35) bi.ac={r:this.r,t:pick(askedIds)}; bi.dn=this.r; }
       if(this.ph==='ans' && this.pend && this.pend.t===b.id && !(bi.ans && bi.ans.k===this.pend.k)){
         const opts = ansOptions(this.pend.q, this.nmax, this.hs).filter(x=>x!==this.pend.truth);
         const lie = this.canLie(b, this.p(this.pend.a)) && Math.random()<.3 && opts.length;
@@ -477,12 +501,14 @@ class Host {
     const lgPub = this.lg.map(l=> l[5] ? [l[0],l[1],l[2],l[3],null,1,l[6]] : l);
     const S = {
       c:this.code, h:this.me, ph:this.ph, r:this.r, R:this.R, tn:this.tn, TT:this.LAPS||2, lap:this.lap||1, cur:this.cur||null, pend:this.pend?{a:this.pend.a,t:this.pend.t,q:this.pend.q,k:this.pend.k}:null, la:this.la||null, ord:this.order||[], fin:this.fin?1:0, k:this.key(),
-      P:this.P.map(p=>[p.id, p.name, p.alive?p.pts:(p.outPts||0), (p.alive?1:0)|(p.open?.ok?2:0)|(p.open&&!p.open.ok&&!p.open.half?4:0)|(p.open?.half?512:0)|(p.skip?8:0)|(p.bot?16:0)|(p.id===this.cur?32:0)|(this.conn(p)?64:0)|(p.wd?128:0), p.rp]),
+      P:this.P.map(p=>[p.id, p.name, p.alive?p.pts:(p.outPts||0), (p.alive?1:0)|(p.open?.ok?2:0)|(p.open&&!p.open.ok&&!p.open.half?4:0)|(p.open?.half?512:0)|(p.skip?8:0)|(p.bot?16:0)|(p.id===this.cur?32:0)|(this.conn(p)?64:0)|(p.wd?128:0)|(p.late?1024:0), p.rp]),
       tc:this.table.length, pz:this.paused?1:0, lvl:this.lvl, pkl:this.pkl||[], nm:this.nmax||5, hs:this.hs||2, th:this.th||3, hi:this.hints, lg:lgPub, ev:this.ev, pv, evk:this.evk||null, pkp:this.pkp||[], revs:this.revs||[], mutes:this.mutes||[], fk:(this.ph==='results'&&this.fk!=null)?this.hints[this.fk]:null, fki:this.ph==='results'?this.fk:null,
       res:this.ph==='results'?this.res:null, lv:this.ph==='results'||this.ph==='over'?(this.lastVault||this.vault):null,
       ct:this.court&&['talk','vote','over'].includes(this.ph)?{d:this.court.d, m:this.court.m, w:this.court.win?1:0, k:this.courtKey(), cnt:this.court.cnt||null}:null,
       el:this.ph==='wills'?this.el:null, win:this.win, sm:this.simple?1:0, whs:this.whs||[], bo:this.ph==='wills'?this.bo:null,
-      st:this.ph==='over'?this.st:null, bw:this.ph==='over'?this.bestW:null
+      st:this.ph==='over'?this.st:null, bw:this.ph==='over'?this.bestW:null,
+      lies:this.ph==='results'?this.lies.map(l=>[l[1],l[2],l[3],l[4],l[5],this.accs.some(a=>a[0]===l[2]&&a[1]===l[1]&&a[2])?1:0]):null,
+      accs:this.ph==='results'?this.accs:null, nt:['lobby','over'].includes(this.ph)&&this.games?this.night:null
     };
     const body = JSON.stringify(S);
     if(body !== this._last){ this._last = body; this.v++; }

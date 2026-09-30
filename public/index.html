@@ -482,6 +482,16 @@ button.def{background:var(--panel2)}
 .award{display:flex;align-items:center;gap:10px;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:18px;padding:8px 12px;box-shadow:0 4px 0 var(--ink);animation:rise .5s both}
 .award .aic{font-size:1.8rem}
 .award .small{opacity:.75;font-weight:600}
+.lierow{display:flex;align-items:center;gap:10px;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:16px;padding:8px 10px;box-shadow:0 4px 0 var(--ink);animation:rise .45s both}
+.lierow .tagx{margin-inline-start:auto;flex:none;background:var(--mint);border:2px solid var(--ink);border-radius:999px;padding:0 8px;font-weight:800;font-size:.8rem}
+.lierow.caught{background:#ffe1e7} .lierow.caught .tagx{background:var(--pink);color:#fff}
+.fad{gap:8px}
+.deckrows{display:flex;flex-direction:column;gap:6px;margin:4px 0}
+.deckrow{display:grid;gap:4px;justify-content:center}
+.deckrow .nc{font-size:.85rem;cursor:default}
+.deckbox .split{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.deckbox .split span{background:rgba(36,16,74,.08);border-radius:999px;padding:2px 10px;font-weight:700;font-size:.88rem}
+.deckline{font-weight:700;font-size:.88rem;text-align:center;background:rgba(36,16,74,.07);border-radius:999px;padding:3px 12px;margin:6px auto 0;width:fit-content}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 <style>
@@ -504,6 +514,11 @@ const AVC = ['#ffd23f','#ff7eb3','#4fd1ff','#6ff0a6','#c3a2ff','#ff9a3c','#2ee6c
 const T = {
 ar:{
  title:'الوصية',
+ fadT:'🤥 فضايح الراوند', fadLine:'{a} كدب على {b}', fadSaid:'قال', fadTruth:'والحقيقة', fadCaught:'اتقفش! −٢', fadFree:'عدّت عليه +٢', fadNone:'محدش كدب الراوند ده. ناس محترمة 😇', fadWrong:'{a} اتهم {b} ظلم (−١)',
+ tip_acc:['🕵️','حد كدب عليك؟','لو حاسس إن حد كدب عليك لما سألته، اتهمه. لو صح: انت +٢ وهو −٢. لو غلط: انت −١.'],
+ nightT:'🏆 سكور القعدة', nightS:'بيتجمع من كل الجيمات في الأوضة دي', nightW:'{n} فوز', nightG:'{n} جيم',
+ b_late_s:'دخلت والجيم شغالة، فهتلعب شبح لحد الجيم الجاية. راهن واهمس!', tip_late:['👋','أهلاً!','الجيم كانت بدأت، فانت شبح دلوقتي: تقدر تراهن مين هيخرج وتهمس بتلميحات. الجيم الجاية هتلعب عادي.'],
+ deckT:'الكروت الراوند ده: {t} كارت', dkVault:'في الخزنة', dkHands:'مع اللعيبة ({h} لكل واحد)', dkTable:'على الترابيزة', deckLine:'{t} كارت: من ١ لـ {n} × ٣ ألوان', deckNote:'العدد بيتغير حسب عدد اللعيبة والصعوبة.',
  simpleOn:'🐣 جيم سهل', simpleOnS:'من غير قدرات ولا أحداث. أحسن حاجة لو فيه حد أول مرة يلعب.', simpleOff:'✨ جيم كامل', simpleOffS:'كل راوند قدرة سرية، وممكن حدث يقلب القواعد.',
  invite:'ابعت الدعوة', inviteTxt:'تعالى العب معايا «الوصية» 📜🔐 كود الأوضة: {c}', qrBtn:'QR', qrHelp:'صحابك يصوروا الكود ده بكاميرا الموبايل ويدخلوا على طول.', copiedInv:'الدعوة اتنسخت ✓ الصقها في واتساب', deepJoin:'اكتب اسمك ودوس «ادخل» عشان تدخل أوضة {c}',
  tipOk:'فهمت 👍', tipAb:'قدرة جديدة: {n}', tipEv:'حدث جديد: {n}',
@@ -611,7 +626,7 @@ ar:{
  noLog:'لسه محدش سأل حاجة', turnN:'دور {n}', evOk:'🔓 {p} فتح الخزنة!', evBad:'🔒 {p} فتح غلط', evHalf:'🔓 {p} فتح بـ ٢ صح من ٣',
  peekSaw:'الكارت اللي شفته', peekGone:'اختفى! بس اتشطب في النوتة لوحده ✓', noAction:'مفيش حاجة جديدة ليك الدور ده',
  // accuse
- accT:'حد كدب عليك؟', accS:'صح = +٢ ، غلط = −١. والكداب اللي محدش كشفه ياخد +٢.', nobody:'محدش', guessT:'تخمينك الأخير', guessS:'اللي مفتحش بيترتب بعدد الكروت الصح.', done:'خلصت ✓', doneW:'مستنيين الباقي...',
+ accT:'حد كدب عليك؟', accS:'لو صح: انت +٢ وهو −٢. لو غلط: انت −١. والكداب اللي محدش كشفه ياخد +٢. كل الكدب هيتفضح آخر الراوند!', nobody:'محدش', guessT:'تخمينك الأخير', guessS:'اللي مفتحش بيترتب بعدد الكروت الصح.', done:'خلصت ✓', doneW:'مستنيين الباقي...',
  // ghost
  ghostT:'قوة الشبح', ghostS:'مرة في الراوند: ادّي حد +٢ أو اخصم منه ٢.', ghostDone:'اتسجل ✓ هيتحسب آخر الراوند',
  // results
@@ -630,9 +645,9 @@ ar:{
  H0:'مجموع الخزنة بين {a} و {b}', H1:'مفيش كارت {c} في الخزنة', H2:'في الخزنة {n} كارت {c}', H3:'أعلى رقم في الخزنة {n}', H4:'في الخزنة {n} رقم زوجي', H5:'فيه كارت أكبر من {n}؟ {y}', H4z:'كل أرقام الخزنة فردية', H6:'أصغر رقم في الخزنة {n}', H7y:'كروت الخزنة ٣ ألوان مختلفة', H7n:'فيه لون متكرر في الخزنة', H8y:'فيه رقم {n} في الخزنة', H8n:'مفيش رقم {n} في الخزنة', H9:'تلميح دهبي: {c} {n} في الخزنة!',
  help:[
   ['📜','الوصية','قبل ما اللعبة تبدأ، كل واحد يكتب وصية سرية. بتتنفذ لما يخرج: يدي نقطه لحد، أو ينتقم، أو يفضح حد. وممكن يحط «عقاب في القعدة» لحد يعمله بجد.'],
-  ['🔐','الخزنة','في الخزنة ٣ كروت سرية. كل واحد معاه كارتين، والباقي مقلوب على الترابيزة. كروتك أكيد مش في الخزنة.'],
+  ['🔐','الخزنة','في الخزنة ٣ كروت سرية. كل واحد معاه كارت أو اتنين، والباقي مقلوب على الترابيزة. كروتك أكيد مش في الخزنة. في أول كل راوند اللعبة بتقولك الكروت كام وأرقامها من كام لكام.'],
   ['👀','الأدوار','كل واحد بيلعب في دوره (٤٠ ثانية) والكل بيتفرج: يبص على كارت من الترابيزة، أو يسأل حد سؤال والإجابة بتظهر كبيرة للكل.'],
-  ['🤥','الكدب','لما حد يسألك انت اللي بتجاوب. الحقيقة بس مفتوحة، ولو دوست «اكدب» تقدر تختار أي إجابة تانية. مرة في الراوند.'],
+  ['🤥','الكدب','لما حد يسألك انت اللي بتجاوب. الحقيقة بس مفتوحة، ولو دوست «اكدب» تقدر تختار أي إجابة تانية. مرة في الراوند. بس آخر الراوند كل الكدب بيتفضح، ولو اللي كدبت عليه اتهمك تخسر ٢. لو محدش قفشك تاخد +٢.'],
   ['✨','قدرات وأحداث','كل راوند بتاخد قدرة سرية عشوائية تستخدمها مرة. ومن الراوند التاني ممكن يطلع حدث يغير قواعد الراوند كله.'],
   ['📝','النوتة والتلميحات','كل دور بيطلع تلميح جديد، وبعد الدور التاني تلميح دهبي بيكشف كارت من الخزنة. اشطب اللي مش فيها، ولما تعرف افتح. ٣ صح = نقط كاملة، ٢ صح = أقل، غير كده −٥.'],
   ['⚖️','الخروج','آخر كل راوند الأقل في المجموع يخرج ووصيته تتنفذ. لو فيه تعادل: محكمة وتصويت. آخر اتنين: أول واحد يفتح يكسب. واللي خرج يبقى شبح: يراهن ويهمس ويأثر في اللعبة.']
@@ -640,6 +655,11 @@ ar:{
 },
 en:{
  title:'El Wasseya',
+ fadT:'🤥 This round\'s scandals', fadLine:'{a} lied to {b}', fadSaid:'said', fadTruth:'truth was', fadCaught:'Caught! −2', fadFree:'Got away +2', fadNone:'Nobody lied this round. Such honest people 😇', fadWrong:'{a} wrongly accused {b} (−1)',
+ tip_acc:['🕵️','Did someone lie to you?','If you think someone lied when you asked them, accuse them. Right: you +2, they −2. Wrong: you −1.'],
+ nightT:'🏆 Tonight\'s scores', nightS:'Adds up every game in this room', nightW:'{n} wins', nightG:'{n} games',
+ b_late_s:'You joined mid-game, so you\'re a ghost until the next one. Bet and whisper!', tip_late:['👋','Welcome!','The game already started, so you\'re a ghost for now: bet on who goes out and whisper hints. Next game you play normally.'],
+ deckT:'Cards this round: {t}', dkVault:'in the vault', dkHands:'in hands ({h} each)', dkTable:'on the table', deckLine:'{t} cards: 1–{n} × 3 colors', deckNote:'The count changes with players and difficulty.',
  simpleOn:'🐣 Easy game', simpleOnS:'No powers or events. Best when someone is new.', simpleOff:'✨ Full game', simpleOffS:'A secret power each round, and events that twist the rules.',
  invite:'Send invite', inviteTxt:'Come play El Wasseya with me 📜🔐 Room code: {c}', qrBtn:'QR', qrHelp:'Friends scan this with their phone camera and jump right in.', copiedInv:'Invite copied ✓ Paste it in WhatsApp', deepJoin:'Type your name and tap "Join" to enter room {c}',
  tipOk:'Got it 👍', tipAb:'New power: {n}', tipEv:'New event: {n}',
@@ -743,7 +763,7 @@ en:{
  tNotes:'📝 Notes', tLog:'📋 What happened', notesHelpX:'Cross out cards you know are not in the vault.', notesHelpS:'Star the 3 cards you think are in the vault.', mX:'✕ Cross', mS:'⭐ Guess',
  noLog:'No questions yet', turnN:'Turn {n}', evOk:'🔓 {p} opened the vault!', evBad:'🔒 {p} opened wrong', evHalf:'🔓 {p} opened with 2 of 3',
  peekSaw:'The card you saw', peekGone:'Gone! It\'s crossed out in your notes ✓', noAction:'Nothing new for you this turn',
- accT:'Did someone lie to you?', accS:'Right = +2, wrong = −1. A liar nobody catches gets +2.', nobody:'Nobody', guessT:'Your final guess', guessS:'Players who didn\'t open are ranked by correct cards.', done:'Done ✓', doneW:'Waiting for the others...',
+ accT:'Did someone lie to you?', accS:'Right: you +2, they −2. Wrong: you −1. A liar nobody catches gets +2. All lies get exposed at round end!', nobody:'Nobody', guessT:'Your final guess', guessS:'Players who didn\'t open are ranked by correct cards.', done:'Done ✓', doneW:'Waiting for the others...',
  ghostT:'Ghost power', ghostS:'Once per round: give someone +2 or take 2.', ghostDone:'Saved ✓ applies at round end',
  vaultWas:'The vault was', danger:'in danger', next:'Next',
  t_acc:'🕵️ accusation', t_liar:'🤥 lie', t_gh:'👻 ghost', t_beq:'📜 will', correctN:'{n}/3 right', opened:'opened 🔓', halfO:'opened 2 of 3', wrongO:'opened wrong',
@@ -757,9 +777,9 @@ en:{
  H0:'Vault sum is between {a} and {b}', H1:'No {c} card in the vault', H2:'The vault has {n} {c} card(s)', H3:'Highest vault number is {n}', H4:'The vault has {n} even number(s)', H5:'A card above {n}? {y}', H4z:'All vault numbers are odd', H6:'Lowest vault number is {n}', H7y:'The vault has 3 different colors', H7n:'A color repeats in the vault', H8y:'There is a {n} in the vault', H8n:'No {n} in the vault', H9:'Golden hint: {c} {n} is in the vault!',
  help:[
   ['📜','The will','Before the game, everyone writes a secret will. It runs when they\'re out: give points away, take revenge, or expose someone. It can even hold a real-life dare.'],
-  ['🔐','The vault','The vault holds 3 secret cards. Everyone holds 2, the rest lie face-down. Your own cards are never in the vault.'],
+  ['🔐','The vault','The vault holds 3 secret cards. Everyone holds 1 or 2, the rest lie face-down. Your own cards are never in the vault. Each round starts by showing how many cards there are and their numbers.'],
   ['👀','Turns','Players go one at a time (40s) while everyone watches: peek at a table card, or ask someone a question and the answer shows big for everyone.'],
-  ['🤥','Lying','When asked, you answer yourself. Only the truth is open; tap "Lie" to pick any other answer. Once per round.'],
+  ['🤥','Lying','When asked, you answer yourself. Only the truth is open; tap "Lie" to pick any other answer. Once per round. At round end every lie is exposed: if your victim accused you, you lose 2. Got away with it? +2.'],
   ['✨','Powers and events','Each round you get a random secret power to use once. From round 2, an event may change the rules for the whole round.'],
   ['📝','Notes and hints','A new hint every turn, and after turn 2 a golden hint reveals one vault card. Cross out what isn\'t there and open when you know. 3 right = full, 2 right = fewer, else −5.'],
   ['⚖️','Going out','Each round the lowest total goes out and their will runs. Ties go to court. Last two: first to open wins. Whoever\'s out becomes a ghost who bets, whispers and meddles.']
@@ -855,6 +875,7 @@ function onPhaseChange(){
   phaseTips();
   if(S.r !== U.notesR){ U.notes = {}; U.seen = {}; U.tpk = {}; U.pick = []; U.mode = null; U.sheet = null; U.notesR = S.r; U.seenHints = 0; U.whSel = {}; setIn({g:null, o:null, a:null, ac:null}); }
   if(S.ph==='reveal'){ const pk = S.pv?.[me]?.pk; if(pk && pk[2]===S.tn){ U.tpk[pk[0]] = pk[1]; U.peekUntil = Date.now()+3000; setTimeout(render, 3100); if(U.notes[pk[1]]!==2) U.notes[pk[1]]=1; U.seen[pk[1]]=1; } }
+  if(S.ph==='results' && S.lies && S.lies.length) SFX.play('dare');
   if(S.ph==='over'){ SFX.play('win'); U.confetti = true; setTimeout(()=>{U.confetti=false; U.confHTML=null; render();}, 3500); }
   if(S.ph==='lobby' || S.ph==='will'){ U.draft = {c:[], x:'', d:null}; U.dareP = null; U.dareX = ''; U.pendingW = null; U.starting = false; setIn({wd:null}); }
   try{ window.scrollTo({top:0}); }catch(_){}
@@ -993,7 +1014,9 @@ function phaseTips(){
   if(S.ph==='accuse' && alive && !(mp[3]&(2|4|512))) tipT('tip_accuse', ['accuse']);
   if(S.ph==='results') tipT('tip_results', ['results']);
   if(S.ph==='talk') tipT('tip_court', ['talk','vote']);
-  if(!alive && S.r>0 && ['intro','turn','reveal','ans','accuse'].includes(S.ph)) tipT('tip_ghost', ['intro','turn','reveal','ans','accuse','results']);
+  if(S.ph==='accuse' && alive && S.lg.some(l=>l[1]===me && !l[6])) tipT('tip_acc', ['accuse']);
+  if(mp[3]&1024) tipT('tip_late', ['intro','turn','reveal','ans','accuse','results','talk','vote','wills']);
+  else if(!alive && S.r>0 && ['intro','turn','reveal','ans','accuse'].includes(S.ph)) tipT('tip_ghost', ['intro','turn','reveal','ans','accuse','results']);
 }
 function coachView(inSheet){
   if(!inSheet && S.ph==='ans' && S.pend && S.pend.t===me) return '';
@@ -1089,7 +1112,7 @@ function banner(compact){
     case 'intro': h=t('b_intro',{r:S.r}); s = S.evk ? t('b_intro_ev') : t('b_intro_s'); break;
     case 'turn':
       if(['open','confirm'].includes(U.mode) && canOpen()){ h='🔐 '+t('openBtn'); s=t('openAny'); break; }
-      if(!(f&1)){ h=t('b_ghost'); s=t('b_ghost_s'); }
+      if(!(f&1)){ h=t('b_ghost'); s=(f&1024)?t('b_late_s'):t('b_ghost_s'); }
       else if(f&2){ h=t('b_ok'); s=t('b_ok_s'); } else if(f&512){ h=t('b_half'); s=t('b_half_s'); } else if(f&4){ h=t('b_bad'); s=t('b_bad_s'); } else if(f&8){ h=t('b_skip'); s=t('b_skip_s'); }
       else if(S.cur!==me){ h=t('b_their',{p:nm(S.cur)}); s=t('b_their_s'); }
       else if(chosen()){ h=t('b_chosen'); s=t('b_chosen_s'); } else { h=t('b_mine'); s=t('b_turn_s'); }
@@ -1147,7 +1170,7 @@ function lobbyView(){
   const simpleBlock = `<button class="lie pubsw ${sm?'on':''}" data-act="simple" aria-pressed="${sm}" ${isHost()?'':'disabled'}><span style="font-size:1.6rem">${sm?'🐣':'✨'}</span><span><b>${sm?t('simpleOn'):t('simpleOff')}</b><br><span class="small muted">${sm?t('simpleOnS'):t('simpleOffS')}</span></span>${isHost()?'<span class="tg"></span>':''}</button>`;
   const lv = S.lvl || 'normal';
   const lvlBlock = `<div class="sec"><span class="sec-t">🎚️ ${t('lvlT')}</span><div class="modes">${['easy','normal','hard'].map(k=>`<button class="mode ${lv===k?'sel':''}" data-act="lvl" data-v="${k}" ${isHost()?'':'disabled'}><span class="mi">${k==='easy'?'😌':k==='normal'?'🧠':'🔥'}</span><b>${t('lv_'+k)}</b><span>${t('lvd_'+k)}</span></button>`).join('')}</div>${isHost()?'':`<p class="small muted">${t('lvlHost')}</p>`}</div>`;
-  return `<div class="hero" style="padding-top:0">${logoHTML(true)}</div>` + codeBlock + pubBlock + simpleBlock + lvlBlock + people + start + `<button class="btn ghost block" data-act="help">❔ ${t('how')}</button>`;
+  return `<div class="hero" style="padding-top:0">${logoHTML(true)}</div>` + codeBlock + pubBlock + simpleBlock + lvlBlock + people + nightBlock() + start + `<button class="btn ghost block" data-act="help">❔ ${t('how')}</button>`;
 }
 
 /* ---- will ---- */
@@ -1409,6 +1432,7 @@ function tableView(){
   const hintArea = hs.length ? hs[0] + (hs.length>1 ? `<button class="morebtn" data-act="sheet" data-v="hints">+${hs.length-1} ${t('moreHints')}</button>` : '') : `<p class="muted small">${S.evk==='dark'?t('darkNote'):t('noHints')}</p>`;
   return `${S.evk?evChip():''}<div class="sec table">
     <div class="vaultbox"><div class="vault small"><div class="slots"><span class="slot">?</span><span class="slot">?</span><span class="slot">?</span></div></div><div class="hints">${hintArea}</div></div>
+    ${deckLine()}
     ${statusBlock()}
     ${hand.length?`<div class="handrow"><div><b>🖐 ${t('hand')}</b><div class="small muted">${t('handNote')}</div></div><div class="hand">${hand.map((h,i)=>card(h, i?'tilt2':'tilt1')).join('')}</div></div>`:''}
   </div>` + peopleRow();
@@ -1442,7 +1466,7 @@ function sheetView(){
   else if((U.mode==='open' || U.mode==='confirm') && canOpen()) body = openFlow();
   else if(String(U.mode).startsWith('ab:')) body = abilityFlow(U.mode.slice(3));
   else if(s==='abs') body = abilityBlock() || `<p class="muted center">${t('noAb')}</p>`;
-  else if(s==='notes') body = `<span class="sheet-t">📝 ${t('tNotesS')}</span><p class="small muted">${t('notesHelp1')}</p>${notesGrid()}<div class="hints" style="margin-top:6px">${allHintsHTML().join('')}</div>`;
+  else if(s==='notes') body = `<span class="sheet-t">📝 ${t('tNotesS')}</span>${deckLine()}<p class="small muted">${t('notesHelp1')}</p>${notesGrid()}<div class="hints" style="margin-top:6px">${allHintsHTML().join('')}</div>`;
   else if(s==='log') body = `<span class="sheet-t">📋 ${t('tLogS')}</span>${logHTML()}`;
   else if(s==='hints') body = `<span class="sheet-t">🔑 ${t('hints')}</span><div class="hints">${allHintsHTML().join('')}</div>`;
   else if(s==='ghost') body = ghostBlock();
@@ -1498,12 +1522,20 @@ function abilityFlow(k){
   const ready = (!need.includes('T') || sel.t) && (!need.includes('Q') || sel.q!=null) && (!(need==='I'||need==='H') || sel.i!=null);
   return `<div class="sec">${backBtn()}${abCard(k, false, true)}${body}<button class="btn gold lg block" data-act="abdo" data-k="${k}" ${ready?'':'disabled'}>${t('useAb')} ${ABI[k]}</button></div>`;
 }
+function deckBlock(){
+  const n = S.nm||5, tot = 3*n, pl = (S.ord && S.ord.length) || S.P.filter(isAlive).length;
+  return `<div class="sec deckbox"><span class="sec-t">🃏 ${t('deckT',{t:tot})}</span>
+    <div class="deckrows">${[0,1,2].map(col=>`<div class="deckrow" style="grid-template-columns:repeat(${n},minmax(0,34px))">${Array.from({length:n},(_,i)=>`<span class="nc ${CK[col]}">${ncInner(col,i+1)}</span>`).join('')}</div>`).join('')}</div>
+    <div class="split"><span>🔐 <b class="num">3</b> ${t('dkVault')}</span><span>🖐 <b class="num">${(S.hs||2)*pl}</b> ${t('dkHands',{h:S.hs||2})}</span><span>🂠 <b class="num">${S.tc}</b> ${t('dkTable')}</span></div>
+    <p class="small muted">${t('deckNote')}</p></div>`;
+}
+const deckLine = () => `<div class="deckline">🃏 ${t('deckLine',{t:3*(S.nm||5), n:S.nm||5})}</div>`;
 function introView(){
   const pv = S.pv?.[me];
   const ev = S.evk ? `<div class="stage evstage"><div class="big">${EVI[S.evk]}</div><span class="lbl">${t('evThis')}</span><h2>${t('EV_'+S.evk)}</h2><p>${t('EVD_'+S.evk)}</p></div>` : `<div class="stage"><div class="big">🔐</div><h2>${t('normalRound')}</h2><p class="muted">${t('normalRoundS')}</p></div>`;
   const revs = (S.revs||[]).map(id=>`<div class="event">👻 ${t('revived',{p:nm(id)})}</div>`).join('');
   const abs = pv && pv.ab && pv.ab.length ? `<div class="sec"><span class="sec-t">✨ ${pv.ab.length>1?t('yourAbs'):t('yourAb')}</span>${pv.ab.map(k=>abCard(k,false,true)).join('')}<p class="small muted">${t('abIntro')}</p></div>` : '';
-  return ev + revs + abs + hostNext();
+  return ev + revs + deckBlock() + abs + hostNext();
 }
 
 /* ---- accuse ---- */
@@ -1511,10 +1543,27 @@ function accuseView(){
   const mp = meP();
   if(!isAlive(mp)) return ghostBlock() + betBlock();
   const done = IN.dn===S.r, opened = mp[3]&(2|4|512);
-  if(opened) return `<div class="sec"><div class="waitbox"><div class="bigemoji">⏳</div><p>${t('doneW')}</p></div></div>`;
-  return `<div class="sec"><span class="sec-t">⭐ ${t('guessT')}</span><p class="small muted">${t('guessS')}</p>
+  if(opened) return accBlock() + `<div class="sec"><div class="waitbox"><div class="bigemoji">⏳</div><p>${t('doneW')}</p></div></div>`;
+  return accBlock() + `<div class="sec"><span class="sec-t">⭐ ${t('guessT')}</span><p class="small muted">${t('guessS')}</p>
     ${pickSlots()}<p class="small muted center">${t('pickHelp')}</p>${pickGrid()}</div>`
     + (done ? `<p class="saved center">${t('doneW')}</p>` : `<button class="btn gold lg block" data-act="done">${t('done')}</button>`) + sideTabsLogOnly();
+}
+function accBlock(){
+  const asked = [...new Set(S.lg.filter(l=>l[1]===me && !l[6]).map(l=>l[2]))].filter(id=>P(id));
+  if(!asked.length) return '';
+  const cur = IN.ac && IN.ac.r===S.r ? IN.ac.t : null;
+  return `<div class="sec"><span class="sec-t">🕵️ ${t('accT')}</span><p class="small muted">${t('accS')}</p><div class="pgrid">${asked.map(id=>`<button class="person pick-person ${cur===id?'sel':''}" data-act="acc" data-t="${id}">${avatar(id)}<span class="nm">${nm(id)}</span></button>`).join('')}<button class="person pick-person ${cur?'':'sel'}" data-act="acc" data-t=""><span class="av" style="--av:#ffffff">🙅</span><span class="nm">${t('nobody')}</span></button></div></div>`;
+}
+const ansTxt = (q, a) => (q===0||q===6) ? `<b class="num">${a}</b>` : `<b>${a?t('yes'):t('no')}</b>`;
+function fadBlock(){
+  const lies = S.lies || [], wrong = (S.accs||[]).filter(a=>!a[2]);
+  return `<div class="sec fad"><span class="sec-t">${t('fadT')}</span>${lies.length ? lies.map((l,i)=>`<div class="lierow ${l[5]?'caught':''}" style="animation-delay:${.2+i*.35}s">${avatar(l[0],'sm')}<div style="min-width:0"><b>${t('fadLine',{a:nm(l[0]), b:nm(l[1])})}</b><div class="small">${qT(l[2])} ${t('fadSaid')} ${ansTxt(l[2],l[3])} ${t('fadTruth')} ${ansTxt(l[2],l[4])}</div></div><span class="tagx">${l[5]?t('fadCaught'):t('fadFree')}</span></div>`).join('') : `<p class="small muted">${t('fadNone')}</p>`}
+    ${wrong.map(a=>`<div class="small muted">🙃 ${t('fadWrong',{a:nm(a[0]), b:nm(a[1])})}</div>`).join('')}</div>`;
+}
+function nightBlock(){
+  const nt = S.nt; if(!nt) return '';
+  const rows = Object.entries(nt).sort((a,b)=>b[1].s-a[1].s || b[1].w-a[1].w);
+  return `<div class="sec"><span class="sec-t">${t('nightT')}</span><p class="small muted">${t('nightS')}</p>${rows.map(([id,r],i)=>`<div class="lrow ${id===me?'me':''}"><span class="num muted">${i===0?'👑':i+1}</span><b>${esc(r.n)}</b><span class="small muted">${r.w?'🏆 '+t('nightW',{n:r.w})+' · ':''}${t('nightG',{n:r.g})}</span><span class="tot num">${r.s}</span></div>`).join('')}</div>`;
 }
 function sideTabsLogOnly(){ const turns = [...new Set([...S.lg.map(l=>l[0]), ...S.ev.map(e=>e[2])])].sort((a,b)=>b-a);
   return turns.length ? `<div class="sec"><span class="sec-t">${t('tLog')}</span><div class="log">${turns.map(n=>`<span class="turnlbl">${t('turnN',{n})}</span>${S.lg.map((l,ix)=>[l,ix]).filter(([l])=>l[0]===n).map(([l,ix])=>logItem(l,ix)).join('')}${(S.pkp||[]).filter(p=>p[0]===n).map(pkItem).join('')}${(S.mutes||[]).filter(m=>m[0]===n).map(m=>`<div class="event">${t('muted',{p:nm(m[1])})}</div>`).join('')}${S.ev.filter(e=>e[2]===n).map(evItem).join('')}`).join('')}</div></div>` : ''; }
@@ -1529,10 +1578,10 @@ function resultsView(){
   const alive = S.P.filter(isAlive).sort((a,b)=>a[2]-b[2]);
   const minTot = alive[0]?.[2];
   const rows = [...res].sort((a,b)=>P(b[0])[2]-P(a[0])[2]).map(r=>{ const [id, rp, rank, c, acc, liar, gh, beq] = r; const x = P(id), f = x[3];
-    const tags = [ (f&2)?t('opened'):(f&512)?t('halfO'):(f&4)?t('wrongO'):t('correctN',{n:c}), acc?`${t('t_acc')} ${acc>0?'+':''}${acc}`:'', liar?`${t('t_liar')} +${liar}`:'', gh?`${t('t_gh')} ${gh>0?'+':''}${gh}`:'', beq?`${t('t_beq')} +${beq}`:'' ].filter(Boolean).join(' · ');
+    const tags = [ (f&2)?t('opened'):(f&512)?t('halfO'):(f&4)?t('wrongO'):t('correctN',{n:c}), acc?`${t('t_acc')} ${acc>0?'+':''}${acc}`:'', liar?`${t('t_liar')} ${liar>0?'+':''}${liar}`:'', gh?`${t('t_gh')} ${gh>0?'+':''}${gh}`:'', beq?`${t('t_beq')} +${beq}`:'' ].filter(Boolean).join(' · ');
     const danger = x[2]===minTot;
     return `<div class="lrow ${danger?'danger':''} ${id===me?'me':''}">${avatar(id,'sm')}<div style="min-width:0"><b>${esc(x[1])}</b>${danger?` <span class="small" style="color:#d0233a">⚠️ ${t('danger')}</span>`:''}<div class="tags">${tags}</div></div><span class="delta ${rp>0?'p':rp<0?'m':'z'} num">${rp>0?'+':''}${rp}</span><span class="tot num">${x[2]}</span></div>`; }).join('');
-  return `<div class="sec">${podium}</div>
+  return fadBlock() + `<div class="sec">${podium}</div>
    ${S.fk?`<div class="event">🎰 ${t('fakeWas')} “${hintText(S.fk)}”</div>`:''}
    ${S.lv?`<div class="sec center"><span class="lbl">${t('vaultWas')}</span><div class="row center">${S.lv.map(c=>card(c,'flip')).join('')}</div></div>`:''}
    <div class="col">${rows}</div>${hostNext()}`;
@@ -1627,7 +1676,7 @@ function overView(){
   return `<div class="stage"><div class="big">🏆</div>${avatar(S.win,'lg')}<h2 style="font-size:2.2rem">${nm(S.win)}</h2>
     ${S.lv?`<div class="row center">${S.lv.map(c=>card(c)).join('')}</div>`:''}</div>
    <div class="sec"><span class="sec-t">${t('standings')}</span>${sorted.map((x,i)=>`<div class="lrow ${x[0]===me?'me':''}"><span class="num muted">${i+1}</span><div class="row">${avatar(x[0],'sm')}<b>${esc(x[1])}</b></div><span class="small muted">${x[0]===S.win?'🏆':(x[3]&1)?'':t('out')}</span><span class="tot num">${x[2]}</span></div>`).join('')}</div>
-   ${awardsHTML()}${bestWillHTML()}
+   ${awardsHTML()}${bestWillHTML()}${nightBlock()}
    <button class="btn block" data-act="shareres">${t('shareRes')}</button>
    ${isHost()?`<button class="btn gold lg block" data-act="newgame">${t('newGame')} 🎲</button>`:''}`;
 }
