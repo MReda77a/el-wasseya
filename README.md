@@ -12,7 +12,8 @@
 wasseya-app/
 ├── public/
 │   ├── index.html      ← شكل اللعبة وكل النصوص (عربي وإنجليزي)
-│   ├── engine.js       ← قواعد اللعبة كلها (الخزنة، الوصايا، القدرات، الأحداث، البوتات)
+│   ├── engine.js       ← قواعد اللعبة كلها (الخزنة، الوصايا، القدرات، الأحداث، الأشباح، البوتات)
+│   ├── qr.js           ← بيعمل QR كود للأوضة (مكتبة qrcode-generator، رخصة MIT)
 │   ├── manifest.json   ← عشان اللعبة تتنزل على الشاشة الرئيسية زي الأبلكيشن
 │   └── icons/          ← أيقونات اللعبة (١٩٢، ٥١٢، ١٠٢٤)
 ├── shared/room.js      ← إدارة الأوضة (دخول، خروج، صاحب الأوضة…)
@@ -98,6 +99,10 @@ npm start
 | النقط | `public/engine.js` ← `rankPts` و `scoreRound()` |
 | البوتات | `public/engine.js` ← `bots()` |
 | أي نص في اللعبة | `public/index.html` ← `const T = { ar:{...}, en:{...} }` |
+| العقابات الجاهزة («عقاب في القعدة») | `public/index.html` ← `dares:[...]` (ولو غيرت عددهم غيّر `DAREN` في `engine.js`) |
+| ألقاب آخر الجيم | `public/index.html` ← `AW:{...}` والدالة `awards()` |
+| الأصوات | `public/index.html` ← `const SFX` |
+| شرح أول مرة | `public/index.html` ← `tip_...` والدالة `phaseTips()` |
 | الألوان والشكل | `public/index.html` ← أول `<style>` (`:root`) |
 | الأوض والدخول والخروج | `shared/room.js` |
 

@@ -114,6 +114,7 @@
         case 'pub': this.pub = !!d.v; break;
         case 'pause': h.pause(); break;
         case 'resume': h.resume(); break;
+        case 'simple': if(h.ph === 'lobby') h.simple = !!d.v; break;
         case 'lvl': if(h.ph === 'lobby' && ['easy','normal','hard'].includes(d.v)) h.lvl = d.v; break;
       }
       this.sendState(true); this.changed();

@@ -448,6 +448,40 @@ button.def{background:var(--panel2)}
 @keyframes floatup{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:1;transform:translateY(-15vh) scale(1.1)}100%{transform:translateY(-95vh) scale(1) rotate(-12deg);opacity:0}}
 .toast{position:absolute;top:calc(74px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);max-width:88%;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:18px;padding:8px 14px;box-shadow:0 5px 0 var(--ink);font-weight:600;animation:rise .3s ease-out;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .toast.out{opacity:0;transition:opacity .4s}
+.coach{position:relative;margin:4px 0 12px;display:flex;gap:10px;align-items:center;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:20px;padding:10px 12px;box-shadow:0 6px 0 var(--ink)}
+.coach.anim{animation:coachin .45s cubic-bezier(.3,1.5,.5,1)}
+@keyframes coachin{from{opacity:0;transform:translateY(-16px) scale(.92)}}
+.coach .ci{font-size:1.7rem;flex:none;width:48px;height:48px;border-radius:50%;background:var(--yellow);border:3px solid var(--ink);display:grid;place-items:center}
+.coach b{font-size:1.05rem;display:block} .coach p{font-size:.88rem;font-weight:600;opacity:.8;margin:0;line-height:1.35}
+.coach .btn{flex:none}
+.qrbox{background:#fff;border:3px solid var(--ink);border-radius:20px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink);max-width:260px;margin:10px auto 0;text-align:center}
+.qrbox svg{width:210px;height:210px;display:block}
+.will-out.cur{box-shadow:0 6px 0 var(--ink),0 0 0 6px rgba(255,210,63,.65)}
+.will-out.done{opacity:.88}
+.will-out.still,.darecard.still{animation:none}
+.wo-head{display:flex;align-items:center;gap:12px} .wo-head h3{font-size:1.3rem;margin:0}
+.av.dead{filter:grayscale(.85)}
+.envelope{font-size:4.2rem;text-align:center;line-height:1.2;animation:shake .22s linear infinite}
+.will-out .res.pop{animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+.will-out .res.good{background:rgba(18,183,106,.16)} .will-out .res.evil{background:rgba(255,77,94,.16)} .will-out .res.fail{opacity:.6}
+.will-out .res > .av{margin-inline-start:auto}
+.av.shake{animation:shake .3s linear 4}
+.will-out .res.hitme{outline:3px solid var(--pink);animation:pop .45s,flash .8s 3}
+@keyframes flash{50%{background:rgba(255,79,139,.45)}}
+.youhit{display:inline-block;margin-top:4px;background:var(--pink);color:#fff;border:2px solid var(--ink);border-radius:999px;padding:0 10px;font-weight:800}
+.darecard{position:relative;background:var(--yellow);color:var(--ink);border:3px solid var(--ink);border-radius:20px;padding:20px 14px 14px;margin-top:8px;text-align:center;box-shadow:0 5px 0 var(--ink);animation:stamp .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes stamp{from{transform:scale(1.8) rotate(-8deg);opacity:0}}
+.darecard .dstamp{position:absolute;top:-15px;inset-inline-start:12px;background:var(--pink);color:#fff;border:2px solid var(--ink);border-radius:999px;padding:0 12px;font-weight:800;font-size:.9rem;transform:rotate(-3deg)}
+.darecard .dwho{display:flex;align-items:center;justify-content:center;gap:10px;font-size:1.2rem}
+.darecard p{font-size:1.25rem;font-weight:800;margin:.4em 0 0}
+.lastw{font-weight:700}
+.dare-set{display:flex;align-items:center;gap:8px;background:var(--yellow);color:var(--ink);border:2px solid var(--ink);border-radius:14px;padding:8px 10px;font-weight:700}
+.dare-set button{margin-inline-start:auto;width:30px;height:30px;border-radius:50%;background:#fff;border:2px solid var(--ink);font-weight:800;flex:none}
+.hint.ghostw{background:#e9e0ff;border-style:dashed}
+.awards{display:flex;flex-direction:column;gap:8px}
+.award{display:flex;align-items:center;gap:10px;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:18px;padding:8px 12px;box-shadow:0 4px 0 var(--ink);animation:rise .5s both}
+.award .aic{font-size:1.8rem}
+.award .small{opacity:.75;font-weight:600}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 <style>
@@ -459,6 +493,7 @@ img{max-width:100%}
 </head>
 <body>
 <div id="app"></div>
+<script src="/qr.js"></script>
 <script src="/engine.js"></script>
 <script>
 (function(){
@@ -469,6 +504,27 @@ const AVC = ['#ffd23f','#ff7eb3','#4fd1ff','#6ff0a6','#c3a2ff','#ff9a3c','#2ee6c
 const T = {
 ar:{
  title:'الوصية',
+ simpleOn:'🐣 جيم سهل', simpleOnS:'من غير قدرات ولا أحداث. أحسن حاجة لو فيه حد أول مرة يلعب.', simpleOff:'✨ جيم كامل', simpleOffS:'كل راوند قدرة سرية، وممكن حدث يقلب القواعد.',
+ invite:'ابعت الدعوة', inviteTxt:'تعالى العب معايا «الوصية» 📜🔐 كود الأوضة: {c}', qrBtn:'QR', qrHelp:'صحابك يصوروا الكود ده بكاميرا الموبايل ويدخلوا على طول.', copiedInv:'الدعوة اتنسخت ✓ الصقها في واتساب', deepJoin:'اكتب اسمك ودوس «ادخل» عشان تدخل أوضة {c}',
+ tipOk:'فهمت 👍', tipAb:'قدرة جديدة: {n}', tipEv:'حدث جديد: {n}',
+ tip_will:['📜','وصيتك','اختار حاجة أو اتنين يحصلوا لما تخرج. وتقدر تزود «عقاب في القعدة» للضحك.'],
+ tip_myturn:['🎯','دورك!','«بُص» على كارت من الترابيزة، أو «اسأل» حد سؤال والكل يسمع الإجابة. ولو عرفت الخزنة «افتح» في أي وقت.'],
+ tip_watch:['👂','ركّز في الإجابات','لما حد يسأل، الإجابة بتظهر للكل. افتح «النوتة» واشطب الكروت اللي عرفت إنها مش في الخزنة.'],
+ tip_ans:['🤥','حد بيسألك!','الحقيقة بس مفتوحة. عايز تكدب؟ دوس «اكدب» واختار أي إجابة تانية، ومحدش هيعرف.'],
+ tip_gold:['🌟','تلميح دهبي','ده بيقولك كارت من الخزنة بالظبط. كده فاضل كارتين بس!'],
+ tip_accuse:['⭐','آخر فرصة','اختار ٣ كروت تخمينك. كل ما الكروت الصح تزيد، نقطك تزيد.'],
+ tip_results:['📉','خلي بالك','الأقل في المجموع الكلي هو اللي هيخرج ووصيته تتنفذ.'],
+ tip_court:['⚖️','محكمة','فيه تعادل. كل واحد يدافع عن نفسه بصوته، وبعدين الباقي يصوّت مين يخرج.'],
+ tip_ghost:['👻','بقيت شبح','لسه ليك دور: ادّي حد +٢ أو اخصم منه، راهن مين هيخرج، وابعت همسة لحد (صح أو كدب، انت حر).'],
+ tip_simple:['🐣','جيم سهل','الجيم دي من غير قدرات وأحداث عشان تتعودوا. الجيم الجاية جربوها كاملة.'],
+ wDrum:'{p} خرج... وسايب وصية', wNoneD:'{p} خرج ومكنش كاتب حاجة 🤷', wShowAll:'⏩ اعرض الكل', youHit:'ده انت! 😱', betOk:'🔮 {g} توقع إن {p} هيخرج، وطلع صح!', lastWords:'آخر كلام:',
+ dareT:'🎲 عقاب في القعدة', dareWhoAll:'الكل', g_dare:'🎲 عقاب في القعدة (اختياري)', dareS:'حد من القعدة يعمل حاجة بجد لما تخرج. للضحك بس.', dareCustomPh:'أو اكتب عقاب من عندك...', dareWho:'مين يتعاقب؟', dareOk:'تمام', WS_dare:'{a}: {d}',
+ dares:['يدفع المشاريب','يقول نكتة، ولو محدش ضحك يقول تانية','يغني مقطع بصوت عالي','يقلد حد في القعدة والباقي يخمن مين','يعمل صوت حيوان الكل يختاره','يمدح كل واحد في القعدة بجملة','يتكلم فصحى لحد آخر الجيم','يحكي أحرج موقف حصله','يعمل ٥ ضغط دلوقتي','يرقص ١٠ ثواني'],
+ betShort:'راهن', whShort:'همسة', betT:'🔮 مين هيخرج الراوند ده؟', betS:'لو توقعك صح هيظهر للكل، وتاخد لقب «العرّاف» آخر الجيم. تقدر تغيره لحد آخر الراوند.', betDone:'راهنت على {p} ✓',
+ whT:'🗣️ همسة شبح', whS:'مرة في الراوند: ابعت تلميح سري لحد عايش. انت تختار: صح ولا كدب. هو مش هيعرف.', whWho:'١. تهمس لمين؟', whKind:'٢. صح ولا كدب؟', whTrue:'✅ صح', whFalse:'🤥 كدب', whGo:'اهمس 🗣️', whSent:'همست لـ {p}:', whK1:'صح', whK0:'كدب', whUsed:'همست الراوند ده خلاص.',
+ gwTag:'ممكن تكون كدب', gwFrom:'👻 {p} همسلك:', gwToast:'👻 شبح همسلك تلميح! بص على التلميحات', whPub:'👻 {g} همس لـ {p}',
+ awardsT:'🏅 ألقاب الجيم', bestWillT:'📜 أقوى وصية', shareRes:'📸 شارك النتيجة', saveImg:'اضغط مطوّل على الصورة واحفظها، أو ابعتها لصحابك.', dlImg:'⬇️ نزّل الصورة', closeB:'اقفل', shareFoot:'العبها مع صحابك', madeBy:'وصية {p}',
+ AW:{l:['🤥','أكبر كداب','كدب {n} مرات'], ok:['🕵️','شرلوك','فتح الخزنة {n} مرات'], q:['🙋','الفضولي','سأل {n} أسئلة'], a:['🎤','نجم الأسئلة','اتسأل {n} مرات'], bad:['💥','المستعجل','فتح غلط {n} مرات'], hit:['🎯','المستهدف','الوصايا جت عليه {n} مرات'], gv:['🎁','الوارث','ورث {n} نقطة'], pk:['👀','البصاص','بص {n} مرات'], bet:['🔮','العرّاف','توقع صح {n} مرات'], wh:['🗣️','الشبح الرغاي','همس {n} مرات'], first:['⚰️','أول ضحية','أول واحد خرج']},
  starting:'بنبدأ...',
  chatT:'الشات', chatPh:'اكتب رسالة...', send:'ابعت', chatEmpty:'لسه محدش كتب حاجة. ابدأ انت!', quick:['كداب! 🤥','يا ساتر 😱','برافو 👏','ركّز يا عم 🧠','هتخرج 😂','حظ حلو 🍀','استنوا عليا ⏳'],
  pausedT:'اللعبة واقفة', pausedHost:'محدش يقدر يلعب لحد ما تكمّل.', pausedWait:'{p} وقّف اللعبة. استنى لحد ما يكمّل.', resume:'كمّل', okNext:'تمام، كمّل', okWait:'مستنيين الباقي...',
@@ -489,7 +545,7 @@ ar:{
  EV_dark:'الكهربا قطعت', EVD_dark:'مفيش تلميحات الراوند ده غير التلميح الدهبي.',
  EV_truth:'كله صدق', EVD_truth:'ممنوع الكدب الراوند ده. كل الإجابات حقيقية.',
  EV_liars:'ليلة الكدب', EVD_liars:'كل واحد يقدر يكدب مرتين الراوند ده.',
- EV_fast:'راوند سريع', EVD_fast:'كل دور ١٢ ثانية بس.',
+ EV_fast:'راوند سريع', EVD_fast:'كل دور ٢٠ ثانية بس.',
  EV_fakehint:'تلميح كداب', EVD_fakehint:'واحد من تلميحات الراوند ده كدب. مين؟ هتعرف في الآخر.',
  EV_double:'دبل', EVD_double:'نقط الراوند ده في ٢، والخسارة كمان.',
  EV_silence:'صمت', EVD_silence:'ممنوع الأسئلة الراوند ده. بص بس.',
@@ -573,17 +629,38 @@ ar:{
  Q:['مجموع {h} كام؟','معاك كارت أحمر؟','معاك كارت أزرق؟','معاك كارت أخضر؟','معاك كارت أكبر من {n}؟','كروتك نفس اللون؟','أعلى رقم معاك كام؟','معاك رقم زوجي؟'], oneCard:'رقم كارتك', Q0one:'رقم كارتك كام؟', twoCards:'كروتك',
  H0:'مجموع الخزنة بين {a} و {b}', H1:'مفيش كارت {c} في الخزنة', H2:'في الخزنة {n} كارت {c}', H3:'أعلى رقم في الخزنة {n}', H4:'في الخزنة {n} رقم زوجي', H5:'فيه كارت أكبر من {n}؟ {y}', H4z:'كل أرقام الخزنة فردية', H6:'أصغر رقم في الخزنة {n}', H7y:'كروت الخزنة ٣ ألوان مختلفة', H7n:'فيه لون متكرر في الخزنة', H8y:'فيه رقم {n} في الخزنة', H8n:'مفيش رقم {n} في الخزنة', H9:'تلميح دهبي: {c} {n} في الخزنة!',
  help:[
-  ['📜','الوصية','قبل ما اللعبة تبدأ، كل واحد يكتب وصية سرية. بتتنفذ لما يخرج: يدي نقطه لحد، أو ينتقم، أو يفضح حد.'],
+  ['📜','الوصية','قبل ما اللعبة تبدأ، كل واحد يكتب وصية سرية. بتتنفذ لما يخرج: يدي نقطه لحد، أو ينتقم، أو يفضح حد. وممكن يحط «عقاب في القعدة» لحد يعمله بجد.'],
   ['🔐','الخزنة','في الخزنة ٣ كروت سرية. كل واحد معاه كارتين، والباقي مقلوب على الترابيزة. كروتك أكيد مش في الخزنة.'],
-  ['👀','الأدوار','كل واحد بيلعب في دوره (٢٥ ثانية) والكل بيتفرج: يبص على كارت من الترابيزة، أو يسأل حد سؤال والإجابة بتظهر كبيرة للكل.'],
+  ['👀','الأدوار','كل واحد بيلعب في دوره (٤٠ ثانية) والكل بيتفرج: يبص على كارت من الترابيزة، أو يسأل حد سؤال والإجابة بتظهر كبيرة للكل.'],
   ['🤥','الكدب','لما حد يسألك انت اللي بتجاوب. الحقيقة بس مفتوحة، ولو دوست «اكدب» تقدر تختار أي إجابة تانية. مرة في الراوند.'],
   ['✨','قدرات وأحداث','كل راوند بتاخد قدرة سرية عشوائية تستخدمها مرة. ومن الراوند التاني ممكن يطلع حدث يغير قواعد الراوند كله.'],
   ['📝','النوتة والتلميحات','كل دور بيطلع تلميح جديد، وبعد الدور التاني تلميح دهبي بيكشف كارت من الخزنة. اشطب اللي مش فيها، ولما تعرف افتح. ٣ صح = نقط كاملة، ٢ صح = أقل، غير كده −٥.'],
-  ['⚖️','الخروج','آخر كل راوند الأقل في المجموع يخرج ووصيته تتنفذ. لو فيه تعادل: محكمة وتصويت. آخر اتنين: أول واحد يفتح يكسب.']
+  ['⚖️','الخروج','آخر كل راوند الأقل في المجموع يخرج ووصيته تتنفذ. لو فيه تعادل: محكمة وتصويت. آخر اتنين: أول واحد يفتح يكسب. واللي خرج يبقى شبح: يراهن ويهمس ويأثر في اللعبة.']
  ], helpNext:'التالي', helpDone:'فهمت، يلا', helpSkip:'تخطي'
 },
 en:{
  title:'El Wasseya',
+ simpleOn:'🐣 Easy game', simpleOnS:'No powers or events. Best when someone is new.', simpleOff:'✨ Full game', simpleOffS:'A secret power each round, and events that twist the rules.',
+ invite:'Send invite', inviteTxt:'Come play El Wasseya with me 📜🔐 Room code: {c}', qrBtn:'QR', qrHelp:'Friends scan this with their phone camera and jump right in.', copiedInv:'Invite copied ✓ Paste it in WhatsApp', deepJoin:'Type your name and tap "Join" to enter room {c}',
+ tipOk:'Got it 👍', tipAb:'New power: {n}', tipEv:'New event: {n}',
+ tip_will:['📜','Your will','Pick one or two things that happen when you\'re out. You can add a real-life dare for laughs.'],
+ tip_myturn:['🎯','Your turn!','"Peek" at a table card, or "Ask" someone a question everyone hears. If you know the vault, "Open" any time.'],
+ tip_watch:['👂','Watch the answers','When someone asks, the answer shows for everyone. Open "Notes" and cross out cards you know aren\'t in the vault.'],
+ tip_ans:['🤥','Someone\'s asking you!','Only the truth is open. Want to lie? Tap "Lie" and pick any other answer. Nobody will know.'],
+ tip_gold:['🌟','Golden hint','This tells you one vault card exactly. Only two left!'],
+ tip_accuse:['⭐','Last chance','Pick your 3-card guess. More right cards, more points.'],
+ tip_results:['📉','Careful','The lowest total goes out and their will runs.'],
+ tip_court:['⚖️','Court','It\'s a tie. Everyone defends themselves out loud, then the rest vote who goes.'],
+ tip_ghost:['👻','You\'re a ghost','You still play: give or take 2, bet on who goes next, and whisper someone a hint (true or false, your call).'],
+ tip_simple:['🐣','Easy game','No powers or events this game so you can learn. Try the full game next time.'],
+ wDrum:'{p} is out... and left a will', wNoneD:'{p} is out and left nothing 🤷', wShowAll:'⏩ Show all', youHit:'That\'s you! 😱', betOk:'🔮 {g} bet {p} would go out, and was right!', lastWords:'Last words:',
+ dareT:'🎲 Real-life dare', dareWhoAll:'Everyone', g_dare:'🎲 Real-life dare (optional)', dareS:'Someone at the table does something for real when you\'re out. Just for laughs.', dareCustomPh:'or write your own dare...', dareWho:'Who does it?', dareOk:'OK', WS_dare:'{a}: {d}',
+ dares:['Buys the next round of drinks','Tells a joke (another if nobody laughs)','Sings a song line out loud','Imitates someone here, others guess who','Makes an animal sound the group picks','Compliments everyone with one line','Talks super formally until the game ends','Tells their most embarrassing story','Does 5 push-ups now','Dances for 10 seconds'],
+ betShort:'Bet', whShort:'Whisper', betT:'🔮 Who goes out this round?', betS:'If you\'re right everyone sees it, and you get the "Oracle" title at the end. You can change it until round end.', betDone:'You bet on {p} ✓',
+ whT:'🗣️ Ghost whisper', whS:'Once per round: send a secret hint to a living player. You choose: true or a lie. They won\'t know.', whWho:'1. Whisper to who?', whKind:'2. True or lie?', whTrue:'✅ True', whFalse:'🤥 Lie', whGo:'Whisper 🗣️', whSent:'You whispered to {p}:', whK1:'true', whK0:'lie', whUsed:'You already whispered this round.',
+ gwTag:'might be a lie', gwFrom:'👻 {p} whispered:', gwToast:'👻 A ghost whispered you a hint! Check your hints', whPub:'👻 {g} whispered to {p}',
+ awardsT:'🏅 Game awards', bestWillT:'📜 Wildest will', shareRes:'📸 Share results', saveImg:'Long-press the image to save it, or send it to friends.', dlImg:'⬇️ Download image', closeB:'Close', shareFoot:'Play it with your friends', madeBy:'{p}\'s will',
+ AW:{l:['🤥','Biggest liar','lied {n} times'], ok:['🕵️','Sherlock','cracked the vault {n} times'], q:['🙋','Nosy','asked {n} questions'], a:['🎤','Hot seat','was asked {n} times'], bad:['💥','Too hasty','opened wrong {n} times'], hit:['🎯','Most wanted','hit by wills {n} times'], gv:['🎁','The heir','inherited {n} pts'], pk:['👀','Peeker','peeked {n} times'], bet:['🔮','The oracle','guessed right {n} times'], wh:['🗣️','Chatty ghost','whispered {n} times'], first:['⚰️','First victim','first one out']},
  starting:'Starting...',
  chatT:'Chat', chatPh:'Type a message...', send:'Send', chatEmpty:'No messages yet. Say something!', quick:['Liar! 🤥','Oh no 😱','Nice 👏','Focus! 🧠','You\'re out 😂','Good luck 🍀','Wait for me ⏳'],
  pausedT:'Game paused', pausedHost:'Nobody can play until you resume.', pausedWait:'{p} paused the game. Wait for them to resume.', resume:'Resume', okNext:'OK, next', okWait:'Waiting for the others...',
@@ -604,7 +681,7 @@ en:{
  EV_dark:'Blackout', EVD_dark:'No hints this round except the golden one.',
  EV_truth:'All truth', EVD_truth:'No lying this round. Every answer is real.',
  EV_liars:'Night of lies', EVD_liars:'Everyone can lie twice this round.',
- EV_fast:'Speed round', EVD_fast:'Every turn is only 12 seconds.',
+ EV_fast:'Speed round', EVD_fast:'Every turn is only 20 seconds.',
  EV_fakehint:'Lying hint', EVD_fakehint:'One of this round\'s hints is false. Which? You\'ll find out at the end.',
  EV_double:'Double', EVD_double:'Round points ×2, losses too.',
  EV_silence:'Silence', EVD_silence:'No questions this round. Peek only.',
@@ -679,13 +756,13 @@ en:{
  Q:['Sum of {h}?','Got a red card?','Got a blue card?','Got a green card?','Got a card above {n}?','Are your cards the same color?','Your highest number?','Got an even number?'], oneCard:'your card', Q0one:'What number is your card?', twoCards:'your cards',
  H0:'Vault sum is between {a} and {b}', H1:'No {c} card in the vault', H2:'The vault has {n} {c} card(s)', H3:'Highest vault number is {n}', H4:'The vault has {n} even number(s)', H5:'A card above {n}? {y}', H4z:'All vault numbers are odd', H6:'Lowest vault number is {n}', H7y:'The vault has 3 different colors', H7n:'A color repeats in the vault', H8y:'There is a {n} in the vault', H8n:'No {n} in the vault', H9:'Golden hint: {c} {n} is in the vault!',
  help:[
-  ['📜','The will','Before the game, everyone writes a secret will. It runs when they\'re out: give points away, take revenge, or expose someone.'],
+  ['📜','The will','Before the game, everyone writes a secret will. It runs when they\'re out: give points away, take revenge, or expose someone. It can even hold a real-life dare.'],
   ['🔐','The vault','The vault holds 3 secret cards. Everyone holds 2, the rest lie face-down. Your own cards are never in the vault.'],
-  ['👀','Turns','Players go one at a time (25s) while everyone watches: peek at a table card, or ask someone a question and the answer shows big for everyone.'],
+  ['👀','Turns','Players go one at a time (40s) while everyone watches: peek at a table card, or ask someone a question and the answer shows big for everyone.'],
   ['🤥','Lying','When asked, you answer yourself. Only the truth is open; tap "Lie" to pick any other answer. Once per round.'],
   ['✨','Powers and events','Each round you get a random secret power to use once. From round 2, an event may change the rules for the whole round.'],
   ['📝','Notes and hints','A new hint every turn, and after turn 2 a golden hint reveals one vault card. Cross out what isn\'t there and open when you know. 3 right = full, 2 right = fewer, else −5.'],
-  ['⚖️','Going out','Each round the lowest total goes out and their will runs. Ties go to court. Last two: first to open wins.']
+  ['⚖️','Going out','Each round the lowest total goes out and their will runs. Ties go to court. Last two: first to open wins. Whoever\'s out becomes a ghost who bets, whispers and meddles.']
  ], helpNext:'Next', helpDone:'Got it', helpSkip:'Skip'
 }};
 let lang = store.get('wsy_lang') || 'ar';
@@ -698,7 +775,7 @@ function applyLang(){ document.documentElement.lang = lang; document.documentEle
 /* ============ CLIENT STATE ============ */
 let me = store.get('wsy_pid'); if(!me){ me = rid(6); store.set('wsy_pid', me); }
 const U = { screen:'home', name: store.get('wsy_name')||'', code:'', err:'', mode:null, selPeek:null, askT:null, askQ:null,
-  notes:{}, seen:{}, tpk:{}, notesR:0, chat:[], chatOpen:false, unread:0, chatDraft:'', chatAnim:false, pick:[], sheet:null, arSeen:0, abSel:{}, rooms:[], lobbyOk:false, pubRoom:true, lastPub:'', noteMode:'x', side:'notes', draft:{c:[], x:''}, pendingW:null, dlLocal:0, phaseDur:1,
+  notes:{}, seen:{}, tpk:{}, notesR:0, tips:[], whSel:{}, wStep:0, willAll:false, dareP:null, dareX:'', shareImg:null, qr:false, invMsg:'', chat:[], chatOpen:false, unread:0, chatDraft:'', chatAnim:false, pick:[], sheet:null, arSeen:0, abSel:{}, rooms:[], lobbyOk:false, pubRoom:true, lastPub:'', noteMode:'x', side:'notes', draft:{c:[], x:'', d:null}, pendingW:null, dlLocal:0, phaseDur:1,
   peekUntil:0, copied:false, help:false, helpI:0, seenHints:0, confetti:false };
 let S = null, IN = {}, host = null, hostTimer = null, joinTimer = null, solo = false;
 
@@ -744,7 +821,10 @@ async function pollRooms(){
 }
 if(canNet){ setInterval(pollRooms, 6000); setTimeout(pollRooms, 300); }
 /* came back after closing the page? rejoin your room */
-setTimeout(()=>{ const code = store.get('wsy_room'); if(canNet && code && U.name){ U.code = code; U.screen = 'wait'; render(); netOpen(code, {t:'join', pid:me, name:U.name}, r=>{ if(r.t==='err'){ store.set('wsy_room',''); U.screen='home'; render(); } }); } }, 50);
+setTimeout(()=>{ let q = null; try{ q = (new URLSearchParams(location.search).get('room')||'').toUpperCase(); if(q) history.replaceState(null, '', location.pathname); }catch(e){}
+  const code = store.get('wsy_room');
+  if(canNet && /^[A-Z]{4}$/.test(q||'') && q!==code){ U.code = q; U.deep = q; if(U.name) joinRoom(); else { U.err = t('deepJoin',{c:q}); render(); setTimeout(()=>{ const e = document.getElementById('in-name'); if(e) e.focus(); }, 80); } return; }
+  if(canNet && code && U.name){ U.code = code; U.screen = 'wait'; render(); netOpen(code, {t:'join', pid:me, name:U.name}, r=>{ if(r.t==='err'){ store.set('wsy_room',''); U.screen='home'; render(); } }); } }, 50);
 
 function recvState(ns){
   if(!ns) return;
@@ -756,18 +836,27 @@ function recvState(ns){
   if(ns.r !== U.arR){ U.arR = ns.r; U.arSeen = 0; }
   for(let k=U.arSeen; k<ar.length; k++){ const a = ar[k]; if(a[0]==='sa2r'){ U.tpk[a[1]] = a[2]; if(U.notes[a[2]]!==2){ U.notes[a[2]]=1; U.seen[a[2]]=1; } } if(a[0]==='tabdeel'){ U.notes[a[1]]=1; } }
   U.arSeen = ar.length;
+  const evN = ns.ev ? ns.ev.length : 0;
+  if(ns.r===U.evR && evN > (U.evN||0)){ const e = ns.ev[evN-1]; SFX.play(e[1]===0 ? 'wrong' : 'open'); }
+  U.evN = evN; U.evR = ns.r;
+  const gwN = ns.pv?.[me]?.gw?.length || 0;
+  if(ns.r===U.gwR && gwN > (U.gwN||0)){ toastText(t('gwToast')); SFX.play('pop'); buzz([60,40,60]); }
+  U.gwN = gwN; U.gwR = ns.r;
+  if(['turn','reveal','ans'].includes(ns.ph) && (ns.hi||[]).some(h=>h[0]===9)) tipT('tip_gold', ['turn','reveal','ans']);
   U.screen = 'game';
   render();
 }
 function onPhaseChange(){
   U.phaseAt = Date.now();
   if(!((['open','confirm'].includes(U.mode) || String(U.mode).startsWith('ab:')) && ['turn','reveal'].includes(S.ph))) U.mode = null;
-  if(S.ph==='ans'){ U.lieMode = false; if(S.pend && S.pend.t===me){ try{ navigator.vibrate && navigator.vibrate([80,60,80]); }catch(_){} } }
-  if(S.ph==='turn'){ U.selPeek=null; U.askT=null; U.askQ=null; if(S.cur===me){ try{ navigator.vibrate && navigator.vibrate(120); }catch(_){} } }
-  if(S.r !== U.notesR){ U.notes = {}; U.seen = {}; U.tpk = {}; U.pick = []; U.mode = null; U.sheet = null; U.notesR = S.r; U.seenHints = 0; setIn({g:null, o:null, a:null, ac:null}); }
+  if(S.ph==='ans'){ U.lieMode = false; if(S.pend && S.pend.t===me){ buzz([80,60,80]); SFX.play('ask'); } }
+  if(S.ph==='turn'){ U.selPeek=null; U.askT=null; U.askQ=null; if(S.cur===me){ buzz(120); SFX.play('turn'); } }
+  if(S.ph==='wills'){ U.wStep = 0; U.willAll = false; }
+  phaseTips();
+  if(S.r !== U.notesR){ U.notes = {}; U.seen = {}; U.tpk = {}; U.pick = []; U.mode = null; U.sheet = null; U.notesR = S.r; U.seenHints = 0; U.whSel = {}; setIn({g:null, o:null, a:null, ac:null}); }
   if(S.ph==='reveal'){ const pk = S.pv?.[me]?.pk; if(pk && pk[2]===S.tn){ U.tpk[pk[0]] = pk[1]; U.peekUntil = Date.now()+3000; setTimeout(render, 3100); if(U.notes[pk[1]]!==2) U.notes[pk[1]]=1; U.seen[pk[1]]=1; } }
-  if(S.ph==='over'){ U.confetti = true; setTimeout(()=>{U.confetti=false; U.confHTML=null; render();}, 3500); }
-  if(S.ph==='lobby' || S.ph==='will'){ U.draft = {c:[], x:''}; U.pendingW = null; U.starting = false; setIn({wd:null}); }
+  if(S.ph==='over'){ SFX.play('win'); U.confetti = true; setTimeout(()=>{U.confetti=false; U.confHTML=null; render();}, 3500); }
+  if(S.ph==='lobby' || S.ph==='will'){ U.draft = {c:[], x:'', d:null}; U.dareP = null; U.dareX = ''; U.pendingW = null; U.starting = false; setIn({wd:null}); }
   try{ window.scrollTo({top:0}); }catch(_){}
 }
 function startHostLoop(){
@@ -855,6 +944,75 @@ function logoHTML(sm){
    <circle cx="162" cy="106" r="7.5" fill="#24104a"/><path d="M157.5 109h9l3.5 15h-16z" fill="#24104a"/></g>
   </svg><span class="word">الوصية</span>${sm?'':'<span class="latin">EL WASSEYA</span>'}</div>`;
 }
+/* ============ sounds (made in the browser, no files) ============ */
+const SFX = (()=>{
+  let ctx = null, muted = store.get('wsy_mute')==='1';
+  function ac(){ if(muted) return null; try{ if(!ctx){ const A = window.AudioContext || window.webkitAudioContext; if(!A) return null; ctx = new A(); } if(ctx.state==='suspended') ctx.resume(); return ctx; }catch(e){ return null; } }
+  function tone(f, t0, d, type, vol, f2){ const c = ac(); if(!c) return; const o = c.createOscillator(), g = c.createGain(), at = c.currentTime + t0;
+    o.type = type||'sine'; o.frequency.setValueAtTime(f, at); if(f2) o.frequency.exponentialRampToValueAtTime(f2, at+d);
+    g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(vol||0.2, at+0.015); g.gain.exponentialRampToValueAtTime(0.0001, at+d);
+    o.connect(g); g.connect(c.destination); o.start(at); o.stop(at+d+0.05); }
+  function noise(t0, d, vol, freq){ const c = ac(); if(!c) return; const n = Math.max(1, Math.floor(c.sampleRate*d)), b = c.createBuffer(1, n, c.sampleRate), ch = b.getChannelData(0);
+    for(let i=0;i<n;i++) ch[i] = (Math.random()*2-1) * (1 - i/n);
+    const s = c.createBufferSource(), g = c.createGain(), f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = freq||900; s.buffer = b; g.gain.value = vol||0.3;
+    s.connect(f); f.connect(g); g.connect(c.destination); s.start(c.currentTime + t0); }
+  const K = {
+    turn(){ tone(660,0,.14,'triangle',.22); tone(990,.12,.22,'triangle',.22); },
+    ask(){ tone(520,0,.12,'square',.07); tone(780,.1,.12,'square',.07); tone(1040,.2,.2,'square',.07); },
+    drum(sec){ sec = sec||1.6; let x = 0, gap = .12; while(x < sec){ noise(x, .07, .15 + .3*x/sec, 180); x += gap; gap = Math.max(.045, gap*.93); } noise(sec, .4, .55, 110); tone(95, sec, .45, 'sine', .45, 45); },
+    good(){ tone(784,0,.12,'triangle',.2); tone(988,.1,.12,'triangle',.2); tone(1319,.2,.32,'triangle',.2); },
+    bad(){ tone(300,0,.35,'sawtooth',.11,120); tone(220,.08,.42,'sawtooth',.09,90); },
+    meh(){ tone(420,0,.2,'sine',.12,300); },
+    dare(){ noise(0,.25,.4,300); [523,659,784,1047].forEach((f,i)=>tone(f, .05+i*.12, i===3?.35:.14, 'square', .09)); },
+    win(){ [523,659,784,1047,784,1047].forEach((f,i)=>tone(f, i*.13, .3, 'triangle', .22)); },
+    pop(){ tone(880,0,.09,'sine',.16,1400); },
+    open(){ tone(392,0,.15,'triangle',.2); tone(587,.12,.15,'triangle',.2); tone(784,.24,.38,'triangle',.22); },
+    wrong(){ tone(180,0,.5,'square',.09,70); },
+  };
+  return { play(k, a){ try{ K[k] && K[k](a); }catch(e){} }, get muted(){ return muted; }, toggle(){ muted = !muted; store.set('wsy_mute', muted?'1':'0'); if(!muted) this.play('pop'); }, unlock(){ if(!muted) ac(); } };
+})();
+function buzz(p){ try{ navigator.vibrate && navigator.vibrate(p); }catch(_){} }
+function toastText(s){ const d = document.createElement('div'); d.className = 'toast'; d.textContent = s; floatEl.appendChild(d); setTimeout(()=>d.classList.add('out'), 2800); setTimeout(()=>d.remove(), 3300); }
+const muteBtn = () => `<button class="btn ghost small" data-act="mute" aria-label="sound">${SFX.muted?'🔇':'🔊'}</button>`;
+
+/* ============ first-time tips: explain each thing the first time it shows up ============ */
+let TIPS_SEEN = {}; try{ TIPS_SEEN = JSON.parse(store.get('wsy_tips')||'{}') || {}; }catch(e){}
+function tip(k, ic, h, p, phs){ if(TIPS_SEEN[k]) return; TIPS_SEEN[k] = 1; store.set('wsy_tips', JSON.stringify(TIPS_SEEN)); U.tips.push({k, ic, h, p, phs}); }
+function tipT(k, phs){ const a = T[lang][k]; if(a) tip(k, a[0], a[1], a[2], phs); }
+function phaseTips(){
+  U.tips = U.tips.filter(x=>x.phs.includes(S.ph));
+  const RND = ['turn','reveal','ans'], mp = meP(), alive = isAlive(mp);
+  if(!mp) return;
+  if(S.ph==='will') tipT('tip_will', ['will']);
+  if(S.ph==='intro'){
+    if(S.sm) tipT('tip_simple', ['intro', ...RND]);
+  }
+  if(S.ph==='turn') for(const k of (S.pv?.[me]?.ab||[])) tip('ab_'+k, ABI[k], t('tipAb',{n:t('AB_'+k)}), t('ABD_'+k)+' '+t('abIntro'), RND);
+  if(S.ph==='turn' && alive){ if(S.cur===me) tipT('tip_myturn', RND); else tipT('tip_watch', RND); }
+  if(S.ph==='ans' && S.pend && S.pend.t===me) tipT('tip_ans', ['ans']);
+  if(S.ph==='accuse' && alive && !(mp[3]&(2|4|512))) tipT('tip_accuse', ['accuse']);
+  if(S.ph==='results') tipT('tip_results', ['results']);
+  if(S.ph==='talk') tipT('tip_court', ['talk','vote']);
+  if(!alive && S.r>0 && ['intro','turn','reveal','ans','accuse'].includes(S.ph)) tipT('tip_ghost', ['intro','turn','reveal','ans','accuse','results']);
+}
+function coachView(inSheet){
+  if(!inSheet && S.ph==='ans' && S.pend && S.pend.t===me) return '';
+  const tp = U.tips.find(x=>x.phs.includes(S.ph)); if(!tp) return '';
+  const anim = U.coachKey !== tp.k ? 'anim' : ''; U.coachKey = tp.k;
+  return `<div class="coach ${anim}" role="status"><span class="ci">${tp.ic}</span><div><b>${tp.h}</b><p>${tp.p}</p></div><button class="btn gold small" data-act="tipok" data-k="${esc(tp.k)}">${t('tipOk')}</button></div>`;
+}
+
+/* ============ invites ============ */
+function inviteURL(c){ return (typeof canNet!=='undefined' && canNet) ? location.origin + '/?room=' + c : ''; }
+function hasQR(){ return typeof qrcode==='function' && !!inviteURL('X'); }
+function qrHTML(c){ try{ const q = qrcode(0, 'M'); q.addData(inviteURL(c)); q.make(); return `<div class="qrbox">${q.createSvgTag({cellSize:6, margin:2, scalable:true})}<p class="small">${t('qrHelp')}</p></div>`; }catch(e){ return ''; } }
+function shareInvite(){
+  const url = inviteURL(S.c), txt = t('inviteTxt', {c:S.c});
+  const copy = ()=>{ try{ navigator.clipboard.writeText(url ? txt + '\n' + url : txt).then(()=>{ U.invMsg = t('copiedInv'); render(); setTimeout(()=>{ U.invMsg = ''; render(); }, 2500); }, ()=>{}); }catch(_){} };
+  if(navigator.share){ navigator.share(url ? {title:t('title'), text:txt, url} : {title:t('title'), text:txt}).catch(e=>{ if(!e || e.name!=='AbortError') copy(); }); }
+  else copy();
+}
+
 /* ============ RENDER ============ */
 const app = document.getElementById('app');
 const layerEl = (()=>{ const d = document.createElement('div'); d.id = 'layer'; document.body.appendChild(d); return d; })();
@@ -871,6 +1029,7 @@ function render(){
     else if(P(me) && ['turn','reveal','ans'].includes(S.ph)) layer += sheetView();
   }
   if(U.screen==='game' && S && S.pz) layer += pauseView();
+  if(U.shareImg) layer += shareImgView();
   if(U.help) layer += helpView();
   if(U.confetti) layer += confettiView();
   if(html !== U.lastMain){ app.innerHTML = html; U.lastMain = html; }
@@ -886,7 +1045,7 @@ function render(){
 const langBtn = () => `<button class="btn ghost small" data-act="lang">${lang==='ar'?'English':'عربي'}</button>`;
 
 function homeView(){
-  return `<div class="topbar"><span class="muted small">${t('meta')}</span>${langBtn()}</div>
+  return `<div class="topbar"><span class="muted small">${t('meta')}</span><div class="row">${muteBtn()}${langBtn()}</div></div>
   <div class="hero">${logoHTML()}<p>${t('tag')}</p>
    <button class="btn ghost" data-act="help">❔ ${t('how')}</button></div>
   <div class="sec">
@@ -954,7 +1113,7 @@ function peopleRow(){
     if(!(f&64)) b+='📵';
     return `<div class="person ${x[0]===me?'me':''} ${act?'active':''}">${avatar(x[0], ((f&1)?'':'dim')+(act?' pulse':''), b)}<span class="nm">${esc(x[1])}</span><span class="num muted">${x[2]}</span></div>`; }).join('')}</div>`;
 }
-function footer(){ return `<div class="spread">${langBtn()}<button class="btn ghost small" data-act="leave">${t('leave')}</button></div>`; }
+function footer(){ return `<div class="spread"><div class="row">${langBtn()}${muteBtn()}</div><button class="btn ghost small" data-act="leave">${t('leave')}</button></div>`; }
 function hostNext(){ return isHost() ? `<button class="btn gold lg block" data-act="next">${t('next')} ←</button>`.replace('←', lang==='ar'?'←':'→') : ''; }
 
 function gameView(){
@@ -965,28 +1124,30 @@ function gameView(){
     case 'lobby': body = lobbyView(); break;
     case 'will': body = willView(); break;
     case 'intro': body = introView(); break;
-    case 'turn': case 'reveal': case 'ans': return hud() + banner(true) + roundView() + footer() + `<div class="ctl-space"></div>` + controller();
+    case 'turn': case 'reveal': case 'ans': return hud() + banner(true) + coachView() + roundView() + footer() + `<div class="ctl-space"></div>` + controller();
     case 'accuse': body = accuseView(); break;
     case 'results': body = resultsView(); break;
     case 'talk': case 'vote': body = courtView(); break;
     case 'wills': body = willsView(); break;
     case 'over': body = overView(); break;
   }
-  return hud() + banner() + body + (['lobby','over','results','intro'].includes(S.ph)?'':peopleRow()) + footer();
+  return hud() + banner() + coachView() + body + (['lobby','over','results','intro'].includes(S.ph)?'':peopleRow()) + footer();
 }
 
 /* ---- lobby ---- */
 function lobbyView(){
   const n = S.P.length;
-  const codeBlock = solo ? '' : `<div class="sec center"><span class="lbl">${lang==='ar'?'كود الأوضة':'Room code'}</span><div class="codebig">${[...S.c].map(c=>`<span>${esc(c)}</span>`).join('')}</div><button class="btn" data-act="copy">${U.copied?t('copied'):t('copy')}</button></div>`;
+  const codeBlock = solo ? '' : `<div class="sec center"><span class="lbl">${lang==='ar'?'كود الأوضة':'Room code'}</span><div class="codebig">${[...S.c].map(c=>`<span>${esc(c)}</span>`).join('')}</div><div class="row center"><button class="btn" data-act="copy">${U.copied?t('copied'):t('copy')}</button><button class="btn gold" data-act="invite">📲 ${t('invite')}</button>${hasQR()?`<button class="btn" data-act="qr">▦ ${t('qrBtn')}</button>`:''}</div>${U.invMsg?`<p class="saved">${U.invMsg}</p>`:''}${U.qr && hasQR() ? qrHTML(S.c) : ''}</div>`;
   const people = `<div class="sec"><div class="spread"><span class="sec-t">👥 ${lang==='ar'?'اللعيبة':'Players'}</span><span class="pill num">${n}/${MAXP}</span></div>
     <div class="pgrid">${S.P.map(x=>`<div class="person ${x[0]===me?'me':''}">${avatar(x[0],'lg', x[0]===S.h?'👑':'')}<span class="nm">${esc(x[1])}</span></div>`).join('')}
     ${isHost() && n<MAXP ? `<button class="person" data-act="addbot"><span class="av lg" style="--av:#ffffff">+</span><span class="nm muted">${t('addBot').replace('+ ','')}</span></button>`:''}</div></div>`;
   const start = isHost() ? `${n<MINP?`<p class="muted center small">${t('needMore',{n:MINP})}</p>`:''}<button class="btn gold lg block" data-act="start" ${(n<MINP||U.starting)?'disabled':''}>${U.starting?'⏳ '+t('starting'):t('start')+' 🎲'}</button>` : `<div class="waitbox"><div class="bigemoji">⏳</div></div>`;
   const pubBlock = (isHost() && !solo) ? `<button class="lie pubsw ${U.pubRoom?'on':''}" data-act="pubtoggle" aria-pressed="${U.pubRoom}"><span style="font-size:1.6rem">${U.pubRoom?'🌍':'🔒'}</span><span><b>${U.pubRoom?t('pubOn'):t('pubOff')}</b><br><span class="small muted">${U.pubRoom?t('pubOnS'):t('pubOffS')}</span></span><span class="tg"></span></button>` : '';
+  const sm = !!S.sm;
+  const simpleBlock = `<button class="lie pubsw ${sm?'on':''}" data-act="simple" aria-pressed="${sm}" ${isHost()?'':'disabled'}><span style="font-size:1.6rem">${sm?'🐣':'✨'}</span><span><b>${sm?t('simpleOn'):t('simpleOff')}</b><br><span class="small muted">${sm?t('simpleOnS'):t('simpleOffS')}</span></span>${isHost()?'<span class="tg"></span>':''}</button>`;
   const lv = S.lvl || 'normal';
   const lvlBlock = `<div class="sec"><span class="sec-t">🎚️ ${t('lvlT')}</span><div class="modes">${['easy','normal','hard'].map(k=>`<button class="mode ${lv===k?'sel':''}" data-act="lvl" data-v="${k}" ${isHost()?'':'disabled'}><span class="mi">${k==='easy'?'😌':k==='normal'?'🧠':'🔥'}</span><b>${t('lv_'+k)}</b><span>${t('lvd_'+k)}</span></button>`).join('')}</div>${isHost()?'':`<p class="small muted">${t('lvlHost')}</p>`}</div>`;
-  return `<div class="hero" style="padding-top:0">${logoHTML(true)}</div>` + codeBlock + pubBlock + lvlBlock + people + start + `<button class="btn ghost block" data-act="help">❔ ${t('how')}</button>`;
+  return `<div class="hero" style="padding-top:0">${logoHTML(true)}</div>` + codeBlock + pubBlock + simpleBlock + lvlBlock + people + start + `<button class="btn ghost block" data-act="help">❔ ${t('how')}</button>`;
 }
 
 /* ---- will ---- */
@@ -995,8 +1156,9 @@ function willView(){
   const wrote = S.P.filter(x=>x[3]&128).length;
   const c = U.draft.c;
   const paper = `<div class="scroll"><h3>📜 ${t('yourWill')}</h3>${c.length?c.map((x,i)=>`<div class="cl"><span>${i+1}.</span><span>${willSentence(x[0],x[1],x[2])}</span><button data-act="wdel" data-i="${i}" aria-label="remove">✕</button></div>`).join(''):`<p class="empty">${t('willEmpty')}</p>`}
+    ${U.draft.d?`<div class="cl">🎲 <span>${dareSentence(U.draft.d)}</span></div>`:''}
     ${U.draft.x?`<div class="cl">✍️ “${esc(U.draft.x)}”</div>`:''}</div>
-    ${c.length||U.draft.x?`<p class="saved">${t('autosave')}</p>`:''}`;
+    ${c.length||U.draft.x||U.draft.d?`<p class="saved">${t('autosave')}</p>`:''}`;
   let picker = '';
   if(U.pendingW){
     const k = U.pendingW[0], needN = NEEDT[k], step = U.pendingW[1] ? 2 : 1;
@@ -1010,13 +1172,25 @@ function willView(){
     picker = WG.map(([g, ks])=>{ const lockG = g==='g_pts' && giveC;
       return `<div class="sec ${lockG?'locked':''}"><span class="sec-t">${t(g)}</span><div class="chips">${ks.map(k=>`<button class="chipb" data-act="wpick" data-k="${k}" ${(full||lockG||usedT.has(k)||(NEEDT[k]||0)>nOthers)?'disabled':''}>${t('WL_'+k)}</button>`).join('')}</div>${g==='g_pts'?`<p class="small ${lockG?'':'muted'}">${lockG?t('giveUsed'):t('split')}</p>`:''}</div>`; }).join('')
       + (full?`<p class="muted small center">${t('max2')}</p>`:'')
+      + dareBlock()
       + `<div class="sec"><label class="sec-t" for="wx">${t('free')}</label><input type="text" id="wx" maxlength="80" placeholder="${t('freePh')}" value="${esc(U.draft.x)}" data-bind="willx"></div>`;
   }
   const ready = IN.wd;
   const btn = ready ? `<button class="btn block" data-act="wready">✏️ ${t('editWill')}</button>` : `<button class="btn gold lg block" data-act="wready">${t('willReady')}</button>`;
   return paper + (ready ? `<div class="waitbox"><div class="bigemoji">⏳</div><p>${t('willWait')}</p></div>` : picker) + btn + `<p class="muted small center">${t('wrote',{n:wrote,m:S.P.length})}</p>`;
 }
-function saveWill(){ setIn({w:{c:U.draft.c, x:U.draft.x}}); }
+function saveWill(){ setIn({w:{c:U.draft.c, x:U.draft.x, d:U.draft.d||null}}); }
+const dareText = d => d.i>=0 ? (T[lang].dares[d.i]||'') : (d.x||'');
+function dareSentence(d){ return t('WS_dare', {a: d.t==='all' ? `<b>${t('dareWhoAll')}</b>` : `<b>${nm(d.t)}</b>`, d: esc(dareText(d))}); }
+function dareBlock(){
+  const dr = U.draft.d;
+  let body;
+  if(dr) body = `<div class="dare-set"><span>🎲 ${dareSentence(dr)}</span><button data-act="daredel" aria-label="remove">✕</button></div>`;
+  else if(U.dareP) body = `<p class="cl"><b>🎲 ${esc(dareText(U.dareP))}</b></p><span class="sec-t">${t('dareWho')}</span><div class="pgrid">${S.P.filter(x=>x[0]!==me).map(x=>`<button class="person pick-person" data-act="daret" data-t="${x[0]}">${avatar(x[0])}<span class="nm">${esc(x[1])}</span></button>`).join('')}<button class="person pick-person" data-act="daret" data-t="all"><span class="av" style="--av:#ffffff">👥</span><span class="nm">${t('dareWhoAll')}</span></button></div><button class="back" data-act="darecancel">${lang==='ar'?'→':'←'} ${t('back')}</button>`;
+  else body = `<div class="chips">${T[lang].dares.map((x,i)=>`<button class="chipb" data-act="darepick" data-i="${i}">${esc(x)}</button>`).join('')}</div>
+    <div class="row" style="flex-wrap:nowrap"><input type="text" id="darex" maxlength="40" placeholder="${t('dareCustomPh')}" value="${esc(U.dareX)}" data-bind="darex" autocomplete="off"><button class="btn" data-act="darecustom">${t('dareOk')}</button></div>`;
+  return `<div class="sec"><span class="sec-t">${t('g_dare')}</span><p class="small muted">${t('dareS')}</p>${body}</div>`;
+}
 
 /* ---- round ---- */
 function chosen(){ return S.cur===me && IN.a && IN.a.r===S.r && IN.a.tn===S.tn ? IN.a : null; }
@@ -1081,7 +1255,7 @@ function openFlow(){
     <p class="small muted center">${t('pickHelp')}</p>${pickGrid()}
     <button class="btn gold lg block" data-act="toconfirm" ${U.pick.length===3?'':'disabled'}>${t('nextStep')}</button></div>` + hintsOnly();
 }
-function hintsOnly(){ return `<div class="sec"><span class="lbl">${t('hints')}</span><div class="hints">${[...S.hi].reverse().map(h=>`<div class="hint ${h[0]===9?'gold':''}">${h[0]===9?'🌟':'🔑'} ${hintText(h)}</div>`).join('')}</div></div>`; }
+function hintsOnly(){ return `<div class="sec"><span class="lbl">${t('hints')}</span><div class="hints">${allHintsHTML().join('')}</div></div>`; }
 function backBtn(to){ return `<button class="back" data-act="mode" data-v="${to||''}">${lang==='ar'?'→':'←'} ${t('back')}</button>`; }
 function revealBlock(){
   const pk = S.pv?.[me]?.pk;
@@ -1138,6 +1312,20 @@ function ghostBlock(){
       <button class="btn small ${done&&IN.gh.t===x[0]&&IN.gh.s<0?'red':''}" data-act="ghost" data-t="${x[0]}" data-s="-1" ${done?'disabled':''}>−2</button></div></div>`).join('')}
     ${done?`<p class="saved">${t('ghostDone')}</p>`:''}</div>`;
 }
+function betBlock(){
+  const b = IN.bt && IN.bt.r===S.r ? IN.bt.t : null;
+  return `<div class="sec"><span class="sec-t">${t('betT')}</span><p class="small muted">${t('betS')}</p><div class="pgrid">${S.P.filter(isAlive).map(x=>`<button class="person pick-person ${b===x[0]?'sel':''}" data-act="bet" data-t="${x[0]}">${avatar(x[0])}<span class="nm">${esc(x[1])}</span></button>`).join('')}</div>${b?`<p class="saved">${t('betDone',{p:nm(b)})}</p>`:''}</div>`;
+}
+function whisperBlock(){
+  const pv = S.pv?.[me] || {};
+  if(pv.ws) return `<div class="sec"><span class="sec-t">${t('whT')}</span><p>${t('whSent',{p:nm(pv.ws[0])})}</p><div class="hint ghostw">👻 ${hintText(pv.ws[1])} <span class="tagx">${pv.ws[2]?t('whK1'):t('whK0')}</span></div><p class="small muted">${t('whUsed')}</p></div>`;
+  if(!['turn','reveal','ans'].includes(S.ph)) return `<div class="sec"><span class="sec-t">${t('whT')}</span><p class="small muted">${t('whS')}</p></div>`;
+  const w = U.whSel, sent = !!(IN.wh && IN.wh.r===S.r);
+  return `<div class="sec"><span class="sec-t">${t('whT')}</span><p class="small muted">${t('whS')}</p>
+    <span class="sec-t">${t('whWho')}</span><div class="pgrid">${S.P.filter(isAlive).map(x=>`<button class="person pick-person ${w.t===x[0]?'sel':''}" data-act="wht" data-t="${x[0]}">${avatar(x[0])}<span class="nm">${esc(x[1])}</span></button>`).join('')}</div>
+    <span class="sec-t" style="${w.t?'':'opacity:.4'}">${t('whKind')}</span><div class="row center"><button class="chipb ${w.s===1?'sel':''}" data-act="whs" data-s="1">${t('whTrue')}</button><button class="chipb ${w.s===0?'sel':''}" data-act="whs" data-s="0">${t('whFalse')}</button></div>
+    <button class="btn gold lg block" data-act="whgo" ${(w.t && w.s!=null && !sent)?'':'disabled'}>${sent?'⏳':t('whGo')}</button></div>`;
+}
 function peekSheet(){
   const n = S.tc||0; let g = '';
   for(let i=0;i<n;i++){
@@ -1159,12 +1347,13 @@ function askSheet(){
     <button class="btn gold lg block" data-act="doask" ${ready?'':'disabled'}>${ready?`${t('askGo')} ${nm(U.askT)}: ${qT(U.askQ)}`:t('askGo')}</button>`; }
 function allHintsHTML(){
   const priv = (S.pv?.[me]?.ph||[]).map(h=>`<div class="hint priv">🧂 ${hintText(h)} <span class="tagx">${t('onlyYou')}</span></div>`);
+  const gw = (S.pv?.[me]?.gw||[]).map(([g,h])=>`<div class="hint ghostw">${t('gwFrom',{p:nm(g)})} ${hintText(h)} <span class="tagx">${t('gwTag')}</span></div>`);
   const pub = [...S.hi].map((h,i)=>({h,i})).reverse().map(({h,i})=>`<div class="hint ${h[0]===9?'gold':''} ${i===S.hi.length-1 && S.hi.length>U.seenHints?'new':''}">${h[0]===9?'🌟':'🔑'} ${hintText(h)}</div>`);
-  return [...priv, ...pub];
+  return [...gw, ...priv, ...pub];
 }
 function logHTML(){
-  const turns = [...new Set([...S.lg.map(l=>l[0]), ...S.ev.map(e=>e[2]), ...(S.pkp||[]).map(p=>p[0]), ...(S.mutes||[]).map(m=>m[0])])].sort((a,b)=>b-a);
-  return turns.length ? `<div class="log">${turns.map(n=>`<span class="turnlbl">${t('turnN',{n})}</span>${S.lg.map((l,ix)=>[l,ix]).filter(([l])=>l[0]===n).map(([l,ix])=>logItem(l,ix)).join('')}${(S.pkp||[]).filter(p=>p[0]===n).map(pkItem).join('')}${(S.mutes||[]).filter(m=>m[0]===n).map(m=>`<div class="event">${t('muted',{p:nm(m[1])})}</div>`).join('')}${S.ev.filter(e=>e[2]===n).map(evItem).join('')}`).join('')}</div>` : `<p class="muted small">${t('noLog')}</p>`;
+  const turns = [...new Set([...S.lg.map(l=>l[0]), ...S.ev.map(e=>e[2]), ...(S.pkp||[]).map(p=>p[0]), ...(S.mutes||[]).map(m=>m[0]), ...(S.whs||[]).map(w=>w[0])])].sort((a,b)=>b-a);
+  return turns.length ? `<div class="log">${turns.map(n=>`<span class="turnlbl">${t('turnN',{n})}</span>${S.lg.map((l,ix)=>[l,ix]).filter(([l])=>l[0]===n).map(([l,ix])=>logItem(l,ix)).join('')}${(S.pkp||[]).filter(p=>p[0]===n).map(pkItem).join('')}${(S.whs||[]).filter(w=>w[0]===n).map(w=>`<div class="event">${t('whPub',{g:nm(w[1]),p:nm(w[2])})}</div>`).join('')}${(S.mutes||[]).filter(m=>m[0]===n).map(m=>`<div class="event">${t('muted',{p:nm(m[1])})}</div>`).join('')}${S.ev.filter(e=>e[2]===n).map(evItem).join('')}`).join('')}</div>` : `<p class="muted small">${t('noLog')}</p>`;
 }
 function statusBlock(){
   const mp = meP(), f = mp[3];
@@ -1210,7 +1399,7 @@ function answerSheet(){
   if(sent!=null) lieBtn = `<p class="saved center">${t('ansSent')}</p>`;
   else if(pv.cl) lieBtn = `<button class="btn lg block liebtn ${lieOn?'on':''}" data-act="liemode">🤥 ${lieOn?t('lieCancel'):t('lieBtn')} <span class="small">(${t('liesLeft',{n:(pv.lm||0)-(pv.lc||0)})})</span></button>`;
   else lieBtn = `<p class="small muted center">🔒 ${S.evk==='truth'?t('noLieRound'):(pv.lc>=pv.lm)?t('lieUsed'):t('shieldNote')}</p>`;
-  return `<div class="asker">${avatar(pd.a,'lg')}<div><span class="lbl">${t('b_asked',{p:nm(pd.a)})}</span><p class="qtext">${qT(pd.q)}</p></div></div>
+  return coachView(true) + `<div class="asker">${avatar(pd.a,'lg')}<div><span class="lbl">${t('b_asked',{p:nm(pd.a)})}</span><p class="qtext">${qT(pd.q)}</p></div></div>
     <p class="small muted">${lieOn?t('lieHelp2'):t('ansHelp')}</p>
     <div class="aopts ${yn?'yn':''}">${opts}</div>${lieBtn}`;
 }
@@ -1233,7 +1422,7 @@ function controller(){
   const cb = (act, v, icon, label, on, hot, badge) => `<button class="cb ${hot?'hot':''}" data-act="${act}" data-v="${v}" ${on?'':'disabled'}><span class="i">${icon}</span><span>${label}</span>${badge?`<i class="bdg num">${badge}</i>`:''}</button>`;
   let main;
   if(alive) main = cb('mode','peek','👀',t('aPeek'),canAct,canAct) + cb('mode','ask', S.evk==='silence'?'🙊':pv.mu?'🤐':'❓', t('aAsk'), askOk, askOk) + cb('mode','open','🔐',t('aOpenShort'),canOpen(),false) + cb('sheet','abs','✨',t('abShort'),abLeft>0,false,abLeft||'');
-  else main = cb('sheet','ghost','👻',t('ghostT'),!(IN.gh && IN.gh.r===S.r),true) + cb('sheet','abs','✨',t('abShort'),abLeft>0,abLeft>0,abLeft||'') + cb('sheet','notes','📝',t('tNotesS'),true,false) + cb('sheet','log','📋',t('tLogS'),true,false,logN||'');
+  else { const ghDone = !!(IN.gh && IN.gh.r===S.r); main = cb('sheet','ghost','👻',t('ghostT'),!ghDone,!ghDone) + cb('sheet','bet','🔮',t('betShort'),true,!(IN.bt && IN.bt.r===S.r)) + cb('sheet','whisper','🗣️',t('whShort'),true,!pv.ws) + (abLeft>0 ? cb('sheet','abs','✨',t('abShort'),true,true,abLeft) : cb('sheet','log','📋',t('tLogS'),true,false,logN||'')); }
   let lie = '';
   if(alive && !(f&8)){
     if(pv.lm===0) lie = `<span class="sb off">🗣️ ${t('noLieShort')}</span>`;
@@ -1257,6 +1446,8 @@ function sheetView(){
   else if(s==='log') body = `<span class="sheet-t">📋 ${t('tLogS')}</span>${logHTML()}`;
   else if(s==='hints') body = `<span class="sheet-t">🔑 ${t('hints')}</span><div class="hints">${allHintsHTML().join('')}</div>`;
   else if(s==='ghost') body = ghostBlock();
+  else if(s==='bet') body = betBlock();
+  else if(s==='whisper') body = whisperBlock();
   const key = String(U.mode||U.sheet);
   if(!body){ U.lastSheet = null; return ''; }
   const anim = key !== U.lastSheet ? 'anim' : ''; U.lastSheet = key;
@@ -1318,7 +1509,7 @@ function introView(){
 /* ---- accuse ---- */
 function accuseView(){
   const mp = meP();
-  if(!isAlive(mp)) return ghostBlock();
+  if(!isAlive(mp)) return ghostBlock() + betBlock();
   const done = IN.dn===S.r, opened = mp[3]&(2|4|512);
   if(opened) return `<div class="sec"><div class="waitbox"><div class="bigemoji">⏳</div><p>${t('doneW')}</p></div></div>`;
   return `<div class="sec"><span class="sec-t">⭐ ${t('guessT')}</span><p class="small muted">${t('guessS')}</p>
@@ -1370,24 +1561,133 @@ function resText(c){
   const map = {give:'R_give', asker:'R_give', above:'R_give', first:'R_first', revive:'R_revive', minus:'R_minus', skip:'R_skip', take:'R_take', swap:'R_swap', expose:'R_expose', cancel:'R_cancel'};
   return t(map[k], m);
 }
-function willsView(){
-  return (S.el||[]).map((it,i)=>{
-    let body;
-    if(it.none) body = `<p>${t('noWill')}</p>`;
-    else if(it.cancelled) body = `<p class="no"><b>${t('cancelledW')}</b></p>`;
-    else body = it.cl.map(c=>`<div class="res"><span class="mk ${c[3]?'ok':'no'}">${c[3]?'✓':'✗'}</span><div><div>${willSentence(c[0], ['asker','above','revive'].includes(c[0])?null:c[1], c[2])}</div><div class="sub">${resText(c)}</div>
-      ${c[0]==='expose'&&c[3]?`<div class="sub">${t('exposed',{p:nm(c[1])})} ${(c[5]||[]).map(e=>willSentence(e[0],e[1],e[2])).join(' + ')||t('noWill')}${c[6]?` — “${esc(c[6])}”`:''}</div>`:''}</div></div>`).join('') || `<p>${t('noWill')}</p>`;
-    return `<div class="will-out" style="animation-delay:${i*0.6}s"><h3>${avatar(it.id)} ${t('outMsg',{p:nm(it.id)})}</h3>${body}${it.x?`<p><b>${t('freeW')}</b> “${esc(it.x)}”</p>`:''}</div>`;
-  }).join('') + hostNext();
+const WSTEP = {intro:2400, cl:2100, dare:2600, x:1800, none:1600, cancel:1800, bet:1800};
+function willSteps(){
+  const st = [];
+  (S.el||[]).forEach((it,i)=>{ st.push(['intro',i]);
+    if(it.none){ st.push(['none',i]); return; }
+    if(it.cancelled) st.push(['cancel',i]);
+    else { it.cl.forEach((c,j)=>st.push(['cl',i,j])); if(it.d) st.push(['dare',i]); }
+    if(it.x) st.push(['x',i]); });
+  (S.bo||[]).forEach((b,j)=>st.push(['bet',j]));
+  return st;
 }
-
+function willShown(){
+  const st = willSteps(); if(U.willAll) return st.length;
+  let el = (Date.now() - (U.phaseAt||0)) / SPEED, n = 0;
+  for(const s of st){ if(el < 0) break; el -= (WSTEP[s[0]]||2000); n++; }
+  return n;
+}
+function willFx(s){
+  if(!s) return; const it = S.el?.[s[1]];
+  switch(s[0]){
+    case 'intro': SFX.play('drum', 1.6); if(it && it.id===me) buzz(400); break;
+    case 'cl': { const c = it.cl[s[2]]; if(!c[3]) SFX.play('meh'); else if(GIVE.includes(c[0])) SFX.play('good'); else SFX.play('bad'); if(c[3] && (c[1]===me || c[2]===me)) buzz([200,80,200]); break; }
+    case 'dare': SFX.play('dare'); if(it.d && it.d.t===me) buzz([300,100,300]); break;
+    case 'cancel': SFX.play('bad'); break;
+    case 'none': SFX.play('meh'); break;
+    default: SFX.play('pop');
+  }
+}
+function dareCard(d, anim){
+  const who = d.t==='all' ? `<span class="av lg" style="--av:#ffffff">👥</span><b>${t('dareWhoAll')}</b>` : `${avatar(d.t,'lg')}<b>${nm(d.t)}</b>`;
+  return `<div class="darecard ${anim?'':'still'}"><span class="dstamp">${t('dareT')}</span><div class="dwho">${who}</div><p>${esc(dareText(d))}</p>${d.t===me?`<div class="youhit">${t('youHit')}</div>`:''}</div>`;
+}
+function clauseRow(c, anim){
+  const good = GIVE.includes(c[0]), sec = ['expose','cancel'].includes(c[0]), hitMe = c[3] && (c[1]===me || c[2]===me) && !good;
+  const ic = !c[3] ? '✗' : good ? '💰' : sec ? '🕵️' : '💥';
+  return `<div class="res ${anim?'pop':''} ${c[3]?(good?'good':'evil'):'fail'} ${hitMe?'hitme':''}"><span class="mk">${ic}</span><div><div>${willSentence(c[0], ['asker','above','revive'].includes(c[0])?null:c[1], c[2])}</div><div class="sub">${resText(c)}</div>
+    ${c[0]==='expose'&&c[3]?`<div class="sub">${t('exposed',{p:nm(c[1])})} ${(c[5]||[]).map(e=>willSentence(e[0],e[1],e[2])).join(' + ')||t('noWill')}${c[6]?` — “${esc(c[6])}”`:''}</div>`:''}${hitMe?`<div class="youhit">${t('youHit')}</div>`:''}</div>${c[3]&&c[1]?avatar(c[1],'sm'+(good||!anim?'':' shake')):''}</div>`;
+}
+function willsView(){
+  const st = willSteps(), n = willShown(), shown = st.slice(0, n), last = shown[shown.length-1];
+  const vis = new Set(shown.map(s=>s.join('-'))), has = (...k) => vis.has(k.join('-')), lastK = last ? last.join('-') : '', isLast = (...k) => lastK === k.join('-');
+  const items = (S.el||[]).map((it,i)=>{
+    if(!has('intro',i)) return '';
+    const cur = last && last[0]!=='bet' && last[1]===i;
+    const head = `<div class="wo-head">${avatar(it.id,'lg dead')}<div><h3>${it.none?t('wNoneD',{p:nm(it.id)}):t('wDrum',{p:nm(it.id)})}</h3><span class="small muted num">${it.pts} ${t('pts')}</span></div></div>`;
+    let body = '';
+    if(!it.none){
+      const first = it.cancelled ? has('cancel',i) : it.cl.length ? has('cl',i,0) : it.d ? has('dare',i) : has('x',i);
+      if(!first) body += `<div class="envelope">📜</div>`;
+      if(it.cancelled && has('cancel',i)) body += `<p class="no"><b>${t('cancelledW')}</b></p>`;
+      it.cl.forEach((c,j)=>{ if(has('cl',i,j)) body += clauseRow(c, isLast('cl',i,j)); });
+      if(it.d && has('dare',i)) body += dareCard(it.d, isLast('dare',i));
+    }
+    if(it.x && has('x',i)) body += `<p class="lastw"><b>${t('lastWords')}</b> “${esc(it.x)}”</p>`;
+    return `<div class="will-out ${cur?'cur':'done'} ${isLast('intro',i)?'':'still'}">${head}${body}</div>`;
+  }).join('');
+  const bets = (S.bo||[]).map((b,j)=> has('bet',j) ? `<div class="event">${t('betOk',{g:nm(b[0]), p:nm(b[1])})}</div>` : '').join('');
+  const done = n >= st.length;
+  return items + bets + (done ? (isHost() ? hostNext() : okBtn()) : `<button class="btn ghost block" data-act="willall">${t('wShowAll')}</button>`);
+}
 /* ---- over ---- */
 function overView(){
   const sorted = [...S.P].sort((a,b)=> (b[0]===S.win)-(a[0]===S.win) || (b[3]&1)-(a[3]&1) || b[2]-a[2]);
   return `<div class="stage"><div class="big">🏆</div>${avatar(S.win,'lg')}<h2 style="font-size:2.2rem">${nm(S.win)}</h2>
     ${S.lv?`<div class="row center">${S.lv.map(c=>card(c)).join('')}</div>`:''}</div>
    <div class="sec"><span class="sec-t">${t('standings')}</span>${sorted.map((x,i)=>`<div class="lrow ${x[0]===me?'me':''}"><span class="num muted">${i+1}</span><div class="row">${avatar(x[0],'sm')}<b>${esc(x[1])}</b></div><span class="small muted">${x[0]===S.win?'🏆':(x[3]&1)?'':t('out')}</span><span class="tot num">${x[2]}</span></div>`).join('')}</div>
+   ${awardsHTML()}${bestWillHTML()}
+   <button class="btn block" data-act="shareres">${t('shareRes')}</button>
    ${isHost()?`<button class="btn gold lg block" data-act="newgame">${t('newGame')} 🎲</button>`:''}`;
+}
+function awards(){
+  const st = S.st || {}, ids = S.P.map(x=>x[0]), found = [];
+  for(const k of ['l','ok','bet','hit','gv','a','q','bad','pk','wh']){
+    let best = null, bv = 0; for(const id of ids){ const v = st[id]?.[k] || 0; if(v > bv){ bv = v; best = id; } }
+    if(best && bv >= (['a','q','pk'].includes(k) ? 2 : 1)) found.push([k, best, bv]);
+  }
+  const out = [], cnt = {};
+  for(const a of found){ if((cnt[a[1]]||0) >= 2) continue; cnt[a[1]] = (cnt[a[1]]||0) + 1; out.push(a); if(out.length >= 5) break; }
+  const firstOut = ids.filter(id=>st[id]?.out).sort((a,b)=>st[a].out-st[b].out)[0];
+  if(firstOut) out.push(['first', firstOut, 1]);
+  return out;
+}
+function awText(k, n){
+  let s = T[lang].AW[k][2];
+  if(n===1) s = lang==='ar' ? s.replace('{n} مرات','مرة واحدة').replace('{n} أسئلة','سؤال واحد').replace('{n} نقطة','نقطة واحدة') : s.replace('{n} times','once').replace('{n} questions','1 question');
+  return s.replace('{n}', n);
+}
+function awardsHTML(){
+  const aw = awards(); if(!aw.length) return '';
+  return `<div class="sec"><span class="sec-t">${t('awardsT')}</span><div class="awards">${aw.map(([k,id,n],i)=>{ const a = T[lang].AW[k]; return `<div class="award" style="animation-delay:${.3+i*.15}s">${avatar(id)}<span class="aic">${a[0]}</span><div><b>${a[1]}</b><div class="small">${nm(id)} · ${awText(k, n)}</div></div></div>`; }).join('')}</div></div>`;
+}
+function bestWillHTML(){
+  const it = S.bw; if(!it) return '';
+  return `<div class="sec"><span class="sec-t">${t('bestWillT')}</span><div class="will-out"><div class="wo-head">${avatar(it.id)}<h3>${t('madeBy',{p:nm(it.id)})}</h3></div>
+    ${it.cl.map(c=>clauseRow(c,false)).join('')}${it.d?dareCard(it.d):''}${it.x?`<p class="lastw"><b>${t('lastWords')}</b> “${esc(it.x)}”</p>`:''}</div></div>`;
+}
+function shareImgView(){
+  return `<div class="ov" data-act="imgclose"><div class="ovc anim" role="dialog" aria-modal="true"><img src="${U.shareImg}" alt="" style="width:100%;border-radius:18px;border:3px solid var(--ink)"><p class="small">${t('saveImg')}</p>
+    ${inviteURL('X') ? `<a class="btn gold block" href="${U.shareImg}" download="el-wasseya.png">${t('dlImg')}</a>` : ''}<button class="btn ghost" data-act="imgclose">${t('closeB')}</button></div></div>`;
+}
+async function shareResults(){
+  const W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const g = cv.getContext('2d');
+  try{ await document.fonts.ready; }catch(e){}
+  const F = (s, w) => `${w||800} ${s}px "Baloo Bhaijaan 2","Rubik",system-ui,sans-serif`;
+  const plain = s => String(s).replace(/<[^>]+>/g,'').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+  g.direction = lang==='ar' ? 'rtl' : 'ltr'; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  const bg = g.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#8b3dff'); bg.addColorStop(1,'#3a0f8f'); g.fillStyle = bg; g.fillRect(0,0,W,H);
+  for(let i=0;i<70;i++){ g.globalAlpha = .3; g.fillStyle = AVC[i%AVC.length]; g.beginPath(); g.arc(Math.random()*W, Math.random()*H, 4+Math.random()*10, 0, 7); g.fill(); } g.globalAlpha = 1;
+  const rr = (x,y,w,h,r) => { g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); };
+  const panel = (y,h,fill) => { g.fillStyle = '#24104a'; rr(90,y+10,W-180,h,36); g.fill(); g.fillStyle = fill; rr(90,y,W-180,h,36); g.fill(); g.lineWidth = 6; g.strokeStyle = '#24104a'; rr(90,y,W-180,h,36); g.stroke(); };
+  const fit = (s, max) => { s = plain(s); if(g.measureText(s).width <= max) return s; while(s.length > 3 && g.measureText(s+'…').width > max) s = s.slice(0,-1); return s+'…'; };
+  g.fillStyle = '#ffd23f'; g.font = F(112); g.fillText(lang==='ar' ? 'الوصية 📜' : 'El Wasseya 📜', W/2, 150);
+  panel(195, 190, '#fff1c9'); g.fillStyle = '#24104a'; g.font = F(58); g.fillText('🏆', W/2, 270); g.font = F(66); g.fillText(fit(t('winner',{p:nm(S.win)}), W-260), W/2, 350);
+  let y = 425; const aw = awards().slice(0,5);
+  if(aw.length){ const h = 124 + aw.length*80; panel(y, h, '#ffffff'); g.fillStyle = '#24104a'; g.font = F(44); g.fillText(plain(t('awardsT')), W/2, y+66); let yy = y + 140;
+    for(const [k,id,n] of aw){ const a = T[lang].AW[k]; g.font = F(42); g.fillText(fit(`${a[0]} ${a[1]}: ${nm(id)}`, W-260), W/2, yy); g.globalAlpha = .65; g.font = F(28,600); g.fillText(awText(k, n), W/2, yy+34); g.globalAlpha = 1; yy += 80; }
+    y += h + 36; }
+  const it = S.bw;
+  if(it && y < H-240){ const lines = [...it.cl.filter(c=>c[3]).map(c=>willSentence(c[0], ['asker','above','revive'].includes(c[0])?null:c[1], c[2])), ...(it.d ? ['🎲 '+dareSentence(it.d)] : []), ...(it.x ? ['“'+esc(it.x)+'”'] : [])].slice(0, Math.max(1, Math.floor((H-130-y-100)/56)));
+    const h = 100 + lines.length*56; panel(y, h, '#ffd23f'); g.fillStyle = '#24104a'; g.font = F(42); g.fillText(fit('📜 '+t('madeBy',{p:nm(it.id)}), W-260), W/2, y+64);
+    g.font = F(34,700); lines.forEach((l,i)=>g.fillText(fit(l, W-260), W/2, y+124+i*56)); }
+  g.fillStyle = '#ffffff'; g.font = F(40); g.fillText(t('shareFoot') + (inviteURL('X') ? ' · ' + location.host : ''), W/2, H-70);
+  const blob = await new Promise(r=>{ try{ cv.toBlob(r, 'image/png'); }catch(e){ r(null); } });
+  const file = blob && typeof File==='function' ? new File([blob], 'el-wasseya.png', {type:'image/png'}) : null;
+  if(file && navigator.canShare && navigator.canShare({files:[file]})){ try{ await navigator.share({files:[file], title:t('title'), text:t('shareFoot')}); return; }catch(e){ if(e && e.name==='AbortError') return; } }
+  try{ U.shareImg = blob ? URL.createObjectURL(blob) : cv.toDataURL('image/png'); }catch(e){ U.shareImg = cv.toDataURL('image/png'); }
+  render();
 }
 
 
@@ -1439,18 +1739,19 @@ document.addEventListener('input', e=>{
   else if(b==='code') U.code = e.target.value.toUpperCase();
   else if(b==='chat'){ U.chatDraft = e.target.value; }
   else if(b==='willx'){ U.draft.x = e.target.value; saveWill(); }
+  else if(b==='darex'){ U.dareX = e.target.value; }
 });
-document.addEventListener('keydown', e=>{ if(e.key==='Enter'){ if(e.target.id==='chatinput'){ if(sendChat(U.chatDraft)){ U.chatDraft=''; render(); const ci=document.getElementById('chatinput'); if(ci) ci.focus(); } return; } if(e.target.id==='in-code') joinRoom(); else if(e.target.id==='in-name') createRoom(); } });
+document.addEventListener('keydown', e=>{ if(e.key==='Enter'){ if(e.target.id==='chatinput'){ if(sendChat(U.chatDraft)){ U.chatDraft=''; render(); const ci=document.getElementById('chatinput'); if(ci) ci.focus(); } return; } if(e.target.id==='darex'){ const x = U.dareX.trim(); if(x){ U.dareP = {i:-1, x}; render(); } return; } if(e.target.id==='in-code') joinRoom(); else if(e.target.id==='in-name'){ if(U.deep) joinRoom(); else createRoom(); } } });
 document.addEventListener('change', e=>{ if(e.target.id==='wx') render(); });
 document.addEventListener('click', e=>{
+  SFX.unlock();
   const el = e.target.closest('[data-act]'); if(!el) return;
   const act = el.dataset.act, d = el.dataset;
   // ignore taps that land right after the screen changed (the finger was meant for the previous screen)
   const nowT = Date.now(), sincePh = nowT - (U.phaseAt||0);
   const spam = sincePh < 900 || (sincePh < 6000 && U.ignAt && nowT - U.ignAt < 450);
-  if(spam && !['lang','help','helpnext','helpclose','helpbg','closesheet','leave','pause','resume','chat','chatclose','chatsend','chatsendin'].includes(act)){ U.ignAt = nowT; return; }
-  if(false && !['lang','help','helpnext','helpclose','helpbg','closesheet','leave','pause','resume','chat','chatclose','chatsend','chatsendin'].includes(act)) return;
-  if(act==='helpbg' && e.target!==el) return;
+  if(spam && !['lang','help','helpnext','helpclose','helpbg','closesheet','leave','pause','resume','chat','chatclose','chatsend','chatsendin','tipok','mute','imgclose'].includes(act)){ U.ignAt = nowT; return; }
+  if((act==='helpbg' || (act==='imgclose' && el.classList.contains('ov'))) && e.target!==el) return;
   switch(act){
     case 'lang': lang = lang==='ar'?'en':'ar'; store.set('wsy_lang', lang); render(); break;
     case 'help': U.helpKey = null; U.help = true; U.helpI = 0; render(); break;
@@ -1491,7 +1792,24 @@ document.addEventListener('click', e=>{
     case 'abdo': { const au = (IN.au && IN.au.r===S.r) ? {...IN.au} : {r:S.r}; au[d.k] = {...U.abSel}; setIn({au}); U.mode = null; U.abSel = {}; U.sheet = 'abs'; render(); break; }
     case 'answer': if(S.pend){ setIn({ans:{k:S.pend.k, v:+d.v}}); U.lieMode = false; render(); } break;
     case 'liemode': U.lieMode = !U.lieMode; render(); break;
-    case 'lvl': if(solo && host){ if(host.ph==='lobby') host.lvl = d.v; } else cmd('lvl', d.v); break;
+    case 'lvl': if(host){ if(host.ph==='lobby') host.lvl = d.v; } else cmd('lvl', d.v); break;
+    case 'simple': if(host){ if(host.ph==='lobby') host.simple = !host.simple; } else cmd('simple', !S.sm); break;
+    case 'mute': SFX.toggle(); U.lastMain = null; render(); break;
+    case 'tipok': U.tips = U.tips.filter(x=>x.k!==d.k); render(); break;
+    case 'invite': shareInvite(); break;
+    case 'qr': U.qr = !U.qr; render(); break;
+    case 'willall': U.willAll = true; tickTimer(); render(); break;
+    case 'shareres': shareResults(); break;
+    case 'imgclose': U.shareImg = null; render(); break;
+    case 'darepick': U.dareP = {i:+d.i, x:''}; render(); break;
+    case 'darecustom': { const x = (U.dareX||'').trim(); if(x){ U.dareP = {i:-1, x}; render(); } break; }
+    case 'darecancel': U.dareP = null; render(); break;
+    case 'daret': if(U.dareP){ U.draft.d = {i:U.dareP.i, x:U.dareP.x, t:d.t}; U.dareP = null; U.dareX = ''; saveWill(); render(); } break;
+    case 'daredel': U.draft.d = null; saveWill(); render(); break;
+    case 'bet': setIn({bt:{r:S.r, t:d.t}}); render(); break;
+    case 'wht': U.whSel.t = d.t; render(); break;
+    case 'whs': U.whSel.s = +d.s; render(); break;
+    case 'whgo': if(U.whSel.t && U.whSel.s!=null){ setIn({wh:{r:S.r, t:U.whSel.t, s:U.whSel.s}}); U.whSel = {}; render(); } break;
     case 'rk': setIn({rk:S.k}); render(); break;
     case 'pause': if(host) host.pause(); else if(typeof cmd==='function') cmd('pause'); break;
     case 'resume': if(host) host.resume(); else if(typeof cmd==='function') cmd('resume'); break;
@@ -1521,6 +1839,16 @@ function tickTimer(){
   const ring = document.getElementById('ring'), fg = document.getElementById('ringfg');
   if(fg) fg.setAttribute('stroke-dashoffset', String(144.5 * (1 - Math.min(1, ms/U.phaseDur))));
   if(ring) ring.classList.toggle('low', s<=5);
+  if(S && S.ph==='wills' && U.screen==='game'){
+    const n = willShown();
+    if(n !== U.wStep){
+      const st = willSteps(), from = U.wStep||0;
+      for(let k=Math.max(from, n-1); k<n; k++) willFx(st[k]);
+      const newIntro = st.slice(from, n).some(x=>x[0]==='intro');
+      U.wStep = n; render();
+      if(newIntro){ const c = document.querySelector('.will-out.cur'); if(c) try{ c.scrollIntoView({behavior:'smooth', block:'center'}); }catch(_){} }
+    }
+  }
 }
 setInterval(tickTimer, 250);
 applyLang(); render();
